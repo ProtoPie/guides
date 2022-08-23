@@ -58,7 +58,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             if(e.code === 'Backspace' && this.state.selectedGuides.length) {
                 this.deleteSelectedGuide();
             }
-        })
+        });
+
+        window.addEventListener('click', (e) => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            this.resetSelected();
+        });
     }
     public render() {
         const {
@@ -107,7 +113,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         </GuidesElement>;
     }
 
-    private selectGuide(pos: number) {
+    private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+        e.stopPropagation()
+        e.preventDefault();
         this.setState({
             selectedGuides: [pos]
         })
@@ -135,7 +143,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     key={i}
                     data-index={i}
                     data-pos={pos}
-                    onClick={() => this.selectGuide(pos)}
+                    onClick={(e) => this.selectGuide(pos, e)}
                     style={{
                         ...guideStyle,
                         transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
@@ -492,5 +500,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     private getTranslateName() {
         return this.props.type === "horizontal" ? "translateY" : "translateX";
+    }
+
+    private resetSelected() {
+        this.setState({
+            selectedGuides:[]
+        });
     }
 }
