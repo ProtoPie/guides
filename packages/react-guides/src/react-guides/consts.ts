@@ -73,6 +73,9 @@ canvas {
     background: #f33;
     z-index: 2;
 }
+.selected {
+    box-shadow: 0 0 10px 0.1px #f33;
+}
 .guide.dragging:before {
     position: absolute;
     content: "";

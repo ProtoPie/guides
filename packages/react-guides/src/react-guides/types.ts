@@ -9,6 +9,7 @@ import {
 
 export interface GuidesState {
     guides: number[];
+    selectedGuides: number[]
 }
 
 /**
@@ -75,6 +76,8 @@ export interface GuidesProps extends GuidesOptions {
     onDrag?: (e: OnDrag) => any;
     onDragEnd?: (e: OnDragEnd) => any;
     onClickRuler?: (e: OnClickRuler) => any;
+    onDeleteGuide?: (index: OnDeleteGuide) => any;
+    onAddGuide?: (pos: OnAddGuide) => any;
 }
 /**
  * @typedef
@@ -117,6 +120,26 @@ export interface OnDragEnd extends OnGestoDragEnd {
  * @memberof Guides
  * @extends Gesto.OnDragEnd
  */
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Gesto.OnAddGuide
+ */
+ export interface OnAddGuide {
+    posNewGuide?: number;
+}
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Gesto.OnDeleteGuide
+ */
+export interface OnDeleteGuide {
+    deletedIndexGuide?: number;
+    deletedPosGuide?: number;
+}
+
 export interface OnClickRuler extends OnGestoDragEnd {
     pos: number;
 }

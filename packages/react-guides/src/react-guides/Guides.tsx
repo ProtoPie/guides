@@ -21,6 +21,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         snaps: [],
         digit: 0,
         onClickRuler: () => { },
+        onAddGuide: () => { },        
+        onDeleteGuide: () => { },
         onChangeGuides: () => { },
         onDragStart: () => { },
         onDrag: () => { },
@@ -37,6 +39,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     };
     public state: GuidesState = {
         guides: [],
+        selectedGuides: []
     };
     public adderElement!: HTMLElement;
     public scrollPos: number = 0;
@@ -49,6 +52,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
 
+    constructor() {
+        super(Guides.defaultProps);
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            if(e.code === 'Backspace' && this.state.selectedGuides.length) {
+                this.deleteSelectedGuide();
+            }
+        })
+    }
     public render() {
         const {
             className,
@@ -63,7 +74,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         } = this.props as Required<GuidesProps>;
         const props = this.props;
         const translateName = this.getTranslateName();
-
 
         const rulerProps: RulerProps = {};
 
@@ -96,6 +106,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             </div>
         </GuidesElement>;
     }
+
+    private selectGuide(pos: number) {
+        this.setState({
+            selectedGuides: [pos]
+        })
+    }
+
     public renderGuides() {
         const props = this.props;
         const {
@@ -109,15 +126,16 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const translateName = this.getTranslateName();
         const guides = this.state.guides;
         const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
-
+        const selectedGuides = this.state.selectedGuides;
         this.guideElements = [];
         if (showGuides) {
             return guides.map((pos, i) => {
-                return (<div className={prefix("guide", type)}
+                return (<div className={`${prefix("guide", type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
                     ref={refs(this, "guideElements", i)}
                     key={i}
                     data-index={i}
                     data-pos={pos}
+                    onClick={() => this.selectGuide(pos)}
                     style={{
                         ...guideStyle,
                         transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
@@ -209,6 +227,43 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             guides,
         });
     }
+
+    /**
+     * Delete the selected guideline.
+     * @memberof Guides
+     * @instance
+     */
+    public deleteSelectedGuide() {
+        const guides = this.getGuides();
+        const index = guides.findIndex(guide => {
+            if(this.state.selectedGuides.includes(guide)){
+                return guide;
+            }
+        });
+        
+        this.props.onDeleteGuide!({
+            deletedPosGuide: guides[index],
+            deletedIndexGuide: index,
+        });
+        
+        guides.splice(index, 1);
+        this.setState({
+            guides,
+            selectedGuides: []
+        });
+    }
+
+    /**
+     * Clear all guidelines
+     * @memberof Guides
+     * @instance
+     */
+    public clearAllGuides() {
+        this.setState({
+            guides: []
+        });
+    }
+
     /**
      * Get current guidelines.
      * @memberof Guides
@@ -229,7 +284,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.scrollPos = pos;
         guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
 
-        const guides = this.state.guides;
+        const guides = this.state.guides
+        
         this.guideElements.forEach((el, i) => {
             if (!el) {
                 return;
@@ -295,7 +351,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const { datas, isDouble, distX, distY } = e;
         const pos = this.movePos(e);
         let guides = this.state.guides;
-        const { onChangeGuides, zoom, displayDragPos, digit, lockGuides } = this.props;
+        const { onChangeGuides, onAddGuide, zoom, displayDragPos, digit, lockGuides } = this.props;
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
         if (displayDragPos) {
@@ -343,6 +399,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                         isRemove: false,
                         isChange: false,
                     });
+
+                    onAddGuide!({
+                        posNewGuide: guidePos
+                    });
                 });
             }
         } else {
@@ -356,7 +416,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
                     return;
                 }
+                const deletedPosGuide = guides[index];
                 guides.splice(index, 1);
+                this.props.onDeleteGuide!({
+                    deletedIndexGuide: index,
+                    deletedPosGuide
+                });
                 isRemove = true;
             } else if (guides.indexOf(guidePos) > -1) {
                 return;

@@ -80,6 +80,9 @@ export default class App extends Component<{}> {
                     dragPosFormat={v => `${v}cm`}
                     displayDragPos={true}
                     displayGuidePos={true}
+                    onAddGuide={e => {
+                        console.log('addGuide', e);
+                    }}
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}
@@ -94,6 +97,10 @@ export default class App extends Component<{}> {
                     }}
                     onClickRuler={e => {
                         console.log("?", e);
+                    }}
+
+                    onDeleteGuide={e => {
+                        console.log('deleteGuide', e);
                     }}
                 />
             </div>
