@@ -25,6 +25,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         onDeleteGuide: () => { },
         onChangeGuides: () => { },
         onDragStart: () => { },
+        onResetGuides: () => {},
         onDrag: () => { },
         onDragEnd: () => { },
         displayDragPos: false,
@@ -52,18 +53,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private guideElements: HTMLElement[] = [];
     private _isFirstMove = false;
 
-    constructor() {
-        super(Guides.defaultProps);
+    constructor(props: Required<GuidesProps>) {
+        super(props);
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             if(e.code === 'Backspace' && this.state.selectedGuides.length) {
                 this.deleteSelectedGuide();
             }
         });
 
-        window.addEventListener('click', (e) => {
-            e.stopImmediatePropagation();
-            e.stopPropagation();
+        window.addEventListener('click', (e: MouseEvent) => {
             this.resetSelected();
+            e.stopPropagation();
         });
     }
     public render() {
@@ -114,11 +114,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
 
     private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        e.stopPropagation()
-        e.preventDefault();
         this.setState({
             selectedGuides: [pos]
+        });
+        this.props.onResetGuides!({
+            type: this.props.type
         })
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     public renderGuides() {
@@ -502,7 +505,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return this.props.type === "horizontal" ? "translateY" : "translateX";
     }
 
-    private resetSelected() {
+    public resetSelected() {
         this.setState({
             selectedGuides:[]
         });
