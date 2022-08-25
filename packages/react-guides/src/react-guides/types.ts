@@ -175,4 +175,7 @@ export interface GuidesEvents {
     drag: OnDrag;
     dragEnd: OnDragEnd;
     clickRuler: OnClickRuler;
+    deleteGuide: OnDeleteGuide;
+    addGuide: OnAddGuide;
+    resetGuides: OnResetGuides;
 }
