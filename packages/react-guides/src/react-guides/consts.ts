@@ -74,7 +74,7 @@ canvas {
     z-index: 2;
 }
 .selected {
-    box-shadow: 0 0 10px 0.1px #f33;
+    background: #8169FF;
 }
 .guide.dragging:before {
     position: absolute;
@@ -134,6 +134,9 @@ export const METHODS = [
     "scroll",
     "scrollGuides",
     "resize",
+    "deleteSelectedGuide",
+    "resetSelected",
+    "clearAllGuides"
 ] as const;
 
 export const EVENTS = [
@@ -142,4 +145,7 @@ export const EVENTS = [
     "drag",
     "dragEnd",
     "clickRuler",
+    "deleteGuide",
+    "addGuide",
+    "resetGuides"
 ] as const;

@@ -162,6 +162,9 @@ export interface GuidesInterface {
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
     loadGuides(guides: number[]): void;
+    deleteSelectedGuide(): void;
+    clearAllGuides(): void;
+    resetSelected(): void;
     resize(): void;
 }
 

@@ -359,7 +359,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return nextPos;
     }
     private onDragEnd = (e: OnDragEnd) => {
-        const { datas, isDouble, distX, distY } = e;
+        const { datas, distX, distY } = e;
         const pos = this.movePos(e);
         let guides = this.state.guides;
         const { onChangeGuides, onAddGuide, zoom, displayDragPos, digit, lockGuides } = this.props;
@@ -423,7 +423,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
             guides = [...guides];
 
-            if (isDouble || guidePos < this.scrollPos) {
+            if (guidePos < this.scrollPos) {
                 if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
                     return;
                 }
