@@ -251,7 +251,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 return guide;
             }
         });
-        
+
+        /**
+         * When the drag is deleted, the deleteGuide event is called.
+         * @memberof Guides
+         * @event deleteGuide
+         * @param {OnDeleteGuide} - Parameters for the deleteGuide event
+         */
         this.props.onDeleteGuide!({
             deletedPosGuide: guides[index],
             deletedIndexGuide: index,

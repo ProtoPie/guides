@@ -1,106 +1,55 @@
 
+## :hammer_and_wrench: Build
 
-<p align="middle" ><img src="https://raw.githubusercontent.com/daybrush/guides/master/demo/images/guides.png"/></p>
-<h2 align="middle">Guides</h2>
-<p align="middle">
-<a href="https://www.npmjs.com/package/@scena/guides" target="_blank"><img src="https://img.shields.io/npm/v/@scena/guides.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
-<img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
-<a href="https://github.com/daybrush/guides/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/guides.svg?style=flat-square&label=license&color=08CE5D"/></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/react-guides" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/preact-guides" target="_blank"><img alt="Preact" src="https://img.shields.io/static/v1.svg?label=&message=Preact&style=flat-square&color=673ab8"></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/ngx-guides" target="_blank"><img alt="Angular" src="https://img.shields.io/static/v1.svg?label=&message=Angular&style=flat-square&color=C82B38"></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/vue-guides" target="_blank"><img
-    alt="Vue"
-    src="https://img.shields.io/static/v1.svg?label=&message=Vue2&style=flat-square&color=3fb984"></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/vue3-guides" target="_blank"><img
-    alt="Vue3"
-    src="https://img.shields.io/static/v1.svg?label=&message=Vue3&style=flat-square&color=3fb984"></a>
-<a href="https://github.com/daybrush/guides/tree/master/packages/svelte-guides" target="_blank"><img
-    alt="Svelte"
-    src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
-</p>
-<p align="middle">A Guides component that can draw ruler and manage guidelines.</p>
-<p align="middle">
-    <a href="https://daybrush.com/guides" target="_blank"><strong>Demo</strong></a> /
-    <a href="https://daybrush.com/guides/release/latest/doc/" target="_blank"><strong>API</strong></a> /
-    <a href="https://github.com/daybrush/ruler" target="_blank"><strong>Ruler</strong></a> /
-    <a href="https://github.com/daybrush/scena" target="_blank"><strong>Main Project</strong></a>
-</p>
+1. Run `npm run build` in the folder *packages/react-guides*;
+2. Run `npm run build` in root of the library 'Guides';
+3. Check the *dist/guides.js*, if the changes updates; 
+3. Install the changed library *react-guides* from *[packages/react-guides](https://github.com/ProtoPie/guides/tree/master/packages/react-guides)* to the *[Guides](https://github.com/ProtoPie/guides/blob/master/package.json)*
 
 
-## ⚙️ Installation
-### npm
-```sh
-$ npm i @scena/guides
-```
+### Guides
+## :wastebasket: Delete a guide
 
-### scripts
-```html
-<script src="//daybrush.com/guides/release/latest/dist/guides.min.js"></script>
-```
+**We have two ways how to delete a guide:**
+1. Select a line and press the button 'Delete';
+2. Click on a line and drag to the relative ruler.
+# Functions
 
-## 🚀 How to use
+- `deleteSelectedGuide` - this function is used when a user selected a line and press the 'Delete' button;
+
 ```tsx
-
-import Guides from "@scena/guides";
-
-const guides = new Guides(document.body, {
-    type: "horizontal",
-}).on("changeGuides", e => {
-    console.log(e.guides);
-});
-
-
-let scrollX = 0;
-let scrollY = 0;
-window.addEventListener("resize", () => {
-    guides.resize();
-});
-
-window.addEventListener("wheel", e => {
-    scrollX += e.deltaX;
-    scrollY += e.deltaY;
-
-    guides.scrollGuides(scrollY);
-    guides.scroll(scrollX);
-});
-
+    public deleteSelectedGuide() {
+        // get all active guides
+        const guides = this.getGuides();
+        // find the index of the guide which the user selected
+        const index = guides.findIndex(guide => {
+            if(this.state.selectedGuides.includes(guide)){
+                return guide;
+            }
+        });
+        // call the event what return the index and value of a deleted guide
+        /**
+         * When the drag is deleted, the deleteGuide event is called.
+         * @memberof Guides
+         * @event deleteGuide
+         * @param {OnDeleteGuide} - Parameters for the deleteGuide event
+         */
+        this.props.onDeleteGuide!({
+            deletedPosGuide: guides[index],
+            deletedIndexGuide: index,
+        });
+        
+        guides.splice(index, 1);
+        // push new arrays of guides to the state and clear the array which contains a selected line
+        this.setState({
+            guides,
+            selectedGuides: []
+        });
+    }
 ```
 
-### Ruler Units
-
-The default unit is px, and a line is drawn every 50px. If you want to use a different unit instead of the px unit, use it like this:
-
-* 1px (Default)
-    * zoom: 1
-    * unit: 50 (every 50px)
-* 1cm = 37.7952px
-    * zoom: 37.7952
-    * unit: 1 (every 1cm)
-* 1in = 96px = 2.54cm
-    * zoom: 96
-    * unit: 1 (every 1in)
-
-See: https://www.w3schools.com/cssref/css_units.asp
-
-## ⚙️ Developments
-### `npm run demo:start`
-
-Runs the app in the development mode.<br>
-Open `demo/index.html` file.
-
-
-## ⭐️ Show Your Support
-Please give a ⭐️ if this project helped you!
-
-## 👏 Contributing
-
-If you have any questions or requests or want to contribute to `guides` or other packages, please write the [issue](https://github.com/daybrush/guides/issues) or give me a Pull Request freely.
-
-## 🐞 Bug Report
-
-If you find a bug, please report to us opening a new [Issue](https://github.com/daybrush/guides/issues) on GitHub.
-
+# Selected line
+When the user selected the line we called function  `selectGuide` and this line changes its color to **![#8169FF](https://via.placeholder.com/15/8169FF/8169FF.png) #8169FF**. And if the user clicks anywhere except the line we call a function `resetSelected` for cleaning the array with selected lines.
 
 ## 📝 License
 
