@@ -12,24 +12,13 @@
         "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json"
     },
-    "keywords": [
-        "scene",
-        "scenejs",
-        "scene.js",
-        "scena",
-        "guides",
-        "scroller"
-    ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/daybrush/guides.git"
+        "url": "git+https://github.com/ProtoPie/guides.git"
     },
-    "author": "Daybrush",
+    "author": "Protopie",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/daybrush/guides/issues"
-    },
-    "homepage": "https://daybrush.com/guides",
+
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
         "@daybrush/demo": "0.0.2",
