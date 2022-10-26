@@ -80,6 +80,9 @@ export default class App extends Component<{}> {
                     dragPosFormat={v => `${v}cm`}
                     displayDragPos={true}
                     displayGuidePos={true}
+                    onAddGuide={e => {
+                        console.log('addGuide', e);
+                    }}
                     onChangeGuides={({ guides }) => {
                         console.log("horizontal", guides);
                     }}
@@ -94,6 +97,14 @@ export default class App extends Component<{}> {
                     }}
                     onClickRuler={e => {
                         console.log("?", e);
+                    }}
+                    onDeleteGuide={e => {
+                        console.log('deleteGuide', e);
+                    }}
+                    onResetGuides={({type}) => {
+                        if(type === 'horizontal') {
+                            this.guides2.resetSelected();
+                        }
                     }}
                 />
             </div>
@@ -117,6 +128,11 @@ export default class App extends Component<{}> {
                     }}
                     onDragEnd={e => {
                         console.log("dragEnd", e);
+                    }}
+                    onResetGuides={({type}) => {
+                        if(type === 'vertical') {
+                            this.guides1.resetSelected();
+                        }
                     }}
                 />
             </div>

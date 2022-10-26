@@ -2,7 +2,7 @@
     "name": "@scena/guides",
     "version": "0.18.1",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
-    "main": "./dist/guides.cjs.js",
+    "main": "./dist/guides.min.js",
     "module": "./dist/guides.esm.js",
     "sideEffects": false,
     "types": "declaration/index.d.ts",
@@ -64,6 +64,7 @@
         "typescript": "^3.5.2"
     },
     "dependencies": {
+        "@daybrush/utils": "^1.1.1",
         "@scena/event-emitter": "^1.0.4",
         "react-compat-guides": "~0.15.1",
         "react-simple-compat": "^1.2.2"
