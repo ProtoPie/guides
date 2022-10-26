@@ -5,9 +5,6 @@ import compat from "rollup-plugin-react-compat";
 
 const reactCompat = compat({
     useReactCompat: true,
-    aliasModules: {
-        "@scena/react-guides": "react-compat-guides",
-    },
 });
 const resolveReactCompat = compat({
     useReactCompat: true,
