@@ -9,6 +9,7 @@ import {
 
 export interface GuidesState {
     guides: number[];
+    selectedGuides: number[]
 }
 
 /**
@@ -75,6 +76,9 @@ export interface GuidesProps extends GuidesOptions {
     onDrag?: (e: OnDrag) => any;
     onDragEnd?: (e: OnDragEnd) => any;
     onClickRuler?: (e: OnClickRuler) => any;
+    onDeleteGuide?: (index: OnDeleteGuide) => any;
+    onAddGuide?: (pos: OnAddGuide) => any;
+    onResetGuides?: (type: OnResetGuides) => any;
 }
 /**
  * @typedef
@@ -117,6 +121,35 @@ export interface OnDragEnd extends OnGestoDragEnd {
  * @memberof Guides
  * @extends Gesto.OnDragEnd
  */
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Gesto.OnAddGuide
+ */
+ export interface OnAddGuide {
+    posNewGuide?: number;
+}
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Gesto.OnDeleteGuide
+ */
+export interface OnDeleteGuide {
+    deletedIndexGuide?: number;
+    deletedPosGuide?: number;
+}
+
+/**
+ * @typedef
+ * @memberof Guides
+ * @extends Gesto.OnResetGuides
+ */
+ export interface OnResetGuides {
+    type?: "horizontal" | "vertical";
+}
+
 export interface OnClickRuler extends OnGestoDragEnd {
     pos: number;
 }
@@ -129,6 +162,9 @@ export interface GuidesInterface {
     scroll(pos: number): void;
     scrollGuides(pos: number): void;
     loadGuides(guides: number[]): void;
+    deleteSelectedGuide(): void;
+    clearAllGuides(): void;
+    resetSelected(): void;
     resize(): void;
 }
 
@@ -142,4 +178,7 @@ export interface GuidesEvents {
     drag: OnDrag;
     dragEnd: OnDragEnd;
     clickRuler: OnClickRuler;
+    deleteGuide: OnDeleteGuide;
+    addGuide: OnAddGuide;
+    resetGuides: OnResetGuides;
 }
