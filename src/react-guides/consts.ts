@@ -95,6 +95,14 @@ canvas {
     height: 100%;
     cursor: col-resize;
 }
+:host.horizontal .dragging,
+:host.horizontal .selected {
+    height: 2px
+}
+:host.vertical .dragging,
+:host.vertical .selected {
+    width: 2px
+}
 .mobile :host.horizontal .guide {
     transform: scale(1, 2);
 }
