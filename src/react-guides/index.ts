@@ -1,5 +1,4 @@
-import Guides from "./index.esm";
+import Guides from "./Guides";
 
 export default Guides;
 export * from "./types";
-export * from "./index.esm";
