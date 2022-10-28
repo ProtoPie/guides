@@ -17,7 +17,6 @@
     },
     "author": "Protopie",
     "license": "MIT",
-
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
         "@daybrush/demo": "0.0.2",
