@@ -14,10 +14,6 @@
         "type": "git",
         "url": "git+https://github.com/ProtoPie/guides.git"
     },
-    "files": [
-        "dist",
-        "declaration"
-    ],
     "author": "Protopie",
     "license": "MIT",
     "devDependencies": {
