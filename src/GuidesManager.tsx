@@ -1,8 +1,8 @@
 import { ref, Properties } from "framework-utils";
 import * as React from "react";
 import { render } from "react-dom";
-import { PROPERTIES, METHODS, EVENTS } from "./consts";
-import { GuidesInterface, GuidesEvents, GuidesOptions } from "@scena/react-guides/declaration/types";
+import { PROPERTIES, METHODS, EVENTS } from "./react-guides/consts";
+import { GuidesInterface, GuidesEvents, GuidesOptions } from "./react-guides/types";
 import InnerGuides from "./InnerGuides";
 import EventEmitter from "@scena/event-emitter";
 import { camelize } from "@daybrush/utils";
