@@ -33,6 +33,7 @@
         "pvu": "^0.5.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
+        "rollup": "^1.32.1",
         "rollup-plugin-css-bundle": "^1.0.4",
         "rollup-plugin-react-compat": "^0.1.0",
         "scenejs": "^1.1.4",
