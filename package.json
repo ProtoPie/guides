@@ -4,10 +4,9 @@
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.min.js",
     "sideEffects": false,
-    "types": "declaration/index.d.ts",
+    "types": "src/index.d.ts",
     "scripts": {
-        "start": "rollup -c && npm run declaration && print-sizes ./dist",
-        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "start": "rollup -c",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json"
     },
     "repository": {
