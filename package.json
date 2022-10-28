@@ -6,8 +6,7 @@
     "sideEffects": false,
     "types": "declaration/index.d.ts",
     "scripts": {
-        "start": "rollup -c -w",
-        "build": "rollup -c && npm run declaration && print-sizes ./dist",
+        "start": "rollup -c && npm run declaration && print-sizes ./dist",
         "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json"
     },
