@@ -3,43 +3,18 @@
     "version": "0.18.1",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.min.js",
-    "module": "./dist/guides.esm.js",
     "sideEffects": false,
-    "types": "declaration/index.d.ts",
+    "types": "src/index.ts",
     "scripts": {
-        "start": "rollup -c -w",
-        "build": "rollup -c && npm run declaration && print-sizes ./dist",
-        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
-        "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
-        "demo:start": "rollup -c rollup.config.demo.js -w",
-        "demo:build": "rollup -c rollup.config.demo.js",
-        "prerelease": "npm run build && npm run doc && prerelease --dirs=dist",
-        "release": "npm run build && npm run doc && npm run demo:build && release --dirs=dist,doc",
-        "release:init": "npm run build && npm run doc && npm run demo:build && release -i --dirs=dist,doc",
-        "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
-        "packages": "npm run packages:update && npm run packages:build && npm run packages:publish",
-        "packages:update": "pvu --update=svelte-guides,ngx-guides/projects/ngx-guides,vue-guides,vue3-guides",
-        "packages:build": "pvu --build=svelte-guides,ngx-guides,vue-guides,vue3-guides",
-        "packages:publish": "pvu --publish=svelte-guides,ngx-guides/dist/ngx-guides,vue-guides,vue3-guides"
+        "start": "rollup -c",
+        "doc": "rm -rf ./doc && jsdoc -c jsdoc.json"
     },
-    "keywords": [
-        "scene",
-        "scenejs",
-        "scene.js",
-        "scena",
-        "guides",
-        "scroller"
-    ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/daybrush/guides.git"
+        "url": "git+https://github.com/ProtoPie/guides.git"
     },
-    "author": "Daybrush",
+    "author": "Protopie",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/daybrush/guides/issues"
-    },
-    "homepage": "https://daybrush.com/guides",
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
         "@daybrush/demo": "0.0.2",
@@ -57,6 +32,7 @@
         "pvu": "^0.5.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
+        "rollup": "^1.32.1",
         "rollup-plugin-css-bundle": "^1.0.4",
         "rollup-plugin-react-compat": "^0.1.0",
         "scenejs": "^1.1.4",

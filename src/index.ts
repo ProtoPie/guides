@@ -1,5 +1,5 @@
-import Guides from "./Guides";
+import GuidesManager from "./GuidesManager";
 
-export * from "@scena/react-guides/declaration/types";
-export * from "./consts";
-export default Guides;
+export * from "./react-guides/types";
+export default class Guides extends GuidesManager {}
+
