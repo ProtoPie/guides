@@ -1,15 +1,16 @@
-import { prefix } from "./utils";
-import { prefixCSS } from "framework-utils";
-import { GuidesOptions } from "./types";
-import { PROPERTIES as RULER_PROPERTIES } from "@scena/react-ruler";
+import { PROPERTIES as RULER_PROPERTIES } from '@scena/react-ruler';
+import { prefixCSS } from 'framework-utils';
 
-export const RULER = prefix("ruler");
-export const ADDER = prefix("guide", "adder");
-export const GUIDES = prefix("guides");
-export const GUIDE = prefix("guide");
-export const DRAGGING = prefix("dragging");
-export const DISPLAY_DRAG = prefix("display-drag");
-export const GUIDES_CSS = prefixCSS("scena-", `
+import { GuidesOptions } from './types';
+import { prefix } from './utils';
+
+export const RULER = prefix('ruler');
+export const ADDER = prefix('guide', 'adder');
+export const GUIDES = prefix('guides');
+export const GUIDE = prefix('guide');
+export const DRAGGING = prefix('dragging');
+export const DISPLAY_DRAG = prefix('display-drag');
+export const GUIDES_CSS = prefixCSS('scena-', `
 {
     position: relative;
     width: 100%;
@@ -124,36 +125,36 @@ canvas {
 `);
 
 export const PROPERTIES: Array<keyof GuidesOptions> = [
-    "className",
-    "rulerStyle",
+    'className',
+    'rulerStyle',
     'snapThreshold',
-    "snaps",
-    "displayDragPos",
-    "cspNonce",
+    'snaps',
+    'displayDragPos',
+    'cspNonce',
     'dragPosFormat',
-    "defaultGuides",
-    "showGuides",
+    'defaultGuides',
+    'showGuides',
     ...RULER_PROPERTIES,
 ];
 
 export const METHODS = [
-    "getGuides",
-    "loadGuides",
-    "scroll",
-    "scrollGuides",
-    "resize",
-    "deleteSelectedGuide",
-    "resetSelected",
-    "clearAllGuides"
+    'getGuides',
+    'loadGuides',
+    'scroll',
+    'scrollGuides',
+    'resize',
+    'deleteSelectedGuide',
+    'resetSelected',
+    'clearAllGuides',
 ] as const;
 
 export const EVENTS = [
-    "changeGuides",
-    "dragStart",
-    "drag",
-    "dragEnd",
-    "clickRuler",
-    "deleteGuide",
-    "addGuide",
-    "resetGuides"
+    'changeGuides',
+    'dragStart',
+    'drag',
+    'dragEnd',
+    'clickRuler',
+    'deleteGuide',
+    'addGuide',
+    'resetGuides',
 ] as const;

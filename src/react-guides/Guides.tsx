@@ -1,20 +1,21 @@
-import * as React from "react";
-import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from "@scena/react-ruler";
-import { ref, refs } from "framework-utils";
-import Gesto, { OnDragEnd } from "gesto";
-import styled, { StyledElement } from "react-css-styled";
-import { GUIDES, GUIDE, DRAGGING, ADDER, DISPLAY_DRAG, GUIDES_CSS } from "./consts";
-import { prefix } from "./utils";
-import { hasClass, addClass, removeClass } from "@daybrush/utils";
-import { GuidesState, GuidesProps, GuidesInterface } from "./types";
-import { getDistElementMatrix, calculateMatrixDist } from "css-to-mat";
+import { addClass, hasClass, removeClass } from '@daybrush/utils';
+import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '@scena/react-ruler';
+import { calculateMatrixDist,getDistElementMatrix } from 'css-to-mat';
+import { ref, refs } from 'framework-utils';
+import Gesto, { OnDragEnd } from 'gesto';
+import * as React from 'react';
+import styled, { StyledElement } from 'react-css-styled';
 
-const GuidesElement = styled("div", GUIDES_CSS);
+import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
+import { GuidesInterface,GuidesProps, GuidesState } from './types';
+import { prefix } from './utils';
+
+const GuidesElement = styled('div', GUIDES_CSS);
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
     public static defaultProps: GuidesProps = {
-        className: "",
-        type: "horizontal",
+        className: '',
+        type: 'horizontal',
         zoom: 1,
         style: {},
         snapThreshold: 5,
@@ -40,10 +41,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     };
     public state: GuidesState = {
         guides: [],
-        selectedGuides: []
+        selectedGuides: [],
     };
     public adderElement!: HTMLElement;
-    public scrollPos: number = 0;
+    public scrollPos = 0;
     public ruler!: Ruler;
     private manager!: StyledElement<HTMLElement>;
     private guidesElement!: HTMLElement;
@@ -84,30 +85,30 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const rulerProps: RulerProps = {};
 
         RULER_PROPERTIES.forEach(name => {
-            if (name === "style") {
+            if (name === 'style') {
                 return;
             }
             (rulerProps as any)[name] = props[name];
         });
         return <GuidesElement
-            ref={ref(this, "manager")}
+            ref={ref(this, 'manager')}
             cspNonce={cspNonce}
-            className={`${prefix("manager", type)} ${className}`}
+            className={`${prefix('manager', type)} ${className}`}
             portalContainer={portalContainer}
             style={style}
         >
-            <div className={prefix("guide-origin")} ref={ref(this, "originElement")}></div>
+            <div className={prefix('guide-origin')} ref={ref(this, 'originElement')}></div>
             <Ruler
-                ref={ref(this, "ruler")}
+                ref={ref(this, 'ruler')}
                 style={rulerStyle}
                 {...rulerProps}
             />
-            <div className={GUIDES} ref={ref(this, "guidesElement")} style={{
+            <div className={GUIDES} ref={ref(this, 'guidesElement')} style={{
                 transform: `${translateName}(${-this.scrollPos * zoom}px)`,
             }}>
                 {displayDragPos && <div className={DISPLAY_DRAG}
-                    ref={ref(this, "displayElement")} style={dragGuideStyle} />}
-                <div className={ADDER} ref={ref(this, "adderElement")} />
+                    ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
+                <div className={ADDER} ref={ref(this, 'adderElement')} />
                 {this.renderGuides()}
             </div>
         </GuidesElement>;
@@ -115,10 +116,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
         this.setState({
-            selectedGuides: [pos]
+            selectedGuides: [pos],
         });
         this.props.onResetGuides!({
-            type: this.props.type
+            type: this.props.type,
         })
         e.stopPropagation();
         e.preventDefault();
@@ -141,20 +142,22 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.guideElements = [];
         if (showGuides) {
             return guides.map((pos, i) => {
-                return (<div className={`${prefix("guide", type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
-                    ref={refs(this, "guideElements", i)}
-                    key={i}
-                    data-index={i}
-                    data-pos={pos}
-                    onClick={(e) => this.selectGuide(pos, e)}
-                    style={{
-                        ...guideStyle,
-                        transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
-                    }}>
-                        {displayGuidePos && <div className={prefix("guide-pos")} style={guidePosStyle || {}}>
-                            {guidePosFormat!(pos)}
-                        </div>}
-                    </div>);
+                return (
+                    <div className={`${prefix('guide', type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
+                        ref={refs(this, 'guideElements', i)}
+                        key={i}
+                        data-index={i}
+                        data-pos={pos}
+                        onClick={(e) => this.selectGuide(pos, e)}
+                        style={{
+                            ...guideStyle,
+                            transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
+                        }}>
+                            {displayGuidePos && <div className={prefix('guide-pos')} style={guidePosStyle || {}}>
+                                {guidePosFormat!(pos)}
+                            </div>}
+                        </div>
+                    );
             });
         }
         return;
@@ -162,7 +165,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public componentDidMount() {
         this.gesto = new Gesto(this.manager.getElement(), {
             container: document.body,
-        }).on("dragStart", e => {
+        }).on('dragStart', e => {
             const {
                 type,
                 zoom,
@@ -178,7 +181,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             const datas = e.datas;
             const canvasElement = this.ruler.canvasElement;
             const guidesElement = this.guidesElement;
-            const isHorizontal = type === "horizontal";
+            const isHorizontal = type === 'horizontal';
             const originRect = this.originElement.getBoundingClientRect();
             const matrix = getDistElementMatrix(this.manager.getElement());
             const offsetPos = calculateMatrixDist(matrix, [
@@ -192,9 +195,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             datas.offsetPos = offsetPos;
             datas.matrix = matrix;
 
-            let isLockAdd = lockGuides && lockGuides.indexOf("add") > -1;
-            let isLockRemove = lockGuides && lockGuides.indexOf("remove") > -1;
-            let isLockChange = lockGuides && lockGuides.indexOf("change") > -1;
+            const isLockAdd = lockGuides && lockGuides.indexOf('add') > -1;
+            const isLockRemove = lockGuides && lockGuides.indexOf('remove') > -1;
+            const isLockChange = lockGuides && lockGuides.indexOf('change') > -1;
 
             if (target === canvasElement) {
                 if (isLockAdd) {
@@ -216,8 +219,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 return false;
             }
             this.onDragStart(e);
-        }).on("drag", this.onDrag).on("dragEnd", this.onDragEnd);
-        this.setState({ guides: this.props.defaultGuides || [] }); // pass array of guides on mount data to create gridlines or something like that in ui
+        }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
+        // pass array of guides on mount data to create gridlines or something like that in ui
+        this.setState({ guides: this.props.defaultGuides || [] });
     }
     public componentWillUnmount() {
         this.gesto.unset();
@@ -247,7 +251,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public deleteSelectedGuide() {
         const guides = this.getGuides();
         const index = guides.findIndex(guide => {
-            if(this.state.selectedGuides.includes(guide)){
+            if(this.state.selectedGuides.includes(guide)) {
                 return guide;
             }
         });
@@ -260,7 +264,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         guides.splice(index, 1);
         this.setState({
             guides,
-            selectedGuides: []
+            selectedGuides: [],
         });
     }
 
@@ -271,7 +275,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      */
     public clearAllGuides() {
         this.setState({
-            guides: []
+            guides: [],
         });
     }
 
@@ -301,7 +305,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             if (!el) {
                 return;
             }
-            el.style.display = -pos + guides[i] < 0 ? "none" : "block";
+            el.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
         });
     }
     /**
@@ -366,7 +370,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
         if (displayDragPos) {
-            this.displayElement.style.cssText += `display: none;`;
+            this.displayElement.style.cssText += 'display: none;';
         }
         removeClass(datas.target, DRAGGING);
         /**
@@ -412,32 +416,32 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                     });
 
                     onAddGuide!({
-                        posNewGuide: guidePos
+                        posNewGuide: guidePos,
                     });
                 });
             }
         } else {
-            const index = datas.target.getAttribute("data-index");
+            const index = datas.target.getAttribute('data-index');
             let isRemove = false;
             let isChange = false;
 
             guides = [...guides];
 
             if (guidePos < this.scrollPos) {
-                if (lockGuides && (lockGuides === true || lockGuides.indexOf("remove") > -1)) {
+                if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
                     return;
                 }
                 const deletedPosGuide = guides[index];
                 guides.splice(index, 1);
                 this.props.onDeleteGuide!({
                     deletedIndexGuide: index,
-                    deletedPosGuide
+                    deletedPosGuide,
                 });
                 isRemove = true;
             } else if (guides.indexOf(guidePos) > -1) {
                 return;
             } else {
-                if (lockGuides && (lockGuides === true || lockGuides.indexOf("change") > -1)) {
+                if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
                     return;
                 }
                 guides[index] = guidePos;
@@ -467,7 +471,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             digit,
         } = props;
         const dragPosFormat = props.dragPosFormat || (v => v);
-        const isHorizontal = type === "horizontal";
+        const isHorizontal = type === 'horizontal';
         const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         const offsetPos = datas.offsetPos;
         const offsetX = matrixPos[0] + offsetPos[0];
@@ -484,17 +488,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }
         if (!datas.fromRuler || !this._isFirstMove) {
             if (displayDragPos) {
-                const displayPos = type === "horizontal"
+                const displayPos = type === 'horizontal'
                     ? [offsetX, nextPos]
                     : [nextPos, offsetY];
-                this.displayElement.style.cssText += `display: block;`
-                    + `transform: translate(-50%, -50%) `
-                    + `translate(${displayPos.map(v => `${v}px`).join(", ")})`;
+                this.displayElement.style.cssText += 'display: block;'
+                    + 'transform: translate(-50%, -50%) '
+                    + `translate(${displayPos.map(v => `${v}px`).join(', ')})`;
                 this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
             }
             const target = datas.target;
 
-            target.setAttribute("data-pos", guidePos);
+            target.setAttribute('data-pos', guidePos);
             target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
         }
 
@@ -502,12 +506,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     }
     private getTranslateName() {
-        return this.props.type === "horizontal" ? "translateY" : "translateX";
+        return this.props.type === 'horizontal' ? 'translateY' : 'translateX';
     }
 
     public resetSelected() {
         this.setState({
-            selectedGuides:[]
+            selectedGuides:[],
         });
     }
 }
