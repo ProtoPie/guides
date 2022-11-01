@@ -35,7 +35,7 @@
         "eslint-plugin-unused-imports": "^2.0.0",
         "gesto": "^1.0.0",
         "gh-pages": "^2.0.1",
-        "husky": "^8.0.1",
+        "husky": "^8.0.0",
         "keycon": "^1.1.0",
         "print-sizes": "0.0.4",
         "pvu": "^0.5.1",
