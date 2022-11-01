@@ -4,13 +4,15 @@
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
     "main": "./dist/guides.min.js",
     "sideEffects": false,
-    "types": "src/index.ts",
+    "types": "declaration/index.d.ts",
     "scripts": {
         "start": "rollup -c",
+        "dev": "rollup -c -w",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "lint": "npx eslint src/**/*.{ts,tsx}",
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
     },
     "repository": {
         "type": "git",
@@ -20,11 +22,7 @@
     "license": "MIT",
     "devDependencies": {
         "@daybrush/builder": "^0.1.2",
-        "@daybrush/demo": "0.0.2",
         "@daybrush/jsdoc": "^0.3.9",
-        "@daybrush/release": "^0.2.4",
-        "@types/karma-chai": "^0.1.2",
-        "@types/mocha": "^5.2.7",
         "@types/react": "^16.9.17",
         "@types/react-dom": "^16.9.4",
         "@typescript-eslint/eslint-plugin": "^5.41.0",
@@ -34,11 +32,7 @@
         "eslint-plugin-react": "^7.31.10",
         "eslint-plugin-unused-imports": "^2.0.0",
         "gesto": "^1.0.0",
-        "gh-pages": "^2.0.1",
         "husky": "^8.0.0",
-        "keycon": "^1.1.0",
-        "print-sizes": "0.0.4",
-        "pvu": "^0.5.1",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
         "rollup": "^1.32.1",
@@ -57,8 +51,6 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-simple-import-sort": "^8.0.0",
-        "prettier": "^2.7.1",
-        "react-compat-guides": "~0.15.1",
-        "react-simple-compat": "^1.2.2"
+        "prettier": "^2.7.1"
     }
 }
