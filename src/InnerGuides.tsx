@@ -1,8 +1,9 @@
-import * as React from "react";
-import { createPortal } from "react-dom";
-import { ref } from "framework-utils";
-import ReactGuides from "./react-guides";
-import { GuidesOptions } from "./react-guides/types";
+import { ref } from 'framework-utils';
+import * as React from 'react';
+import { createPortal } from 'react-dom';
+
+import ReactGuides from './react-guides';
+import { GuidesOptions } from './react-guides/types';
 
 export interface InnerGuidesProps extends GuidesOptions {
     container?: HTMLElement;
@@ -16,6 +17,6 @@ export default class InnerGuides extends React.Component<InnerGuidesProps, Inner
     }
     public render() {
         const { container, ...state } = this.state;
-        return createPortal(<ReactGuides ref={ref(this, "guides")} {...state} />, container);
+        return createPortal(<ReactGuides ref={ref(this, 'guides')} {...state} />, container);
     }
 }

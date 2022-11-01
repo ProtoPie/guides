@@ -1,4 +1,4 @@
-import Guides from "./Guides";
+import Guides from './Guides';
 
 export default Guides;
-export * from "./types";
+export * from './types';

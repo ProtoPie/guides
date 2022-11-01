@@ -1,10 +1,10 @@
-import { RulerProps } from "@scena/react-ruler/declaration/types";
-import { IObject } from "@daybrush/utils";
+import { IObject } from '@daybrush/utils';
+import { RulerProps } from '@scena/react-ruler/declaration/types';
 import {
-    OnDragStart as OnGestoDragStart,
     OnDrag as OnGestoDrag,
     OnDragEnd as OnGestoDragEnd,
-} from "gesto";
+    OnDragStart as OnGestoDragStart,
+} from 'gesto';
 
 
 export interface GuidesState {
@@ -44,7 +44,7 @@ export interface GuidesOptions extends RulerProps {
     dragPosFormat?: (value: number) => string | number;
     defaultGuides?: number[];
     showGuides?: boolean;
-    lockGuides?: boolean | Array<"add" | "change" | "remove">;
+    lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
     /**
      * pos digit of guidelines (default: 0)
      */
@@ -147,7 +147,7 @@ export interface OnDeleteGuide {
  * @extends Gesto.OnResetGuides
  */
  export interface OnResetGuides {
-    type?: "horizontal" | "vertical";
+    type?: 'horizontal' | 'vertical';
 }
 
 export interface OnClickRuler extends OnGestoDragEnd {
