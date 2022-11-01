@@ -8,9 +8,9 @@
     "scripts": {
         "start": "rollup -c",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
-        "prepare": "husky install",
         "lint": "npx eslint src/**/*.{ts,tsx}",
-        "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix"
+        "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
