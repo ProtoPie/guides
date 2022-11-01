@@ -1,11 +1,12 @@
-import { ref, Properties } from "framework-utils";
-import * as React from "react";
-import { render } from "react-dom";
-import { PROPERTIES, METHODS, EVENTS } from "./consts";
-import { GuidesInterface, GuidesEvents, GuidesOptions } from "@scena/react-guides/declaration/types";
-import InnerGuides from "./InnerGuides";
-import EventEmitter from "@scena/event-emitter";
-import { camelize } from "@daybrush/utils";
+import { camelize } from '@daybrush/utils';
+import EventEmitter from '@scena/event-emitter';
+import { Properties,ref } from 'framework-utils';
+import * as React from 'react';
+import { render } from 'react-dom';
+
+import InnerGuides from './InnerGuides';
+import { EVENTS,METHODS, PROPERTIES } from './react-guides/consts';
+import { GuidesEvents, GuidesInterface, GuidesOptions } from './react-guides/types';
 
 @Properties(METHODS as any, (prototype, property) => {
     if (prototype[property]) {
@@ -39,7 +40,7 @@ import { camelize } from "@daybrush/utils";
  * @extends EventEmitter
  */
 class Guides extends EventEmitter<GuidesEvents> {
-    private tempElement = document.createElement("div");
+    private tempElement = document.createElement('div');
     private innerGuides!: InnerGuides;
     /**
      * @sort 1
@@ -55,7 +56,7 @@ class Guides extends EventEmitter<GuidesEvents> {
         });
 
         render(
-            <InnerGuides  {...options} {...events} container={container} ref={ref(this, "innerGuides")} />,
+            <InnerGuides  {...options} {...events} container={container} ref={ref(this, 'innerGuides')} />,
             this.tempElement,
         );
     }
