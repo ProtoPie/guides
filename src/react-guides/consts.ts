@@ -111,10 +111,17 @@ canvas {
     transform: scale(2, 1);
 }
 :host.horizontal .guide:before {
-    height: 20px;
+    height: 10px;
+    margin-top: -5px;
+    display: block;
+    content: '';
 }
 :host.vertical .guide:before {
-    width: 20px;
+    width: 10px;
+    height: 100%;
+    margin-left: -5px;
+    display: block;
+    content: '';
 }
 .adder {
     display: none;

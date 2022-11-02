@@ -324,26 +324,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     public scroll(pos: number) {
         this.ruler.scroll(pos);
     }
+
     private onDragStart = (e: any) => {
-        const { datas, inputEvent } = e;
-
         this._isFirstMove = true;
-        this.movePos(e);
-
-        /**
-         * When the drag starts, the dragStart event is called.
-         * @memberof Guides
-         * @event dragStart
-         * @param {OnDragStart} - Parameters for the dragStart event
-         */
-        this.props.onDragStart!({
-            ...e,
-            dragElement: datas.target,
-        });
-        inputEvent.stopPropagation();
-        inputEvent.preventDefault();
     }
-    private onDrag = (e: any) => {
+
+    private onDrag = (e: any) => { 
         if (this._isFirstMove) {
             this._isFirstMove = false;
             addClass(e.datas.target, DRAGGING);
@@ -363,7 +349,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return nextPos;
     }
     private onDragEnd = (e: OnDragEnd) => {
-        const { datas, distX, distY } = e;
+        const { datas, isDrag, distX, distY } = e;
+
+        if(!isDrag) {
+            return;
+        }
+
         const pos = this.movePos(e);
         let guides = this.state.guides;
         const { onChangeGuides, onAddGuide, zoom, displayDragPos, digit, lockGuides } = this.props;
