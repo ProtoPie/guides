@@ -14,7 +14,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private gesto;
     private guideElements;
     private _isFirstMove;
+    private _pointerEventsTimer;
     constructor(props: Required<GuidesProps>);
+    disablePointerEventsOnScroll(): void;
     render(): JSX.Element;
     private selectGuide;
     renderGuides(): JSX.Element[];
@@ -25,7 +27,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     deleteSelectedGuide(): void;
     clearAllGuides(): void;
     getGuides(): number[];
-    scrollGuides(pos: number): void;
+    scrollGuides(pos: number, zoom?: number): void;
     resize(): void;
     scroll(pos: number): void;
     private onDragStart;
