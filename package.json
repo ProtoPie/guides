@@ -45,6 +45,7 @@
     "dependencies": {
         "@daybrush/utils": "^1.1.1",
         "@scena/event-emitter": "^1.0.4",
+        "@scena/react-ruler": "^0.11.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-import-resolver-typescript": "^3.5.2",
         "eslint-plugin-import": "^2.26.0",
