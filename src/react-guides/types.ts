@@ -160,7 +160,7 @@ export interface OnClickRuler extends OnGestoDragEnd {
 export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
-    scrollGuides(pos: number): void;
+    scrollGuides(pos: number, zoom?: number): void;
     loadGuides(guides: number[]): void;
     deleteSelectedGuide(): void;
     clearAllGuides(): void;

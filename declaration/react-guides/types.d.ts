@@ -1,88 +1,88 @@
 import { IObject } from '@daybrush/utils';
 import { RulerProps } from '@scena/react-ruler/declaration/types';
 import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
+
 export interface GuidesState {
-    guides: number[];
-    selectedGuides: number[];
+  guides: number[];
+  selectedGuides: number[];
 }
 export interface GuidesOptions extends RulerProps {
-    className?: string;
-    rulerStyle?: IObject<any>;
-    snapThreshold?: number;
-    snaps?: number[];
-    displayDragPos?: boolean;
-    cspNonce?: string;
-    dragPosFormat?: (value: number) => string | number;
-    defaultGuides?: number[];
-    showGuides?: boolean;
-    lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
-    digit?: number;
-    guideStyle?: Record<string, any>;
-    dragGuideStyle?: Record<string, any>;
-    displayGuidePos?: boolean;
-    guidePosFormat?: (value: number) => string | number;
-    guidePosStyle?: IObject<any>;
-    portalContainer?: HTMLElement | null;
+  className?: string;
+  rulerStyle?: IObject<any>;
+  snapThreshold?: number;
+  snaps?: number[];
+  displayDragPos?: boolean;
+  cspNonce?: string;
+  dragPosFormat?: (value: number) => string | number;
+  defaultGuides?: number[];
+  showGuides?: boolean;
+  lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
+  digit?: number;
+  guideStyle?: Record<string, any>;
+  dragGuideStyle?: Record<string, any>;
+  displayGuidePos?: boolean;
+  guidePosFormat?: (value: number) => string | number;
+  guidePosStyle?: IObject<any>;
+  portalContainer?: HTMLElement | null;
 }
-export interface GuideOptions extends GuidesOptions {
-}
+export interface GuideOptions extends GuidesOptions {}
 export interface GuidesProps extends GuidesOptions {
-    onChangeGuides?: (e: OnChangeGuides) => any;
-    onDragStart?: (e: OnDragStart) => any;
-    onDrag?: (e: OnDrag) => any;
-    onDragEnd?: (e: OnDragEnd) => any;
-    onClickRuler?: (e: OnClickRuler) => any;
-    onDeleteGuide?: (index: OnDeleteGuide) => any;
-    onAddGuide?: (pos: OnAddGuide) => any;
-    onResetGuides?: (type: OnResetGuides) => any;
+  onChangeGuides?: (e: OnChangeGuides) => any;
+  onDragStart?: (e: OnDragStart) => any;
+  onDrag?: (e: OnDrag) => any;
+  onDragEnd?: (e: OnDragEnd) => any;
+  onClickRuler?: (e: OnClickRuler) => any;
+  onDeleteGuide?: (index: OnDeleteGuide) => any;
+  onAddGuide?: (pos: OnAddGuide) => any;
+  onResetGuides?: (type: OnResetGuides) => any;
 }
 export interface OnChangeGuides {
-    guides: number[];
-    isAdd: boolean;
-    isRemove: boolean;
-    isChange: boolean;
-    distX: number;
-    distY: number;
+  guides: number[];
+  isAdd: boolean;
+  isRemove: boolean;
+  isChange: boolean;
+  distX: number;
+  distY: number;
 }
 export interface OnDragStart extends OnGestoDragStart {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 export interface OnDrag extends OnGestoDrag {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 export interface OnDragEnd extends OnGestoDragEnd {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 export interface OnAddGuide {
-    posNewGuide?: number;
+  posNewGuide?: number;
 }
 export interface OnDeleteGuide {
-    deletedIndexGuide?: number;
-    deletedPosGuide?: number;
+  deletedIndexGuide?: number;
+  deletedPosGuide?: number;
 }
 export interface OnResetGuides {
-    type?: 'horizontal' | 'vertical';
+  type?: 'horizontal' | 'vertical';
 }
 export interface OnClickRuler extends OnGestoDragEnd {
-    pos: number;
+  pos: number;
 }
 export interface GuidesInterface {
-    getGuides(): number[];
-    scroll(pos: number): void;
-    scrollGuides(pos: number): void;
-    loadGuides(guides: number[]): void;
-    deleteSelectedGuide(): void;
-    clearAllGuides(): void;
-    resetSelected(): void;
-    resize(): void;
+  getGuides(): number[];
+  scroll(pos: number): void;
+  scrollGuides(pos: number, zoom?: number): void;
+  loadGuides(guides: number[]): void;
+  deleteSelectedGuide(): void;
+  clearAllGuides(): void;
+  resetSelected(): void;
+  resize(): void;
 }
 export interface GuidesEvents {
-    changeGuides: OnChangeGuides;
-    dragStart: OnDragStart;
-    drag: OnDrag;
-    dragEnd: OnDragEnd;
-    clickRuler: OnClickRuler;
-    deleteGuide: OnDeleteGuide;
-    addGuide: OnAddGuide;
-    resetGuides: OnResetGuides;
+  changeGuides: OnChangeGuides;
+  dragStart: OnDragStart;
+  drag: OnDrag;
+  dragEnd: OnDragEnd;
+  clickRuler: OnClickRuler;
+  deleteGuide: OnDeleteGuide;
+  addGuide: OnAddGuide;
+  resetGuides: OnResetGuides;
 }
