@@ -1,0 +1,11 @@
+import { GuidesOptions } from './types';
+export declare const RULER: string;
+export declare const ADDER: string;
+export declare const GUIDES: string;
+export declare const GUIDE: string;
+export declare const DRAGGING: string;
+export declare const DISPLAY_DRAG: string;
+export declare const GUIDES_CSS: string;
+export declare const PROPERTIES: Array<keyof GuidesOptions>;
+export declare const METHODS: readonly ["getGuides", "loadGuides", "scroll", "scrollGuides", "resize", "deleteSelectedGuide", "resetSelected", "clearAllGuides"];
+export declare const EVENTS: readonly ["changeGuides", "dragStart", "drag", "dragEnd", "clickRuler", "deleteGuide", "addGuide", "resetGuides"];
