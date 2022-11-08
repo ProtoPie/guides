@@ -305,7 +305,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @memberof Guides
      * @instance
      */
-    public scrollGuides(pos: number, zoom: number = this.props.zoom) {
+    public scrollGuides(pos: number, zoom = 1) {
         const guidesElement = this.guidesElement;
 
         this.disablePointerEventsOnScroll();
