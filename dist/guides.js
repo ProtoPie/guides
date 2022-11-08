@@ -12,30 +12,32 @@ version: 0.18.1
     (global = global || self, global.Guides = factory(global.React, global.reactDom));
 }(this, (function (React, reactDom) { 'use strict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
+    /******************************************************************************
+    Copyright (c) Microsoft Corporation.
 
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted.
 
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+    PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
     /* global Reflect, Promise */
 
     var extendStatics = function(d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
 
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -71,6 +73,7 @@ version: 0.18.1
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
 
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
@@ -779,7 +782,7 @@ version: 0.18.1
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/gesture.git
-    version: 1.0.4
+    version: 1.0.5
     */
 
     /*! *****************************************************************************
@@ -1887,302 +1890,12 @@ version: 0.18.1
     }
 
     /*
-    Copyright (c) 2017 NAVER Corp.
-    @egjs/component project is licensed under the MIT license
-
-    @egjs/component JavaScript library
-    https://naver.github.io/egjs-component
-
-    @version 2.1.2
-    */
-    /**
-     * Copyright (c) 2015 NAVER Corp.
-     * egjs projects are licensed under the MIT license
-     */
-    function isUndefined(value) {
-      return typeof value === "undefined";
-    }
-    /**
-     * A class used to manage events in a component
-     * @ko 컴포넌트의 이벤트을 관리할 수 있게 하는 클래스
-     * @alias eg.Component
-     */
-
-
-    var Component =
-    /*#__PURE__*/
-    function () {
-      var Component =
-      /*#__PURE__*/
-      function () {
-        /**
-        * Version info string
-        * @ko 버전정보 문자열
-        * @name VERSION
-        * @static
-        * @type {String}
-        * @example
-        * eg.Component.VERSION;  // ex) 2.0.0
-        * @memberof eg.Component
-        */
-
-        /**
-         * @support {"ie": "7+", "ch" : "latest", "ff" : "latest",  "sf" : "latest", "edge" : "latest", "ios" : "7+", "an" : "2.1+ (except 3.x)"}
-         */
-        function Component() {
-          this._eventHandler = {};
-          this.options = {};
-        }
-        /**
-         * Triggers a custom event.
-         * @ko 커스텀 이벤트를 발생시킨다
-         * @param {String} eventName The name of the custom event to be triggered <ko>발생할 커스텀 이벤트의 이름</ko>
-         * @param {Object} customEvent Event data to be sent when triggering a custom event <ko>커스텀 이벤트가 발생할 때 전달할 데이터</ko>
-         * @return {Boolean} Indicates whether the event has occurred. If the stop() method is called by a custom event handler, it will return false and prevent the event from occurring. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">Ref</a> <ko>이벤트 발생 여부. 커스텀 이벤트 핸들러에서 stop() 메서드를 호출하면 'false'를 반환하고 이벤트 발생을 중단한다. <a href="https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F">참고</a></ko>
-         * @example
-        class Some extends eg.Component {
-         some(){
-         	if(this.trigger("beforeHi")){ // When event call to stop return false.
-        	this.trigger("hi");// fire hi event.
-         	}
-         }
-        }
-        const some = new Some();
-        some.on("beforeHi", (e) => {
-        if(condition){
-        	e.stop(); // When event call to stop, `hi` event not call.
-        }
-        });
-        some.on("hi", (e) => {
-        // `currentTarget` is component instance.
-        console.log(some === e.currentTarget); // true
-        });
-        // If you want to more know event design. You can see article.
-        // https://github.com/naver/egjs-component/wiki/How-to-make-Component-event-design%3F
-         */
-
-
-        var _proto = Component.prototype;
-
-        _proto.trigger = function trigger(eventName, customEvent) {
-          if (customEvent === void 0) {
-            customEvent = {};
-          }
-
-          var handlerList = this._eventHandler[eventName] || [];
-          var hasHandlerList = handlerList.length > 0;
-
-          if (!hasHandlerList) {
-            return true;
-          } // If detach method call in handler in first time then handler list calls.
-
-
-          handlerList = handlerList.concat();
-          customEvent.eventType = eventName;
-          var isCanceled = false;
-          var arg = [customEvent];
-          var i = 0;
-
-          customEvent.stop = function () {
-            isCanceled = true;
-          };
-
-          customEvent.currentTarget = this;
-
-          for (var _len = arguments.length, restParam = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-            restParam[_key - 2] = arguments[_key];
-          }
-
-          if (restParam.length >= 1) {
-            arg = arg.concat(restParam);
-          }
-
-          for (i = 0; handlerList[i]; i++) {
-            handlerList[i].apply(this, arg);
-          }
-
-          return !isCanceled;
-        };
-        /**
-         * Executed event just one time.
-         * @ko 이벤트가 한번만 실행된다.
-         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
-         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           alert("hi");
-         }
-         thing() {
-           this.once("hi", this.hi);
-         }
-        }
-        var some = new Some();
-        some.thing();
-        some.trigger("hi");
-        // fire alert("hi");
-        some.trigger("hi");
-        // Nothing happens
-         */
-
-
-        _proto.once = function once(eventName, handlerToAttach) {
-          if (typeof eventName === "object" && isUndefined(handlerToAttach)) {
-            var eventHash = eventName;
-            var i;
-
-            for (i in eventHash) {
-              this.once(i, eventHash[i]);
-            }
-
-            return this;
-          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
-            var self = this;
-            this.on(eventName, function listener() {
-              for (var _len2 = arguments.length, arg = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                arg[_key2] = arguments[_key2];
-              }
-
-              handlerToAttach.apply(self, arg);
-              self.off(eventName, listener);
-            });
-          }
-
-          return this;
-        };
-        /**
-         * Checks whether an event has been attached to a component.
-         * @ko 컴포넌트에 이벤트가 등록됐는지 확인한다.
-         * @param {String} eventName The name of the event to be attached <ko>등록 여부를 확인할 이벤트의 이름</ko>
-         * @return {Boolean} Indicates whether the event is attached. <ko>이벤트 등록 여부</ko>
-         * @example
-        class Some extends eg.Component {
-         some() {
-           this.hasOn("hi");// check hi event.
-         }
-        }
-         */
-
-
-        _proto.hasOn = function hasOn(eventName) {
-          return !!this._eventHandler[eventName];
-        };
-        /**
-         * Attaches an event to a component.
-         * @ko 컴포넌트에 이벤트를 등록한다.
-         * @param {eventName} eventName The name of the event to be attached <ko>등록할 이벤트의 이름</ko>
-         * @param {Function} handlerToAttach The handler function of the event to be attached <ko>등록할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself<ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           console.log("hi");
-         }
-         some() {
-           this.on("hi",this.hi); //attach event
-         }
-        }
-        */
-
-
-        _proto.on = function on(eventName, handlerToAttach) {
-          if (typeof eventName === "object" && isUndefined(handlerToAttach)) {
-            var eventHash = eventName;
-            var name;
-
-            for (name in eventHash) {
-              this.on(name, eventHash[name]);
-            }
-
-            return this;
-          } else if (typeof eventName === "string" && typeof handlerToAttach === "function") {
-            var handlerList = this._eventHandler[eventName];
-
-            if (isUndefined(handlerList)) {
-              this._eventHandler[eventName] = [];
-              handlerList = this._eventHandler[eventName];
-            }
-
-            handlerList.push(handlerToAttach);
-          }
-
-          return this;
-        };
-        /**
-         * Detaches an event from the component.
-         * @ko 컴포넌트에 등록된 이벤트를 해제한다
-         * @param {eventName} eventName The name of the event to be detached <ko>해제할 이벤트의 이름</ko>
-         * @param {Function} handlerToDetach The handler function of the event to be detached <ko>해제할 이벤트의 핸들러 함수</ko>
-         * @return {eg.Component} An instance of a component itself <ko>컴포넌트 자신의 인스턴스</ko>
-         * @example
-        class Some extends eg.Component {
-         hi() {
-           console.log("hi");
-         }
-         some() {
-           this.off("hi",this.hi); //detach event
-         }
-        }
-         */
-
-
-        _proto.off = function off(eventName, handlerToDetach) {
-          // All event detach.
-          if (isUndefined(eventName)) {
-            this._eventHandler = {};
-            return this;
-          } // All handler of specific event detach.
-
-
-          if (isUndefined(handlerToDetach)) {
-            if (typeof eventName === "string") {
-              this._eventHandler[eventName] = undefined;
-              return this;
-            } else {
-              var eventHash = eventName;
-              var name;
-
-              for (name in eventHash) {
-                this.off(name, eventHash[name]);
-              }
-
-              return this;
-            }
-          } // The handler of specific event detach.
-
-
-          var handlerList = this._eventHandler[eventName];
-
-          if (handlerList) {
-            var k;
-            var handlerFunction;
-
-            for (k = 0; (handlerFunction = handlerList[k]) !== undefined; k++) {
-              if (handlerFunction === handlerToDetach) {
-                handlerList = handlerList.splice(k, 1);
-                break;
-              }
-            }
-          }
-
-          return this;
-        };
-
-        return Component;
-      }();
-
-      Component.VERSION = "2.1.2";
-      return Component;
-    }();
-
-    /*
     Copyright (c) 2019 Daybrush
     name: gesto
     license: MIT
     author: Daybrush
-    repository: git+https://github.com/daybrush/gesture.git
-    version: 1.0.0
+    repository: git+https://github.com/daybrush/gesto.git
+    version: 1.13.3
     */
 
     /*! *****************************************************************************
@@ -2249,11 +1962,18 @@ version: 0.18.1
       return e.touches && e.touches.length >= 2;
     }
     function getEventClients(e) {
+      if (!e) {
+        return [];
+      }
+
       if (e.touches) {
         return getClients(e.touches);
       } else {
         return [getClient(e)];
       }
+    }
+    function isMouseEvent(e) {
+      return e && (e.type.indexOf("mouse") > -1 || "button" in e);
     }
     function getPosition(clients, prevClients, startClients) {
       var length = startClients.length;
@@ -2351,19 +2071,6 @@ version: 0.18.1
 
       var __proto = ClientStore.prototype;
 
-      __proto.addClients = function (clients) {
-        if (clients === void 0) {
-          clients = this.prevClients;
-        }
-
-        var position = this.getPosition(clients);
-        var deltaX = position.deltaX,
-            deltaY = position.deltaY;
-        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        this.prevClients = clients;
-        return position;
-      };
-
       __proto.getAngle = function (clients) {
         if (clients === void 0) {
           clients = this.prevClients;
@@ -2380,8 +2087,17 @@ version: 0.18.1
         return getRotatiion(clients) - getRotatiion(this.startClients);
       };
 
-      __proto.getPosition = function (clients) {
-        return getPosition(clients || this.prevClients, this.prevClients, this.startClients);
+      __proto.getPosition = function (clients, isAdd) {
+        if (clients === void 0) {
+          clients = this.prevClients;
+        }
+
+        var position = getPosition(clients || this.prevClients, this.prevClients, this.startClients);
+        var deltaX = position.deltaX,
+            deltaY = position.deltaY;
+        this.movement += Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        this.prevClients = clients;
+        return position;
       };
 
       __proto.getPositions = function (clients) {
@@ -2430,10 +2146,6 @@ version: 0.18.1
           client.clientX -= deltaX;
           client.clientY -= deltaY;
         });
-        this.prevClients.forEach(function (client) {
-          client.clientX -= deltaX;
-          client.clientY -= deltaY;
-        });
       };
 
       return ClientStore;
@@ -2463,7 +2175,7 @@ version: 0.18.1
         _this.options = {};
         _this.flag = false;
         _this.pinchFlag = false;
-        _this.datas = {};
+        _this.data = {};
         _this.isDrag = false;
         _this.isPinch = false;
         _this.isMouse = false;
@@ -2471,7 +2183,11 @@ version: 0.18.1
         _this.clientStores = [];
         _this.targets = [];
         _this.prevTime = 0;
-        _this.isDouble = false;
+        _this.doubleFlag = false;
+        _this._dragFlag = false;
+        _this._isMouseEvent = false;
+        _this._isSecondaryButton = false;
+        _this._preventMouseEvent = false;
 
         _this.onDragStart = function (e, isTrusted) {
           if (isTrusted === void 0) {
@@ -2485,59 +2201,91 @@ version: 0.18.1
           var _a = _this.options,
               container = _a.container,
               pinchOutside = _a.pinchOutside,
+              preventWheelClick = _a.preventWheelClick,
               preventRightClick = _a.preventRightClick,
               preventDefault = _a.preventDefault,
-              checkInput = _a.checkInput;
+              checkInput = _a.checkInput,
+              preventClickEventOnDragStart = _a.preventClickEventOnDragStart,
+              preventClickEventOnDrag = _a.preventClickEventOnDrag,
+              preventClickEventByCondition = _a.preventClickEventByCondition;
           var isTouch = _this.isTouch;
           var isDragStart = !_this.flag;
+          _this._isSecondaryButton = e.which === 3 || e.button === 2;
+
+          if (preventWheelClick && (e.which === 2 || e.button === 1) || preventRightClick && (e.which === 3 || e.button === 2)) {
+            _this.stop();
+
+            return false;
+          }
 
           if (isDragStart) {
             var activeElement = document.activeElement;
             var target = e.target;
-            var tagName = target.tagName.toLowerCase();
-            var hasInput = INPUT_TAGNAMES.indexOf(tagName) > -1;
-            var hasContentEditable = target.isContentEditable;
 
-            if (hasInput || hasContentEditable) {
-              if (checkInput || activeElement === target) {
-                // force false or already focused.
-                return false;
+            if (target) {
+              var tagName = target.tagName.toLowerCase();
+              var hasInput = INPUT_TAGNAMES.indexOf(tagName) > -1;
+              var hasContentEditable = target.isContentEditable;
+
+              if (hasInput || hasContentEditable) {
+                if (checkInput || activeElement === target) {
+                  // force false or already focused.
+                  return false;
+                } // no focus
+
+
+                if (activeElement && hasContentEditable && activeElement.isContentEditable && activeElement.contains(target)) {
+                  return false;
+                }
+              } else if ((preventDefault || e.type === "touchstart") && activeElement) {
+                var activeTagName = activeElement.tagName.toLowerCase();
+
+                if (activeElement.isContentEditable || INPUT_TAGNAMES.indexOf(activeTagName) > -1) {
+                  activeElement.blur();
+                }
               }
 
-              if (activeElement && hasContentEditable && activeElement.isContentEditable && activeElement.contains(target)) {
-                return false;
-              }
-            } else if ((preventDefault || e.type === "touchstart") && activeElement) {
-              var activeTagName = activeElement.tagName;
-
-              if (activeElement.isContentEditable || INPUT_TAGNAMES.indexOf(activeTagName) > -1) {
-                activeElement.blur();
+              if (preventClickEventOnDragStart || preventClickEventOnDrag || preventClickEventByCondition) {
+                addEvent(window, "click", _this._onClick, true);
               }
             }
 
             _this.clientStores = [new ClientStore(getEventClients(e))];
             _this.flag = true;
             _this.isDrag = false;
-            _this.datas = {};
+            _this._dragFlag = true;
+            _this.data = {};
+            _this.doubleFlag = now() - _this.prevTime < 200;
+            _this._isMouseEvent = isMouseEvent(e);
 
-            if (preventRightClick && (e.which === 3 || e.button === 2)) {
-              _this.initDrag();
-
-              return false;
+            if (!_this._isMouseEvent && _this._preventMouseEvent) {
+              _this._preventMouseEvent = false;
             }
 
-            var result = _this.trigger("dragStart", __assign$3({
-              datas: _this.datas,
+            var result = _this._preventMouseEvent || _this.emit("dragStart", __assign$3(__assign$3({
+              data: _this.data,
+              datas: _this.data,
               inputEvent: e,
-              isTrusted: isTrusted
-            }, _this.getCurrentStore().getPosition()));
+              isMouseEvent: _this._isMouseEvent,
+              isSecondaryButton: _this._isSecondaryButton,
+              isTrusted: isTrusted,
+              isDouble: _this.doubleFlag
+            }, _this.getCurrentStore().getPosition()), {
+              preventDefault: function () {
+                e.preventDefault();
+              },
+              preventDrag: function () {
+                _this._dragFlag = false;
+              }
+            }));
 
             if (result === false) {
-              _this.initDrag();
+              _this.stop();
             }
 
-            _this.isDouble = now() - _this.prevTime < 200;
-            _this.flag && preventDefault && e.preventDefault();
+            if (_this._isMouseEvent && _this.flag && preventDefault) {
+              e.preventDefault();
+            }
           }
 
           if (!_this.flag) {
@@ -2546,15 +2294,19 @@ version: 0.18.1
 
           var timer = 0;
 
-          if (isDragStart && isTouch && pinchOutside) {
-            timer = setTimeout(function () {
-              addEvent(container, "touchstart", _this.onDragStart, {
-                passive: false
-              });
-            });
-          }
+          if (isDragStart) {
+            _this._attchDragEvent(); // wait pinch
 
-          if (!isDragStart && isTouch && pinchOutside) {
+
+            if (isTouch && pinchOutside) {
+              timer = setTimeout(function () {
+                addEvent(container, "touchstart", _this.onDragStart, {
+                  passive: false
+                });
+              });
+            }
+          } else if (isTouch && pinchOutside) {
+            // pinch is occured
             removeEvent(container, "touchstart", _this.onDragStart);
           }
 
@@ -2576,22 +2328,36 @@ version: 0.18.1
             return;
           }
 
+          var preventDefault = _this.options.preventDefault;
+
+          if (!_this._isMouseEvent && preventDefault) {
+            e.preventDefault();
+          }
+
           var clients = getEventClients(e);
 
           var result = _this.moveClients(clients, e, false);
 
-          if (_this.pinchFlag || result.deltaX || result.deltaY) {
-            _this.trigger("drag", __assign$3({}, result, {
-              isScroll: !!isScroll,
-              inputEvent: e
-            }));
+          if (_this._dragFlag) {
+            if (_this.pinchFlag || result.deltaX || result.deltaY) {
+              var dragResult = _this._preventMouseEvent || _this.emit("drag", __assign$3(__assign$3({}, result), {
+                isScroll: !!isScroll,
+                inputEvent: e
+              }));
+
+              if (dragResult === false) {
+                _this.stop();
+
+                return;
+              }
+            }
+
+            if (_this.pinchFlag) {
+              _this.onPinch(e, clients);
+            }
           }
 
-          if (_this.pinchFlag) {
-            _this.onPinch(e, clients);
-          }
-
-          _this.getCurrentStore().addClients(clients);
+          _this.getCurrentStore().getPosition(clients, true);
         };
 
         _this.onDragEnd = function (e) {
@@ -2601,46 +2367,124 @@ version: 0.18.1
 
           var _a = _this.options,
               pinchOutside = _a.pinchOutside,
-              container = _a.container;
+              container = _a.container,
+              preventClickEventOnDrag = _a.preventClickEventOnDrag,
+              preventClickEventOnDragStart = _a.preventClickEventOnDragStart,
+              preventClickEventByCondition = _a.preventClickEventByCondition;
+          var isDrag = _this.isDrag;
+
+          if (preventClickEventOnDrag || preventClickEventOnDragStart || preventClickEventByCondition) {
+            requestAnimationFrame(function () {
+              _this._allowClickEvent();
+            });
+          }
+
+          if (!preventClickEventByCondition && !preventClickEventOnDragStart && preventClickEventOnDrag && !isDrag) {
+            _this._allowClickEvent();
+          }
 
           if (_this.isTouch && pinchOutside) {
             removeEvent(container, "touchstart", _this.onDragStart);
           }
 
-          _this.flag = false;
-
-          var position = _this.getCurrentStore().getPosition();
-
-          var currentTime = now();
-          var isDouble = !_this.isDrag && _this.isDouble;
-          _this.prevTime = _this.isDrag || isDouble ? 0 : currentTime;
-
-          _this.trigger("dragEnd", __assign$3({
-            datas: _this.datas,
-            isDouble: isDouble,
-            isDrag: _this.isDrag,
-            inputEvent: e
-          }, position));
-
           if (_this.pinchFlag) {
             _this.onPinchEnd(e);
           }
 
-          _this.clientStores = [];
+          var clients = (e === null || e === void 0 ? void 0 : e.touches) ? getEventClients(e) : [];
+          var clientsLength = clients.length;
+
+          if (clientsLength === 0 || !_this.options.keepDragging) {
+            _this.flag = false;
+          } else {
+            _this._addStore(new ClientStore(clients));
+          }
+
+          var position = _this._getPosition();
+
+          var currentTime = now();
+          var isDouble = !isDrag && _this.doubleFlag;
+          _this.prevTime = isDrag || isDouble ? 0 : currentTime;
+
+          if (!_this.flag) {
+            _this._dettachDragEvent();
+
+            _this._preventMouseEvent || _this.emit("dragEnd", __assign$3({
+              data: _this.data,
+              datas: _this.data,
+              isDouble: isDouble,
+              isDrag: isDrag,
+              isClick: !isDrag,
+              isMouseEvent: _this._isMouseEvent,
+              isSecondaryButton: _this._isSecondaryButton,
+              inputEvent: e
+            }, position));
+            _this.clientStores = [];
+
+            if (!_this._isMouseEvent) {
+              _this._preventMouseEvent = true;
+              requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                  _this._preventMouseEvent = false;
+                });
+              });
+            }
+          }
         };
+
+        _this.onBlur = function () {
+          _this.onDragEnd();
+        };
+
+        _this._allowClickEvent = function () {
+          removeEvent(window, "click", _this._onClick, true);
+        };
+
+        _this._onClick = function (e) {
+          _this._allowClickEvent();
+
+          _this._preventMouseEvent = false;
+          var preventClickEventByCondition = _this.options.preventClickEventByCondition;
+
+          if (preventClickEventByCondition === null || preventClickEventByCondition === void 0 ? void 0 : preventClickEventByCondition(e)) {
+            return;
+          }
+
+          e.stopPropagation();
+          e.preventDefault();
+        };
+
+        _this._onContextMenu = function (e) {
+          var options = _this.options;
+
+          if (!options.preventRightClick) {
+            e.preventDefault();
+          } else {
+            _this.onDragEnd(e);
+          }
+        };
+
+        _this._passCallback = function () {};
 
         var elements = [].concat(targets);
         _this.options = __assign$3({
           checkInput: false,
           container: elements.length > 1 ? window : elements[0],
           preventRightClick: true,
+          preventWheelClick: true,
+          preventClickEventOnDragStart: false,
+          preventClickEventOnDrag: false,
+          preventClickEventByCondition: null,
           preventDefault: true,
+          checkWindowBlur: false,
+          keepDragging: false,
           pinchThreshold: 0,
           events: ["touch", "mouse"]
         }, options);
         var _a = _this.options,
             container = _a.container,
-            events = _a.events;
+            events = _a.events,
+            checkWindowBlur = _a.checkWindowBlur;
         _this.isTouch = events.indexOf("touch") > -1;
         _this.isMouse = events.indexOf("mouse") > -1;
         _this.targets = elements;
@@ -2648,10 +2492,13 @@ version: 0.18.1
         if (_this.isMouse) {
           elements.forEach(function (el) {
             addEvent(el, "mousedown", _this.onDragStart);
+            addEvent(el, "mousemove", _this._passCallback);
           });
-          addEvent(container, "mousemove", _this.onDrag);
-          addEvent(container, "mouseup", _this.onDragEnd);
-          addEvent(container, "contextmenu", _this.onDragEnd);
+          addEvent(container, "contextmenu", _this._onContextMenu);
+        }
+
+        if (checkWindowBlur) {
+          addEvent(window, "blur", _this.onBlur);
         }
 
         if (_this.isTouch) {
@@ -2660,20 +2507,36 @@ version: 0.18.1
           };
           elements.forEach(function (el) {
             addEvent(el, "touchstart", _this.onDragStart, passive_1);
+            addEvent(el, "touchmove", _this._passCallback, passive_1);
           });
-          addEvent(container, "touchmove", _this.onDrag, passive_1);
-          addEvent(container, "touchend", _this.onDragEnd, passive_1);
-          addEvent(container, "touchcancel", _this.onDragEnd, passive_1);
         }
 
         return _this;
       }
       /**
-       * The total moved distance
+       * Stop Gesto's drag events.
        */
 
 
       var __proto = Gesto.prototype;
+
+      __proto.stop = function () {
+        this.isDrag = false;
+        this.data = {};
+        this.clientStores = [];
+        this.pinchFlag = false;
+        this.doubleFlag = false;
+        this.prevTime = 0;
+        this.flag = false;
+
+        this._allowClickEvent();
+
+        this._dettachDragEvent();
+      };
+      /**
+       * The total moved distance
+       */
+
 
       __proto.getMovement = function (clients) {
         return this.getCurrentStore().getMovement(clients) + this.clientStores.slice(1).reduce(function (prev, cur) {
@@ -2703,6 +2566,14 @@ version: 0.18.1
 
       __proto.isPinchFlag = function () {
         return this.pinchFlag;
+      };
+      /**
+       * Whether to start double click
+       */
+
+
+      __proto.isDoubleFlag = function () {
+        return this.doubleFlag;
       };
       /**
        * Whether to pinch
@@ -2759,6 +2630,65 @@ version: 0.18.1
         this.onDragStart(e, false);
       };
       /**
+       * Set the event data while dragging.
+       */
+
+
+      __proto.setEventData = function (data) {
+        var currentData = this.data;
+
+        for (var name in data) {
+          currentData[name] = data[name];
+        }
+
+        return this;
+      };
+      /**
+       * Set the event data while dragging.
+       * Use `setEventData`
+       * @deprecated
+       */
+
+
+      __proto.setEventDatas = function (data) {
+        return this.setEventData(data);
+      };
+      /**
+       * Get the current event state while dragging.
+       */
+
+
+      __proto.getCurrentEvent = function (inputEvent) {
+        return __assign$3(__assign$3({
+          data: this.data,
+          datas: this.data
+        }, this._getPosition()), {
+          movement: this.getMovement(),
+          isDrag: this.isDrag,
+          isPinch: this.isPinch,
+          isScroll: false,
+          inputEvent: inputEvent
+        });
+      };
+      /**
+       * Get & Set the event data while dragging.
+       */
+
+
+      __proto.getEventData = function () {
+        return this.data;
+      };
+      /**
+       * Get & Set the event data while dragging.
+       * Use getEventData method
+       * @depreacated
+       */
+
+
+      __proto.getEventDatas = function () {
+        return this.data;
+      };
+      /**
        * Unset Gesto
        */
 
@@ -2769,14 +2699,13 @@ version: 0.18.1
         var targets = this.targets;
         var container = this.options.container;
         this.off();
+        removeEvent(window, "blur", this.onBlur);
 
         if (this.isMouse) {
           targets.forEach(function (target) {
             removeEvent(target, "mousedown", _this.onDragStart);
           });
-          removeEvent(container, "mousemove", this.onDrag);
-          removeEvent(container, "mouseup", this.onDragEnd);
-          removeEvent(container, "contextmenu", this.onDragEnd);
+          removeEvent(container, "contextmenu", this._onContextMenu);
         }
 
         if (this.isTouch) {
@@ -2784,10 +2713,11 @@ version: 0.18.1
             removeEvent(target, "touchstart", _this.onDragStart);
           });
           removeEvent(container, "touchstart", this.onDragStart);
-          removeEvent(container, "touchmove", this.onDrag);
-          removeEvent(container, "touchend", this.onDragEnd);
-          removeEvent(container, "touchcancel", this.onDragEnd);
         }
+
+        this._allowClickEvent();
+
+        this._dettachDragEvent();
       };
 
       __proto.onPinchStart = function (e) {
@@ -2799,14 +2729,21 @@ version: 0.18.1
 
         var store = new ClientStore(getEventClients(e));
         this.pinchFlag = true;
-        this.clientStores.splice(0, 0, store);
-        this.trigger("pinchStart", __assign$3({
-          datas: this.datas,
+
+        this._addStore(store);
+
+        var result = this.emit("pinchStart", __assign$3(__assign$3({
+          data: this.data,
+          datas: this.data,
           angle: store.getAngle(),
           touches: this.getCurrentStore().getPositions()
-        }, store.getPosition(), {
+        }, store.getPosition()), {
           inputEvent: e
         }));
+
+        if (result === false) {
+          this.pinchFlag = false;
+        }
       };
 
       __proto.onPinch = function (e, clients) {
@@ -2816,15 +2753,16 @@ version: 0.18.1
 
         var store = this.getCurrentStore();
         this.isPinch = true;
-        this.trigger("pinch", __assign$3({
-          datas: this.datas,
+        this.emit("pinch", __assign$3(__assign$3({
+          data: this.data,
+          datas: this.data,
           movement: this.getMovement(clients),
           angle: store.getAngle(clients),
           rotation: store.getRotation(clients),
           touches: store.getPositions(clients),
           scale: store.getScale(clients),
           distance: store.getDistance(clients)
-        }, store.getPosition(clients), {
+        }, store.getPosition(clients)), {
           inputEvent: e
         }));
       };
@@ -2838,21 +2776,14 @@ version: 0.18.1
         this.isPinch = false;
         this.pinchFlag = false;
         var store = this.getCurrentStore();
-        this.trigger("pinchEnd", __assign$3({
-          datas: this.datas,
+        this.emit("pinchEnd", __assign$3(__assign$3({
+          data: this.data,
+          datas: this.data,
           isPinch: isPinch,
           touches: store.getPositions()
-        }, store.getPosition(), {
+        }, store.getPosition()), {
           inputEvent: e
         }));
-        this.isPinch = false;
-        this.pinchFlag = false;
-      };
-
-      __proto.initDrag = function () {
-        this.clientStores = [];
-        this.pinchFlag = false;
-        this.flag = false;
       };
 
       __proto.getCurrentStore = function () {
@@ -2860,22 +2791,84 @@ version: 0.18.1
       };
 
       __proto.moveClients = function (clients, inputEvent, isAdd) {
-        var store = this.getCurrentStore();
-        var position = store[isAdd ? "addClients" : "getPosition"](clients);
-        this.isDrag = true;
-        return __assign$3({
-          datas: this.datas
-        }, position, {
+        var position = this._getPosition(clients, isAdd);
+
+        if (position.deltaX || position.deltaY) {
+          this.isDrag = true;
+        }
+
+        return __assign$3(__assign$3({
+          data: this.data,
+          datas: this.data
+        }, position), {
           movement: this.getMovement(clients),
           isDrag: this.isDrag,
           isPinch: this.isPinch,
           isScroll: false,
+          isMouseEvent: this._isMouseEvent,
+          isSecondaryButton: this._isSecondaryButton,
           inputEvent: inputEvent
         });
       };
 
+      __proto._addStore = function (store) {
+        this.clientStores.splice(0, 0, store);
+      };
+
+      __proto._getPosition = function (clients, isAdd) {
+        var store = this.getCurrentStore();
+        var position = store.getPosition(clients, isAdd);
+
+        var _a = this.clientStores.slice(1).reduce(function (prev, cur) {
+          var storePosition = cur.getPosition();
+          prev.distX += storePosition.distX;
+          prev.distY += storePosition.distY;
+          return prev;
+        }, position),
+            distX = _a.distX,
+            distY = _a.distY;
+
+        return __assign$3(__assign$3({}, position), {
+          distX: distX,
+          distY: distY
+        });
+      };
+
+      __proto._attchDragEvent = function () {
+        var container = this.options.container;
+        var passive = {
+          passive: false
+        };
+
+        if (this.isMouse) {
+          addEvent(container, "mousemove", this.onDrag);
+          addEvent(container, "mouseup", this.onDragEnd);
+        }
+
+        if (this.isTouch) {
+          addEvent(container, "touchmove", this.onDrag, passive);
+          addEvent(container, "touchend", this.onDragEnd, passive);
+          addEvent(container, "touchcancel", this.onDragEnd, passive);
+        }
+      };
+
+      __proto._dettachDragEvent = function () {
+        var container = this.options.container;
+
+        if (this.isMouse) {
+          removeEvent(container, "mousemove", this.onDrag);
+          removeEvent(container, "mouseup", this.onDragEnd);
+        }
+
+        if (this.isTouch) {
+          removeEvent(container, "touchstart", this.onDragStart);
+          removeEvent(container, "touchmove", this.onDrag);
+          removeEvent(container, "touchend", this.onDragEnd);
+          removeEvent(container, "touchcancel", this.onDragEnd);
+        }
+      };
       return Gesto;
-    }(Component);
+    }(EventEmitter);
 
     /*
     Copyright (c) 2019 Daybrush
@@ -3157,11 +3150,9 @@ version: 0.18.1
 
     function prefix() {
       var classNames = [];
-
       for (var _i = 0; _i < arguments.length; _i++) {
         classNames[_i] = arguments[_i];
       }
-
       return prefixNames.apply(void 0, __spreadArrays(['scena-'], classNames));
     }
 
@@ -3177,15 +3168,10 @@ version: 0.18.1
     var EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'];
 
     var GuidesElement = styled$1('div', GUIDES_CSS);
-
-    var Guides =
-    /*#__PURE__*/
-    function (_super) {
+    var Guides = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
-
       function Guides(props) {
         var _this = _super.call(this, props) || this;
-
         _this.state = {
           guides: [],
           selectedGuides: []
@@ -3193,17 +3179,14 @@ version: 0.18.1
         _this.scrollPos = 0;
         _this.guideElements = [];
         _this._isFirstMove = false;
-
         _this.onDragStart = function (e) {
           _this._isFirstMove = true;
         };
-
         _this.onDrag = function (e) {
           if (_this._isFirstMove) {
             _this._isFirstMove = false;
             addClass(e.datas.target, DRAGGING);
           }
-
           var nextPos = _this.movePos(e);
           /**
            * When dragging, the drag event is called.
@@ -3211,41 +3194,32 @@ version: 0.18.1
            * @event drag
            * @param {OnDrag} - Parameters for the drag event
            */
-
-
           _this.props.onDrag(__assign(__assign({}, e), {
             dragElement: e.datas.target
           }));
-
           return nextPos;
         };
-
         _this.onDragEnd = function (e) {
           var datas = e.datas,
-              isDrag = e.isDrag,
-              distX = e.distX,
-              distY = e.distY;
-
+            isDrag = e.isDrag,
+            distX = e.distX,
+            distY = e.distY;
           if (!isDrag) {
             return;
           }
-
           var pos = _this.movePos(e);
-
           var guides = _this.state.guides;
           var _a = _this.props,
-              onChangeGuides = _a.onChangeGuides,
-              onAddGuide = _a.onAddGuide,
-              zoom = _a.zoom,
-              displayDragPos = _a.displayDragPos,
-              digit = _a.digit,
-              lockGuides = _a.lockGuides;
+            onChangeGuides = _a.onChangeGuides,
+            onAddGuide = _a.onAddGuide,
+            zoom = _a.zoom,
+            displayDragPos = _a.displayDragPos,
+            digit = _a.digit,
+            lockGuides = _a.lockGuides;
           var guidePos = parseFloat((pos / zoom).toFixed(digit || 0));
-
           if (displayDragPos) {
             _this.displayElement.style.cssText += 'display: none;';
           }
-
           removeClass(datas.target, DRAGGING);
           /**
            * When the drag finishes, the dragEnd event is called.
@@ -3253,11 +3227,9 @@ version: 0.18.1
            * @event dragEnd
            * @param {OnDragEnd} - Parameters for the dragEnd event
            */
-
           _this.props.onDragEnd(__assign(__assign({}, e), {
             dragElement: datas.target
           }));
-
           if (datas.fromRuler) {
             if (_this._isFirstMove) {
               /**
@@ -3270,7 +3242,6 @@ version: 0.18.1
                 pos: 0
               }));
             }
-
             if (guidePos >= _this.scrollPos && guides.indexOf(guidePos) < 0) {
               _this.setState({
                 guides: __spreadArrays(guides, [guidePos])
@@ -3299,20 +3270,16 @@ version: 0.18.1
             var isRemove_1 = false;
             var isChange_1 = false;
             guides = __spreadArrays(guides);
-
             if (guidePos < _this.scrollPos) {
               if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
                 return;
               }
-
               var deletedPosGuide = guides[index];
               guides.splice(index, 1);
-
               _this.props.onDeleteGuide({
                 deletedIndexGuide: index,
                 deletedPosGuide: deletedPosGuide
               });
-
               isRemove_1 = true;
             } else if (guides.indexOf(guidePos) > -1) {
               return;
@@ -3320,11 +3287,9 @@ version: 0.18.1
               if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
                 return;
               }
-
               guides[index] = guidePos;
               isChange_1 = true;
             }
-
             _this.setState({
               guides: guides
             }, function () {
@@ -3340,7 +3305,6 @@ version: 0.18.1
             });
           }
         };
-
         window.addEventListener('keydown', function (e) {
           if (e.code === 'Backspace' && _this.state.selectedGuides.length) {
             _this.deleteSelectedGuide();
@@ -3348,41 +3312,34 @@ version: 0.18.1
         });
         window.addEventListener('click', function (e) {
           _this.resetSelected();
-
           e.stopPropagation();
         });
         return _this;
       }
-
       var __proto = Guides.prototype;
-
       __proto.disablePointerEventsOnScroll = function () {
         var _this = this;
-
         var _a;
-
         if (!((_a = this.props) === null || _a === void 0 ? void 0 : _a.showGuides)) {
           return;
         }
-
         this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
         this.guidesElement.style.pointerEvents = 'none';
         this._pointerEventsTimer = setTimeout(function () {
           _this.guidesElement.style.pointerEvents = 'auto';
         }, 300);
       };
-
       __proto.render = function () {
         var _a = this.props,
-            className = _a.className,
-            type = _a.type,
-            zoom = _a.zoom,
-            style = _a.style,
-            rulerStyle = _a.rulerStyle,
-            displayDragPos = _a.displayDragPos,
-            cspNonce = _a.cspNonce,
-            dragGuideStyle = _a.dragGuideStyle,
-            portalContainer = _a.portalContainer;
+          className = _a.className,
+          type = _a.type,
+          zoom = _a.zoom,
+          style = _a.style,
+          rulerStyle = _a.rulerStyle,
+          displayDragPos = _a.displayDragPos,
+          cspNonce = _a.cspNonce,
+          dragGuideStyle = _a.dragGuideStyle,
+          portalContainer = _a.portalContainer;
         var props = this.props;
         var translateName = this.getTranslateName();
         var rulerProps = {};
@@ -3390,7 +3347,6 @@ version: 0.18.1
           if (name === 'style') {
             return;
           }
-
           rulerProps[name] = props[name];
         });
         return React.createElement(GuidesElement, {
@@ -3420,7 +3376,6 @@ version: 0.18.1
           ref: ref(this, 'adderElement')
         }), this.renderGuides()));
       };
-
       __proto.selectGuide = function (pos, e) {
         this.setState({
           selectedGuides: [pos]
@@ -3431,29 +3386,24 @@ version: 0.18.1
         e.stopPropagation();
         e.preventDefault();
       };
-
       __proto.renderGuides = function () {
         var _this = this;
-
         var props = this.props;
         var _a = props,
-            type = _a.type,
-            zoom = _a.zoom,
-            showGuides = _a.showGuides,
-            guideStyle = _a.guideStyle,
-            displayGuidePos = _a.displayGuidePos,
-            _b = _a.guidePosStyle,
-            guidePosStyle = _b === void 0 ? {} : _b;
+          type = _a.type,
+          zoom = _a.zoom,
+          showGuides = _a.showGuides,
+          guideStyle = _a.guideStyle,
+          displayGuidePos = _a.displayGuidePos,
+          _b = _a.guidePosStyle,
+          guidePosStyle = _b === void 0 ? {} : _b;
         var translateName = this.getTranslateName();
         var guides = this.state.guides;
-
         var guidePosFormat = props.guidePosFormat || props.dragPosFormat || function (v) {
           return v;
         };
-
         var selectedGuides = this.state.selectedGuides;
         this.guideElements = [];
-
         if (showGuides) {
           return guides.map(function (pos, i) {
             return React.createElement("div", {
@@ -3474,35 +3424,28 @@ version: 0.18.1
             }, guidePosFormat(pos)));
           });
         }
-
         return;
       };
-
       __proto.componentDidMount = function () {
         var _this = this;
-
         this.gesto = new Gesto(this.manager.getElement(), {
           container: document.body
         }).on('dragStart', function (e) {
           var _a = _this.props,
-              type = _a.type,
-              zoom = _a.zoom,
-              lockGuides = _a.lockGuides;
-
+            type = _a.type,
+            zoom = _a.zoom,
+            lockGuides = _a.lockGuides;
           if (lockGuides === true) {
             e.stop();
             return;
           }
-
           var inputEvent = e.inputEvent;
           var target = inputEvent.target;
           var datas = e.datas;
           var canvasElement = _this.ruler.canvasElement;
           var guidesElement = _this.guidesElement;
           var isHorizontal = type === 'horizontal';
-
           var originRect = _this.originElement.getBoundingClientRect();
-
           var matrix = getDistElementMatrix(_this.manager.getElement());
           var offsetPos = calculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
           offsetPos[0] -= guidesElement.offsetLeft;
@@ -3513,39 +3456,35 @@ version: 0.18.1
           var isLockAdd = lockGuides && lockGuides.indexOf('add') > -1;
           var isLockRemove = lockGuides && lockGuides.indexOf('remove') > -1;
           var isLockChange = lockGuides && lockGuides.indexOf('change') > -1;
-
           if (target === canvasElement) {
             if (isLockAdd) {
               e.stop();
               return;
             }
-
             datas.fromRuler = true;
-            datas.target = _this.adderElement; // add
+            datas.target = _this.adderElement;
+            // add
           } else if (hasClass(target, GUIDE)) {
             if (isLockRemove && isLockChange) {
               e.stop();
               return;
             }
-
-            datas.target = target; // change
+            datas.target = target;
+            // change
           } else {
             e.stop();
             return false;
           }
-
           _this.onDragStart(e);
-        }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd); // pass array of guides on mount data to create gridlines or something like that in ui
-
+        }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
+        // pass array of guides on mount data to create gridlines or something like that in ui
         this.setState({
           guides: this.props.defaultGuides || []
         });
       };
-
       __proto.componentWillUnmount = function () {
         this.gesto.unset();
       };
-
       __proto.componentDidUpdate = function (prevProps) {
         if (prevProps.defaultGuides !== this.props.defaultGuides) {
           // to dynamically update guides from code rather than dragging guidelines
@@ -3559,8 +3498,6 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.loadGuides = function (guides) {
         this.setState({
           guides: guides
@@ -3571,11 +3508,8 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.deleteSelectedGuide = function () {
         var _this = this;
-
         var guides = this.getGuides();
         var index = guides.findIndex(function (guide) {
           if (_this.state.selectedGuides.includes(guide)) {
@@ -3597,8 +3531,6 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.clearAllGuides = function () {
         this.setState({
           guides: []
@@ -3609,8 +3541,6 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.getGuides = function () {
         return this.state.guides;
       };
@@ -3619,13 +3549,10 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.scrollGuides = function (pos, zoom) {
         if (zoom === void 0) {
           zoom = 1;
         }
-
         var guidesElement = this.guidesElement;
         this.disablePointerEventsOnScroll();
         this.scrollPos = pos;
@@ -3635,7 +3562,6 @@ version: 0.18.1
           if (!el) {
             return;
           }
-
           el.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
         });
       };
@@ -3644,8 +3570,6 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.resize = function () {
         this.ruler.resize();
       };
@@ -3654,28 +3578,23 @@ version: 0.18.1
        * @memberof Guides
        * @instance
        */
-
-
       __proto.scroll = function (pos) {
         this.ruler.scroll(pos);
       };
-
       __proto.movePos = function (e) {
         var datas = e.datas,
-            distX = e.distX,
-            distY = e.distY;
+          distX = e.distX,
+          distY = e.distY;
         var props = this.props;
         var type = props.type,
-            zoom = props.zoom,
-            snaps = props.snaps,
-            snapThreshold = props.snapThreshold,
-            displayDragPos = props.displayDragPos,
-            digit = props.digit;
-
+          zoom = props.zoom,
+          snaps = props.snaps,
+          snapThreshold = props.snapThreshold,
+          displayDragPos = props.displayDragPos,
+          digit = props.digit;
         var dragPosFormat = props.dragPosFormat || function (v) {
           return v;
         };
-
         var isHorizontal = type === 'horizontal';
         var matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
         var offsetPos = datas.offsetPos;
@@ -3686,12 +3605,10 @@ version: 0.18.1
         var guideSnaps = snaps.slice().sort(function (a, b) {
           return Math.abs(guidePos - a) - Math.abs(guidePos - b);
         });
-
         if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom - nextPos) < snapThreshold) {
           guidePos = guideSnaps[0];
           nextPos = guidePos * zoom;
         }
-
         if (!datas.fromRuler || !this._isFirstMove) {
           if (displayDragPos) {
             var displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
@@ -3700,25 +3617,20 @@ version: 0.18.1
             }).join(', ') + ")");
             this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
           }
-
           var target = datas.target;
           target.setAttribute('data-pos', guidePos);
           target.style.transform = this.getTranslateName() + "(" + nextPos + "px)";
         }
-
         return nextPos;
       };
-
       __proto.getTranslateName = function () {
         return this.props.type === 'horizontal' ? 'translateY' : 'translateX';
       };
-
       __proto.resetSelected = function () {
         this.setState({
           selectedGuides: []
         });
       };
-
       Guides.defaultProps = {
         className: '',
         type: 'horizontal',
@@ -3750,52 +3662,38 @@ version: 0.18.1
       return Guides;
     }(React.PureComponent);
 
-    var InnerGuides =
-    /*#__PURE__*/
-    function (_super) {
+    var InnerGuides = /*#__PURE__*/function (_super) {
       __extends(InnerGuides, _super);
-
       function InnerGuides(props) {
         var _this = _super.call(this, props) || this;
-
         _this.state = {};
         _this.state = __assign({}, props);
         return _this;
       }
-
       var __proto = InnerGuides.prototype;
-
       __proto.render = function () {
         var _a = this.state,
-            container = _a.container,
-            state = __rest(_a, ["container"]);
-
+          container = _a.container,
+          state = __rest(_a, ["container"]);
         return reactDom.createPortal(React.createElement(Guides, __assign({
           ref: ref(this, 'guides')
         }, state)), container);
       };
-
       return InnerGuides;
     }(React.Component);
 
-    var Guides$1 =
-    /*#__PURE__*/
-    function (_super) {
+    var Guides$1 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
       /**
        * @sort 1
        * @param - guides' container
        * @param {$ts:Partial<Guides.GuidesOptions>} - guides' options
        */
-
-
       function Guides(container, options) {
         if (options === void 0) {
           options = {};
         }
-
         var _this = _super.call(this) || this;
-
         _this.tempElement = document.createElement('div');
         var events = {};
         EVENTS.forEach(function (name) {
@@ -3813,46 +3711,34 @@ version: 0.18.1
        * @param state
        * @param callback
        */
-
-
       var __proto = Guides.prototype;
-
       __proto.setState = function (state, callback) {
         this.innerGuides.setState(state, callback);
       };
       /**
        * destroy guides
        */
-
-
       __proto.destroy = function () {
         reactDom.render(null, this.tempElement);
         this.tempElement = null;
         this.innerGuides = null;
       };
-
       __proto.getInnerGuides = function () {
         return this.innerGuides.guides;
       };
-
       Guides = __decorate([Properties(METHODS, function (prototype, property) {
         if (prototype[property]) {
           return;
         }
-
         prototype[property] = function () {
           var args = [];
-
           for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
           }
-
           var self = this.getInnerGuides();
-
           if (!self || !self[property]) {
             return;
           }
-
           return self[property].apply(self, args);
         };
       }), Properties(PROPERTIES$1, function (prototype, property) {
@@ -3862,7 +3748,6 @@ version: 0.18.1
           },
           set: function (value) {
             var _a;
-
             this.innerGuides.setState((_a = {}, _a[property] = value, _a));
           },
           enumerable: true,
@@ -3872,20 +3757,15 @@ version: 0.18.1
       /**
        * @sort 1
        * @extends EventEmitter
-       */
-      ], Guides);
+       */], Guides);
       return Guides;
     }(EventEmitter);
 
-    var Guides$2 =
-    /*#__PURE__*/
-    function (_super) {
+    var Guides$2 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
-
       function Guides() {
         return _super !== null && _super.apply(this, arguments) || this;
       }
-
       return Guides;
     }(Guides$1);
 
