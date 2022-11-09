@@ -52,6 +52,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private originElement!: HTMLElement;
     private gesto!: Gesto;
     private guideElements: HTMLElement[] = [];
+    private _isMounted = false;
     private _isFirstMove = false;
     private _pointerEventsTimer: NodeJS.Timeout;
 
@@ -70,7 +71,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
 
     public disablePointerEventsOnScroll() {
-        if(!this.props?.showGuides) {
+        if(!this.props?.showGuides || !this.guideElements.length) {
             return;
         }
         this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
@@ -176,6 +177,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         return;
     }
     public componentDidMount() {
+        this._isMounted = true;
+
         this.gesto = new Gesto(this.manager.getElement(), {
             container: document.body,
         }).on('dragStart', e => {
@@ -237,6 +240,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.setState({ guides: this.props.defaultGuides || [] });
     }
     public componentWillUnmount() {
+        this._isMounted = false;
+        this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
         this.gesto.unset();
     }
     public componentDidUpdate(prevProps: any) {
@@ -287,6 +292,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      * @instance
      */
     public clearAllGuides() {
+        if (!this._isMounted) {
+            return;
+        }
         this.setState({
             guides: [],
         });
@@ -342,7 +350,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this._isFirstMove = true;
     }
 
-    private onDrag = (e: any) => { 
+    private onDrag = (e: any) => {
         if (this._isFirstMove) {
             this._isFirstMove = false;
             addClass(e.datas.target, DRAGGING);
@@ -364,7 +372,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private onDragEnd = (e: OnDragEnd) => {
         const { datas, isDrag, distX, distY } = e;
 
-        if(!isDrag) {
+        if (!isDrag) {
             return;
         }
 
@@ -514,6 +522,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
 
     public resetSelected() {
+        if (!this._isMounted) {
+            return;
+        }
         this.setState({
             selectedGuides:[],
         });
