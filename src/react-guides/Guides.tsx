@@ -493,11 +493,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         if (!datas.fromRuler || !this._isFirstMove) {
             if (displayDragPos) {
                 const displayPos = type === 'horizontal'
-                    ? [offsetX, nextPos]
-                    : [nextPos, offsetY];
+                ? [offsetX, nextPos]
+                : [nextPos, offsetY];
+                const transform = type === 'horizontal' 
+                    ? `translate(${displayPos.map((v, i) => !i ? '0px' : `${v}px` ).join(', ')})` 
+                    : `translate(${displayPos.map((v, i) => !i ? `${v}px` : '7px' ).join(', ')})`;
                 this.displayElement.style.cssText += 'display: block;'
                     + 'transform: translate(-50%, -50%) '
-                    + `translate(${displayPos.map(v => `${v}px`).join(', ')})`;
+                    + transform;
                 this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
             }
             const target = datas.target;
