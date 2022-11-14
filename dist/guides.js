@@ -775,6 +775,7 @@ version: 0.18.1
     function removeEvent(el, type, listener, options) {
       el.removeEventListener(type, listener, options);
     }
+    //# sourceMappingURL=utils.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1056,6 +1057,7 @@ version: 0.18.1
 
       return EventEmitter;
     }();
+    //# sourceMappingURL=event-emitter.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1105,6 +1107,7 @@ version: 0.18.1
         });
       };
     }
+    //# sourceMappingURL=utils.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1506,6 +1509,7 @@ version: 0.18.1
     }(React.PureComponent);
 
     var PROPERTIES = ["type", "width", "height", "unit", "zoom", "direction", "textAlign", "font", "segment", "mainLineSize", "longLineSize", "shortLineSize", "lineOffset", "textOffset", "negativeRuler", "range", "scrollPos", "style", "backgroundColor", "rangeBackgroundColor", "lineColor", "textColor", "textBackgroundColor", "textFormat", "portalContainer"];
+    //# sourceMappingURL=ruler.esm.js.map
 
     /*
     Copyright (c) 2020 Daybrush
@@ -1732,6 +1736,7 @@ version: 0.18.1
 
       return matrix;
     }
+    //# sourceMappingURL=matrix.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1888,6 +1893,7 @@ version: 0.18.1
         };
       });
     }
+    //# sourceMappingURL=css-to-mat.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -2869,6 +2875,7 @@ version: 0.18.1
       };
       return Gesto;
     }(EventEmitter);
+    //# sourceMappingURL=gesto.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -2999,6 +3006,7 @@ version: 0.18.1
         }
       };
     }
+    //# sourceMappingURL=styled.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -3147,6 +3155,7 @@ version: 0.18.1
         }(StyledElement)
       );
     }
+    //# sourceMappingURL=styled.esm.js.map
 
     function prefix() {
       var classNames = [];
@@ -3155,6 +3164,7 @@ version: 0.18.1
       }
       return prefixNames.apply(void 0, __spreadArrays(['scena-'], classNames));
     }
+    //# sourceMappingURL=utils.js.map
 
     var RULER = prefix('ruler');
     var ADDER = prefix('guide', 'adder');
@@ -3166,6 +3176,7 @@ version: 0.18.1
     var PROPERTIES$1 = __spreadArrays(['className', 'rulerStyle', 'snapThreshold', 'snaps', 'displayDragPos', 'cspNonce', 'dragPosFormat', 'defaultGuides', 'showGuides'], PROPERTIES);
     var METHODS = ['getGuides', 'loadGuides', 'scroll', 'scrollGuides', 'resize', 'deleteSelectedGuide', 'resetSelected', 'clearAllGuides'];
     var EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'];
+    //# sourceMappingURL=consts.js.map
 
     var GuidesElement = styled$1('div', GUIDES_CSS);
     var Guides = /*#__PURE__*/function (_super) {
@@ -3180,6 +3191,8 @@ version: 0.18.1
         _this.guideElements = [];
         _this._isFirstMove = false;
         _this.onDragStart = function (e) {
+          _this.resetSelected();
+          _this.props.onDragStart(e);
           _this._isFirstMove = true;
         };
         _this.onDrag = function (e) {
@@ -3221,15 +3234,6 @@ version: 0.18.1
             _this.displayElement.style.cssText += 'display: none;';
           }
           removeClass(datas.target, DRAGGING);
-          /**
-           * When the drag finishes, the dragEnd event is called.
-           * @memberof Guides
-           * @event dragEnd
-           * @param {OnDragEnd} - Parameters for the dragEnd event
-           */
-          _this.props.onDragEnd(__assign(__assign({}, e), {
-            dragElement: datas.target
-          }));
           if (datas.fromRuler) {
             if (_this._isFirstMove) {
               /**
@@ -3304,6 +3308,15 @@ version: 0.18.1
               });
             });
           }
+          /**
+           * When the drag finishes, the dragEnd event is called.
+           * @memberof Guides
+           * @event dragEnd
+           * @param {OnDragEnd} - Parameters for the dragEnd event
+           */
+          _this.props.onDragEnd(__assign(__assign({}, e), {
+            dragElement: datas.target
+          }));
         };
         window.addEventListener('keydown', function (e) {
           if (e.code === 'Backspace' && _this.state.selectedGuides.length) {
@@ -3379,9 +3392,6 @@ version: 0.18.1
       __proto.selectGuide = function (pos, e) {
         this.setState({
           selectedGuides: [pos]
-        });
-        this.props.onResetGuides({
-          type: this.props.type
         });
         e.stopPropagation();
         e.preventDefault();
@@ -3511,19 +3521,20 @@ version: 0.18.1
       __proto.deleteSelectedGuide = function () {
         var _this = this;
         var guides = this.getGuides();
+        var guidesClone = this.getGuides();
         var index = guides.findIndex(function (guide) {
           if (_this.state.selectedGuides.includes(guide)) {
             return guide;
           }
         });
-        this.props.onDeleteGuide({
-          deletedPosGuide: guides[index],
-          deletedIndexGuide: index
-        });
         guides.splice(index, 1);
         this.setState({
           guides: guides,
           selectedGuides: []
+        });
+        this.props.onDeleteGuide({
+          deletedPosGuide: guidesClone[index],
+          deletedIndexGuide: index
         });
       };
       /**
@@ -3644,7 +3655,6 @@ version: 0.18.1
         onDeleteGuide: function () {},
         onChangeGuides: function () {},
         onDragStart: function () {},
-        onResetGuides: function () {},
         onDrag: function () {},
         onDragEnd: function () {},
         displayDragPos: false,
@@ -3661,6 +3671,8 @@ version: 0.18.1
       };
       return Guides;
     }(React.PureComponent);
+
+    //# sourceMappingURL=index.js.map
 
     var InnerGuides = /*#__PURE__*/function (_super) {
       __extends(InnerGuides, _super);
@@ -3681,6 +3693,7 @@ version: 0.18.1
       };
       return InnerGuides;
     }(React.Component);
+    //# sourceMappingURL=InnerGuides.js.map
 
     var Guides$1 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
@@ -3760,6 +3773,7 @@ version: 0.18.1
        */], Guides);
       return Guides;
     }(EventEmitter);
+    //# sourceMappingURL=GuidesManager.js.map
 
     var Guides$2 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
@@ -3768,6 +3782,7 @@ version: 0.18.1
       }
       return Guides;
     }(Guides$1);
+    //# sourceMappingURL=index.js.map
 
     return Guides$2;
 

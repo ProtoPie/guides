@@ -34,7 +34,6 @@ export interface GuidesProps extends GuidesOptions {
     onClickRuler?: (e: OnClickRuler) => any;
     onDeleteGuide?: (index: OnDeleteGuide) => any;
     onAddGuide?: (pos: OnAddGuide) => any;
-    onResetGuides?: (type: OnResetGuides) => any;
 }
 export interface OnChangeGuides {
     guides: number[];
@@ -60,9 +59,6 @@ export interface OnDeleteGuide {
     deletedIndexGuide?: number;
     deletedPosGuide?: number;
 }
-export interface OnResetGuides {
-    type?: 'horizontal' | 'vertical';
-}
 export interface OnClickRuler extends OnGestoDragEnd {
     pos: number;
 }
@@ -84,5 +80,4 @@ export interface GuidesEvents {
     clickRuler: OnClickRuler;
     deleteGuide: OnDeleteGuide;
     addGuide: OnAddGuide;
-    resetGuides: OnResetGuides;
 }
