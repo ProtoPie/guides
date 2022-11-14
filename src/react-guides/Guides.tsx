@@ -7,7 +7,7 @@ import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface,GuidesProps, GuidesState } from './types';
+import { GuidesInterface,GuidesProps, GuidesState, OnDragStart } from './types';
 import { prefix } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
@@ -228,7 +228,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 return false;
             }
             this.onDragStart();
-            this.props.onDragStart(e as any);
+            this.props.onDragStart(e as OnDragStart);
         }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
         // pass array of guides on mount data to create gridlines or something like that in ui
         this.setState({ guides: this.props.defaultGuides || [] });
