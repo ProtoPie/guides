@@ -3190,8 +3190,9 @@ version: 0.18.1
         _this.scrollPos = 0;
         _this.guideElements = [];
         _this._isFirstMove = false;
-        _this.onDragStart = function () {
+        _this.onDragStart = function (e) {
           _this.resetSelected();
+          _this.props.onDragStart(e);
           _this._isFirstMove = true;
         };
         _this.onDrag = function (e) {
@@ -3484,8 +3485,7 @@ version: 0.18.1
             e.stop();
             return false;
           }
-          _this.onDragStart();
-          _this.props.onDragStart(e);
+          _this.onDragStart(e);
         }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
         // pass array of guides on mount data to create gridlines or something like that in ui
         this.setState({

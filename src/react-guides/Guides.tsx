@@ -227,8 +227,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 e.stop();
                 return false;
             }
-            this.onDragStart();
-            this.props.onDragStart(e as OnDragStart);
+            this.onDragStart(e as OnDragStart);
         }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
         // pass array of guides on mount data to create gridlines or something like that in ui
         this.setState({ guides: this.props.defaultGuides || [] });
@@ -337,8 +336,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.ruler.scroll(pos);
     }
 
-    private onDragStart = () => {
+    private onDragStart = (e: OnDragStart) => {
         this.resetSelected();
+        this.props.onDragStart(e);
         this._isFirstMove = true;
     }
 
