@@ -78,7 +78,6 @@ export interface GuidesProps extends GuidesOptions {
     onClickRuler?: (e: OnClickRuler) => any;
     onDeleteGuide?: (index: OnDeleteGuide) => any;
     onAddGuide?: (pos: OnAddGuide) => any;
-    onResetGuides?: (type: OnResetGuides) => any;
 }
 /**
  * @typedef
@@ -141,15 +140,6 @@ export interface OnDeleteGuide {
     deletedPosGuide?: number;
 }
 
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnResetGuides
- */
- export interface OnResetGuides {
-    type?: 'horizontal' | 'vertical';
-}
-
 export interface OnClickRuler extends OnGestoDragEnd {
     pos: number;
 }
@@ -180,5 +170,4 @@ export interface GuidesEvents {
     clickRuler: OnClickRuler;
     deleteGuide: OnDeleteGuide;
     addGuide: OnAddGuide;
-    resetGuides: OnResetGuides;
 }

@@ -26,7 +26,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         onDeleteGuide: () => { },
         onChangeGuides: () => { },
         onDragStart: () => { },
-        onResetGuides: () => {},
         onDrag: () => { },
         onDragEnd: () => { },
         displayDragPos: false,
@@ -131,9 +130,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.setState({
             selectedGuides: [pos],
         });
-        this.props.onResetGuides!({
-            type: this.props.type,
-        })
         e.stopPropagation();
         e.preventDefault();
     }
@@ -231,7 +227,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 e.stop();
                 return false;
             }
-            this.onDragStart(e);
+            this.onDragStart();
+            this.props.onDragStart(e as any);
         }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
         // pass array of guides on mount data to create gridlines or something like that in ui
         this.setState({ guides: this.props.defaultGuides || [] });
@@ -263,21 +260,23 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
      */
     public deleteSelectedGuide() {
         const guides = this.getGuides();
+        const guidesClone = this.getGuides();
         const index = guides.findIndex(guide => {
             if(this.state.selectedGuides.includes(guide)) {
                 return guide;
             }
         });
-        
-        this.props.onDeleteGuide!({
-            deletedPosGuide: guides[index],
-            deletedIndexGuide: index,
-        });
-        
+
         guides.splice(index, 1);
+        
         this.setState({
             guides,
             selectedGuides: [],
+        });
+        
+        this.props.onDeleteGuide!({
+            deletedPosGuide: guidesClone[index],
+            deletedIndexGuide: index,
         });
     }
 
@@ -338,7 +337,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         this.ruler.scroll(pos);
     }
 
-    private onDragStart = (e: any) => {
+    private onDragStart = () => {
+        this.resetSelected();
         this._isFirstMove = true;
     }
 
@@ -376,17 +376,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         if (displayDragPos) {
             this.displayElement.style.cssText += 'display: none;';
         }
+
         removeClass(datas.target, DRAGGING);
-        /**
-         * When the drag finishes, the dragEnd event is called.
-         * @memberof Guides
-         * @event dragEnd
-         * @param {OnDragEnd} - Parameters for the dragEnd event
-         */
-        this.props.onDragEnd!({
-            ...e,
-            dragElement: datas.target,
-        });
+
         if (datas.fromRuler) {
             if (this._isFirstMove) {
                 /**
@@ -465,6 +457,16 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             });
         }
+        /**
+         * When the drag finishes, the dragEnd event is called.
+         * @memberof Guides
+         * @event dragEnd
+         * @param {OnDragEnd} - Parameters for the dragEnd event
+         */
+        this.props.onDragEnd!({
+            ...e,
+            dragElement: datas.target,
+        });
     }
     private movePos(e: any) {
         const { datas, distX, distY } = e;
