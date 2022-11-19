@@ -466,8 +466,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             ...e,
             dragElement: datas.target,
         });
-
-        console.log(this.gesto.getCurrentEvent());
     }
     private movePos(e: any) {
         const { datas, distX, distY } = e;
