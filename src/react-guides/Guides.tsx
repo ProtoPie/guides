@@ -127,9 +127,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
 
     private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        this.setState({
-            selectedGuides: [pos],
-        });
+        // we should detect if the last event was dragging event
+        // in such case we don't wan't to make guide selected
+        if (!this.gesto.isDragging()) {
+            this.setState({
+                selectedGuides: [pos],
+            });
+        }
         e.stopPropagation();
         e.preventDefault();
     }
@@ -457,16 +461,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             });
         }
-        /**
-         * When the drag finishes, the dragEnd event is called.
-         * @memberof Guides
-         * @event dragEnd
-         * @param {OnDragEnd} - Parameters for the dragEnd event
-         */
+
         this.props.onDragEnd!({
             ...e,
             dragElement: datas.target,
         });
+
+        console.log(this.gesto.getCurrentEvent());
     }
     private movePos(e: any) {
         const { datas, distX, distY } = e;

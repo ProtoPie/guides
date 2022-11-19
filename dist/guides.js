@@ -3308,15 +3308,10 @@ version: 0.18.1
               });
             });
           }
-          /**
-           * When the drag finishes, the dragEnd event is called.
-           * @memberof Guides
-           * @event dragEnd
-           * @param {OnDragEnd} - Parameters for the dragEnd event
-           */
           _this.props.onDragEnd(__assign(__assign({}, e), {
             dragElement: datas.target
           }));
+          console.log(_this.gesto.getCurrentEvent());
         };
         window.addEventListener('keydown', function (e) {
           if (e.code === 'Backspace' && _this.state.selectedGuides.length) {
@@ -3390,9 +3385,13 @@ version: 0.18.1
         }), this.renderGuides()));
       };
       __proto.selectGuide = function (pos, e) {
-        this.setState({
-          selectedGuides: [pos]
-        });
+        // we should detect if the last event was dragging event
+        // in such case we don't wan't to make guide selected
+        if (!this.gesto.isDragging()) {
+          this.setState({
+            selectedGuides: [pos]
+          });
+        }
         e.stopPropagation();
         e.preventDefault();
       };
