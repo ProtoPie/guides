@@ -4451,10 +4451,6 @@ version: 0.18.1
               lockGuides = _a.lockGuides;
           var guidePos = parseFloat((pos / zoom).toFixed(digit || 0));
 
-          if (displayDragPos) {
-            _this.displayElement.style.cssText += 'display: none;';
-          }
-
           removeClass(datas.target, DRAGGING);
           /**
            * When the drag finishes, the dragEnd event is called.
@@ -4903,9 +4899,9 @@ version: 0.18.1
           if (displayDragPos) {
             var displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
             var transform = type === 'horizontal' ? "translate(" + displayPos.map(function (v, i) {
-              return !i ? '0px' : v + "px";
-            }).join(', ') + ")" : "translate(" + displayPos.map(function (v, i) {
-              return !i ? v + "px" : '7px';
+              return !i ? '-4px' : v - 13 + "px";
+            }).join(', ') + ") rotate(-90deg)" : "translate(" + displayPos.map(function (v, i) {
+              return !i ? v + 16 + "px" : '9px';
             }).join(', ') + ")";
             this.displayElement.style.cssText += 'display: block;' + 'transform: translate(-50%, -50%) ' + transform;
             this.displayElement.innerHTML = "" + dragPosFormat(guidePos);

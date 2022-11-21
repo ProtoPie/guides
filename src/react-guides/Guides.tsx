@@ -497,8 +497,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 ? [offsetX, nextPos]
                 : [nextPos, offsetY];
                 const transform = type === 'horizontal' 
-                    ? `translate(${displayPos.map((v, i) => !i ? '0px' : `${v}px` ).join(', ')})` 
-                    : `translate(${displayPos.map((v, i) => !i ? `${v}px` : '7px' ).join(', ')})`;
+                    ? `translate(${displayPos.map((v, i) => !i ? '-4px' : `${v - 13}px` ).join(', ')}) rotate(-90deg)` 
+                    : `translate(${displayPos.map((v, i) => !i ? `${v + 16}px` : '9px' ).join(', ')})`;
                 this.displayElement.style.cssText += 'display: block;'
                     + 'transform: translate(-50%, -50%) '
                     + transform;
