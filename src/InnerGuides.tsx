@@ -13,7 +13,7 @@ export default class InnerGuides extends React.Component<InnerGuidesProps, Inner
     public guides: ReactGuides;
     constructor(props: InnerGuidesProps) {
         super(props);
-        this.state = this.props;
+        this.state = { ...props };
     }
     public render() {
         const { container, ...state } = this.state;

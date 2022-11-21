@@ -38,8 +38,12 @@ canvas {
     position: absolute;
     font-weight: bold;
     font-size: 12px;
-    color: #f33;
+    color: #E04169;
+    width: 50px;
+    text-align: center;
+    backdrop-filter: blur(20px);
 }
+
 .horizontal .guide-pos {
     bottom: 100%;
     left: 50%;
@@ -47,20 +51,31 @@ canvas {
 }
 .vertical .guide-pos {
     left: calc(100% + 2px);
-    top: 50%;
+    top: 10px;
     transform: translateY(-50%);
 }
 .display-drag {
     position: absolute;
-    will-change: transform;
     z-index: 2000;
     font-weight: bold;
     font-size: 12px;
-    display: none;
-    left: 20px;
-    top: -20px;
-    color: #f33;
+    display: block;
+    color: #E04169;
+    backdrop-filter: blur(20px);
 }
+
+.horizontal .display-drag {
+    bottom: 100%;
+    left: 15px
+    transform: translate(-50%);
+}
+
+.vertical .display-drag {
+    left: calc(100% + 2px);
+    top: 10px;
+    transform: translateY(-50%);
+}
+
 :host.horizontal .guides {
     width: 100%;
     height: 0;
@@ -111,10 +126,17 @@ canvas {
     transform: scale(2, 1);
 }
 :host.horizontal .guide:before {
-    height: 20px;
+    height: 10px;
+    margin-top: -5px;
+    display: block;
+    content: '';
 }
 :host.vertical .guide:before {
-    width: 20px;
+    width: 10px;
+    height: 100%;
+    margin-left: -5px;
+    display: block;
+    content: '';
 }
 .adder {
     display: none;

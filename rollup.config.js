@@ -15,5 +15,12 @@ export default builder([
         output: "./dist/guides.min.js",
         plugins: [resolveReactCompat],
         uglify: true,
+    },
+    {
+        name: "Guides",
+        input: "src/index.ts",
+        output: "./dist/guides.js",
+        plugins: [resolveReactCompat],
+        uglify: false,
     }
 ]);
