@@ -1,39 +1,10 @@
 import { IObject } from '@daybrush/utils';
 import { RulerProps } from '@scena/react-ruler/declaration/types';
-import {
-    OnDrag as OnGestoDrag,
-    OnDragEnd as OnGestoDragEnd,
-    OnDragStart as OnGestoDragStart,
-} from 'gesto';
-
-
+import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
 export interface GuidesState {
     guides: number[];
-    selectedGuides: number[]
+    selectedGuides: number[];
 }
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Ruler.RulerProps
- * @property - guides' class name (default: "")
- * @property - ruler's css style(default: width 100%, height: 100%)
- * @property - Interval to snap (default: 5)
- * @property - Positions to snap (default: [])
- * @property - Whether to show the moving pos when dragging (default: false)
- * @property - csp nonce
- * @property - Format of drag pos (default: v => v)
- * @property - default guidelines (default: [])
- * @property - Whether to show guidelines (default: true)
- * @property - Whether to lock add/remove/change functions via drag/click of guides (default: false)
- * @property - pos digit of guidelines (default: 0)
- * @property - CSS style objects for guide elements (default: {})
- * @property - CSS style objects for drag guide element (default: {})
- * @property - Whether to show the guide pos text (default: false)
- * @property - Format of displayed guide pos (default: dragPosFormat)
- * @property - CSS style objects for displayed guide element (default: {})
- * @property - Guides Portal Container to support other frameworks. Don't set it. (default: null)
- */
 export interface GuidesOptions extends RulerProps {
     className?: string;
     rulerStyle?: IObject<any>;
@@ -45,9 +16,6 @@ export interface GuidesOptions extends RulerProps {
     defaultGuides?: number[];
     showGuides?: boolean;
     lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
-    /**
-     * pos digit of guidelines (default: 0)
-     */
     digit?: number;
     guideStyle?: Record<string, any>;
     dragGuideStyle?: Record<string, any>;
@@ -56,20 +24,8 @@ export interface GuidesOptions extends RulerProps {
     guidePosStyle?: IObject<any>;
     portalContainer?: HTMLElement | null;
 }
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Guides.GuidesOptions
- */
 export interface GuideOptions extends GuidesOptions {
 }
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Guides.GuidesOptions
- */
 export interface GuidesProps extends GuidesOptions {
     onChangeGuides?: (e: OnChangeGuides) => any;
     onDragStart?: (e: OnDragStart) => any;
@@ -80,10 +36,6 @@ export interface GuidesProps extends GuidesOptions {
     onAddGuide?: (pos: OnAddGuide) => any;
     onResetGuides?: (type: OnResetGuides) => any;
 }
-/**
- * @typedef
- * @memberof Guides
- */
 export interface OnChangeGuides {
     guides: number[];
     isAdd: boolean;
@@ -92,71 +44,28 @@ export interface OnChangeGuides {
     distX: number;
     distY: number;
 }
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragStart
- */
 export interface OnDragStart extends OnGestoDragStart {
     dragElement: HTMLElement;
 }
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDrag
- */
 export interface OnDrag extends OnGestoDrag {
     dragElement: HTMLElement;
 }
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragEnd
- */
 export interface OnDragEnd extends OnGestoDragEnd {
     dragElement: HTMLElement;
 }
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDragEnd
- */
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnAddGuide
- */
- export interface OnAddGuide {
+export interface OnAddGuide {
     posNewGuide?: number;
 }
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnDeleteGuide
- */
 export interface OnDeleteGuide {
     deletedIndexGuide?: number;
     deletedPosGuide?: number;
 }
-
-/**
- * @typedef
- * @memberof Guides
- * @extends Gesto.OnResetGuides
- */
- export interface OnResetGuides {
+export interface OnResetGuides {
     type?: 'horizontal' | 'vertical';
 }
-
 export interface OnClickRuler extends OnGestoDragEnd {
     pos: number;
 }
-/**
- * @typedef
- * @memberof Guides
- */
 export interface GuidesInterface {
     getGuides(): number[];
     scroll(pos: number): void;
@@ -167,11 +76,6 @@ export interface GuidesInterface {
     resetSelected(): void;
     resize(): void;
 }
-
-/**
- * @typedef
- * @memberof Guides
- */
 export interface GuidesEvents {
     changeGuides: OnChangeGuides;
     dragStart: OnDragStart;

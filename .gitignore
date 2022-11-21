@@ -8,7 +8,6 @@ coverage/
 jsdoc/
 doc/
 outjs/
-declaration/
 build/
 .vscode/
 rollup-plugin-visualizer/
