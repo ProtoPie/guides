@@ -4400,6 +4400,10 @@ version: 0.18.1
         _this._isFirstMove = false;
 
         _this.onDragStart = function (e) {
+          _this.resetSelected();
+
+          _this.props.onDragStart(e);
+
           _this._isFirstMove = true;
         };
 
@@ -4630,9 +4634,6 @@ version: 0.18.1
         this.setState({
           selectedGuides: [pos]
         });
-        this.props.onResetGuides({
-          type: this.props.type
-        });
         e.stopPropagation();
         e.preventDefault();
       };
@@ -4782,19 +4783,20 @@ version: 0.18.1
         var _this = this;
 
         var guides = this.getGuides();
+        var guidesClone = this.getGuides();
         var index = guides.findIndex(function (guide) {
           if (_this.state.selectedGuides.includes(guide)) {
             return guide;
           }
         });
-        this.props.onDeleteGuide({
-          deletedPosGuide: guides[index],
-          deletedIndexGuide: index
-        });
         guides.splice(index, 1);
         this.setState({
           guides: guides,
           selectedGuides: []
+        });
+        this.props.onDeleteGuide({
+          deletedPosGuide: guidesClone[index],
+          deletedIndexGuide: index
         });
       };
       /**
@@ -4940,7 +4942,6 @@ version: 0.18.1
         onDeleteGuide: function () {},
         onChangeGuides: function () {},
         onDragStart: function () {},
-        onResetGuides: function () {},
         onDrag: function () {},
         onDragEnd: function () {},
         displayDragPos: false,
