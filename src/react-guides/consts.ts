@@ -37,7 +37,6 @@ canvas {
 .guide-pos {
     position: absolute;
     font-weight: bold;
-    font-size: 12px;
     color: #E04169;
     width: 50px;
     text-align: center;
@@ -61,19 +60,16 @@ canvas {
     font-size: 12px;
     display: block;
     color: #E04169;
+    font-size: 10px;
+    line-height: 12px;
+    padding: 0 1px;
+    width: max-content;
     backdrop-filter: blur(20px);
 }
 
-.horizontal .display-drag {
+:host.horizontal .display-drag {
     bottom: 100%;
-    left: 15px
-    transform: translate(-50%);
-}
-
-.vertical .display-drag {
-    left: calc(100% + 2px);
-    top: 10px;
-    transform: translateY(-50%);
+    left: 15px;
 }
 
 :host.horizontal .guides {

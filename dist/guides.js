@@ -3162,7 +3162,7 @@ version: 0.18.1
     var GUIDE = prefix('guide');
     var DRAGGING = prefix('dragging');
     var DISPLAY_DRAG = prefix('display-drag');
-    var GUIDES_CSS = prefixCSS('scena-', "\n{\n    position: relative;\n    width: 100%;\n    height: 100%;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.guide-pos {\n    position: absolute;\n    font-weight: bold;\n    font-size: 12px;\n    color: #E04169;\n    width: 50px;\n    text-align: center;\n    backdrop-filter: blur(20px);\n}\n\n.horizontal .guide-pos {\n    bottom: 100%;\n    left: 50%;\n    transform: translate(-50%);\n}\n.vertical .guide-pos {\n    left: calc(100% + 2px);\n    top: 10px;\n    transform: translateY(-50%);\n}\n.display-drag {\n    position: absolute;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: block;\n    color: #E04169;\n    backdrop-filter: blur(20px);\n}\n\n.horizontal .display-drag {\n    bottom: 100%;\n    left: 15px\n    transform: translate(-50%);\n}\n\n.vertical .display-drag {\n    left: calc(100% + 2px);\n    top: 10px;\n    transform: translateY(-50%);\n}\n\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.selected {\n    background: #8169FF;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n:host.horizontal .dragging,\n:host.horizontal .selected {\n    height: 2px\n}\n:host.vertical .dragging,\n:host.vertical .selected {\n    width: 2px\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 10px;\n    margin-top: -5px;\n    display: block;\n    content: '';\n}\n:host.vertical .guide:before {\n    width: 10px;\n    height: 100%;\n    margin-left: -5px;\n    display: block;\n    content: '';\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
+    var GUIDES_CSS = prefixCSS('scena-', "\n{\n    position: relative;\n    width: 100%;\n    height: 100%;\n}\ncanvas {\n    position: relative;\n}\n.guide-origin {\n    position: absolute;\n    width: 1px;\n    height: 1px;\n    top: 0;\n    left: 0;\n    opacity: 0;\n}\n.guides {\n    position: absolute;\n    bottom: 0;\n    right: 0;\n    will-change: transform;\n    z-index: 2000;\n}\n.guide-pos {\n    position: absolute;\n    font-weight: bold;\n    color: #E04169;\n    width: 50px;\n    text-align: center;\n    backdrop-filter: blur(20px);\n}\n\n.horizontal .guide-pos {\n    bottom: 100%;\n    left: 50%;\n    transform: translate(-50%);\n}\n.vertical .guide-pos {\n    left: calc(100% + 2px);\n    top: 10px;\n    transform: translateY(-50%);\n}\n.display-drag {\n    position: absolute;\n    z-index: 2000;\n    font-weight: bold;\n    font-size: 12px;\n    display: block;\n    color: #E04169;\n    font-size: 10px;\n    line-height: 12px;\n    padding: 0 1px;\n    width: max-content;\n    backdrop-filter: blur(20px);\n}\n\n:host.horizontal .display-drag {\n    bottom: 100%;\n    left: 15px;\n}\n\n:host.horizontal .guides {\n    width: 100%;\n    height: 0;\n}\n:host.vertical .guides {\n    height: 100%;\n    width: 0;\n}\n.guide {\n    position: absolute;\n    background: #f33;\n    z-index: 2;\n}\n.selected {\n    background: #8169FF;\n}\n.guide.dragging:before {\n    position: absolute;\n    content: \"\";\n    width: 100%;\n    height: 100%;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n}\n:host.horizontal .guide {\n    width: 100%;\n    height: 1px;\n    cursor: row-resize;\n}\n:host.vertical .guide {\n    width: 1px;\n    height: 100%;\n    cursor: col-resize;\n}\n:host.horizontal .dragging,\n:host.horizontal .selected {\n    height: 2px\n}\n:host.vertical .dragging,\n:host.vertical .selected {\n    width: 2px\n}\n.mobile :host.horizontal .guide {\n    transform: scale(1, 2);\n}\n.mobile :host.vertical .guide {\n    transform: scale(2, 1);\n}\n:host.horizontal .guide:before {\n    height: 10px;\n    margin-top: -5px;\n    display: block;\n    content: '';\n}\n:host.vertical .guide:before {\n    width: 10px;\n    height: 100%;\n    margin-left: -5px;\n    display: block;\n    content: '';\n}\n.adder {\n    display: none;\n}\n.adder.dragging {\n    display: block;\n}\n");
     var PROPERTIES$1 = __spreadArrays(['className', 'rulerStyle', 'snapThreshold', 'snaps', 'displayDragPos', 'cspNonce', 'dragPosFormat', 'defaultGuides', 'showGuides'], PROPERTIES);
     var METHODS = ['getGuides', 'loadGuides', 'scroll', 'scrollGuides', 'resize', 'deleteSelectedGuide', 'resetSelected', 'clearAllGuides'];
     var EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'];
@@ -3611,12 +3611,7 @@ version: 0.18.1
         }
         if (!datas.fromRuler || !this._isFirstMove) {
           if (displayDragPos) {
-            var displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
-            var transform = type === 'horizontal' ? "translate(" + displayPos.map(function (v, i) {
-              return !i ? '-6px' : v - 13 + "px";
-            }).join(', ') + ") rotate(-90deg)" : "translate(" + displayPos.map(function (v, i) {
-              return !i ? v + 16 + "px" : '9px';
-            }).join(', ') + ")";
+            var transform = type === 'horizontal' ? this.calcHorizontalTransform(offsetX, nextPos) : this.calcVerticalTransform(nextPos, offsetY);
             this.displayElement.style.cssText += 'display: block;' + 'transform: translate(-50%, -50%) ' + transform;
             this.displayElement.innerHTML = "" + dragPosFormat(guidePos);
           }
@@ -3633,6 +3628,18 @@ version: 0.18.1
         this.setState({
           selectedGuides: []
         });
+      };
+      __proto.calcHorizontalTransform = function (offsetX, nextPos) {
+        var displayPos = [offsetX, nextPos];
+        return "translate(" + displayPos.map(function (v, i) {
+          return !i ? '-6px' : v - 10 + "px";
+        }).join(', ') + ") rotate(-90deg)";
+      };
+      __proto.calcVerticalTransform = function (nextPos, offsetY) {
+        var displayPos = [nextPos, offsetY];
+        return "translate(" + displayPos.map(function (v, i) {
+          return !i ? v + 16 + "px" : '9px';
+        }).join(', ') + ")";
       };
       Guides.defaultProps = {
         className: '',
