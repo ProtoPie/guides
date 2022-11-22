@@ -378,16 +378,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         }
 
         removeClass(datas.target, DRAGGING);
-        /**
-         * When the drag finishes, the dragEnd event is called.
-         * @memberof Guides
-         * @event dragEnd
-         * @param {OnDragEnd} - Parameters for the dragEnd event
-         */
-         this.props.onDragEnd!({
-            ...e,
-            dragElement: datas.target,
-        });
         if (datas.fromRuler) {
             if (this._isFirstMove) {
                 /**
@@ -466,6 +456,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 });
             });
         }
+
+        /**
+         * When the drag finishes, the dragEnd event is called.
+         * @memberof Guides
+         * @event dragEnd
+         * @param {OnDragEnd} - Parameters for the dragEnd event
+         */
+            this.props.onDragEnd!({
+                ...e,
+                dragElement: datas.target,
+            });
     }
     private movePos(e: any) {
         const { datas, distX, distY } = e;
@@ -497,7 +498,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
                 ? [offsetX, nextPos]
                 : [nextPos, offsetY];
                 const transform = type === 'horizontal' 
-                    ? `translate(${displayPos.map((v, i) => !i ? '-4px' : `${v - 13}px` ).join(', ')}) rotate(-90deg)` 
+                    ? `translate(${displayPos.map((v, i) => !i ? '-6px' : `${v - 13}px` ).join(', ')}) rotate(-90deg)` 
                     : `translate(${displayPos.map((v, i) => !i ? `${v + 16}px` : '9px' ).join(', ')})`;
                 this.displayElement.style.cssText += 'display: block;'
                     + 'transform: translate(-50%, -50%) '
