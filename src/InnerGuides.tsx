@@ -6,17 +6,17 @@ import ReactGuides from './react-guides';
 import { GuidesOptions } from './react-guides/types';
 
 export interface InnerGuidesProps extends GuidesOptions {
-    container?: HTMLElement;
+  container?: HTMLElement;
 }
 export default class InnerGuides extends React.Component<InnerGuidesProps, InnerGuidesProps> {
-    public state: InnerGuidesProps = {};
-    public guides: ReactGuides;
-    constructor(props: InnerGuidesProps) {
-        super(props);
-        this.state = { ...props };
-    }
-    public render() {
-        const { container, ...state } = this.state;
-        return createPortal(<ReactGuides ref={ref(this, 'guides')} {...state} />, container);
-    }
+  public state: InnerGuidesProps = {};
+  public guides: ReactGuides;
+  constructor(props: InnerGuidesProps) {
+    super(props);
+    this.state = { ...props };
+  }
+  public render() {
+    const { container, ...state } = this.state;
+    return createPortal(<ReactGuides ref={ref(this, 'guides')} {...state} />, container);
+  }
 }

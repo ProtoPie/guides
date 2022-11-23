@@ -1,15 +1,10 @@
 import { IObject } from '@daybrush/utils';
 import { RulerProps } from '@scena/react-ruler/declaration/types';
-import {
-    OnDrag as OnGestoDrag,
-    OnDragEnd as OnGestoDragEnd,
-    OnDragStart as OnGestoDragStart,
-} from 'gesto';
-
+import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
 
 export interface GuidesState {
-    guides: number[];
-    selectedGuides: number[]
+  guides: number[];
+  selectedGuides: number[];
 }
 
 /**
@@ -35,26 +30,26 @@ export interface GuidesState {
  * @property - Guides Portal Container to support other frameworks. Don't set it. (default: null)
  */
 export interface GuidesOptions extends RulerProps {
-    className?: string;
-    rulerStyle?: IObject<any>;
-    snapThreshold?: number;
-    snaps?: number[];
-    displayDragPos?: boolean;
-    cspNonce?: string;
-    dragPosFormat?: (value: number) => string | number;
-    defaultGuides?: number[];
-    showGuides?: boolean;
-    lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
-    /**
-     * pos digit of guidelines (default: 0)
-     */
-    digit?: number;
-    guideStyle?: Record<string, any>;
-    dragGuideStyle?: Record<string, any>;
-    displayGuidePos?: boolean;
-    guidePosFormat?: (value: number) => string | number;
-    guidePosStyle?: IObject<any>;
-    portalContainer?: HTMLElement | null;
+  className?: string;
+  rulerStyle?: IObject<any>;
+  snapThreshold?: number;
+  snaps?: number[];
+  displayDragPos?: boolean;
+  cspNonce?: string;
+  dragPosFormat?: (value: number) => string | number;
+  defaultGuides?: number[];
+  showGuides?: boolean;
+  lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
+  /**
+   * pos digit of guidelines (default: 0)
+   */
+  digit?: number;
+  guideStyle?: Record<string, any>;
+  dragGuideStyle?: Record<string, any>;
+  displayGuidePos?: boolean;
+  guidePosFormat?: (value: number) => string | number;
+  guidePosStyle?: IObject<any>;
+  portalContainer?: HTMLElement | null;
 }
 
 /**
@@ -62,8 +57,7 @@ export interface GuidesOptions extends RulerProps {
  * @memberof Guides
  * @extends Guides.GuidesOptions
  */
-export interface GuideOptions extends GuidesOptions {
-}
+export interface GuideOptions extends GuidesOptions {}
 
 /**
  * @typedef
@@ -71,25 +65,25 @@ export interface GuideOptions extends GuidesOptions {
  * @extends Guides.GuidesOptions
  */
 export interface GuidesProps extends GuidesOptions {
-    onChangeGuides?: (e: OnChangeGuides) => any;
-    onDragStart?: (e: OnDragStart) => any;
-    onDrag?: (e: OnDrag) => any;
-    onDragEnd?: (e: OnDragEnd) => any;
-    onClickRuler?: (e: OnClickRuler) => any;
-    onDeleteGuide?: (index: OnDeleteGuide) => any;
-    onAddGuide?: (pos: OnAddGuide) => any;
+  onChangeGuides?: (e: OnChangeGuides) => any;
+  onDragStart?: (e: OnDragStart) => any;
+  onDrag?: (e: OnDrag) => any;
+  onDragEnd?: (e: OnDragEnd) => any;
+  onClickRuler?: (e: OnClickRuler) => any;
+  onDeleteGuide?: (index: OnDeleteGuide) => any;
+  onAddGuide?: (pos: OnAddGuide) => any;
 }
 /**
  * @typedef
  * @memberof Guides
  */
 export interface OnChangeGuides {
-    guides: number[];
-    isAdd: boolean;
-    isRemove: boolean;
-    isChange: boolean;
-    distX: number;
-    distY: number;
+  guides: number[];
+  isAdd: boolean;
+  isRemove: boolean;
+  isChange: boolean;
+  distX: number;
+  distY: number;
 }
 /**
  * @typedef
@@ -97,7 +91,7 @@ export interface OnChangeGuides {
  * @extends Gesto.OnDragStart
  */
 export interface OnDragStart extends OnGestoDragStart {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 /**
  * @typedef
@@ -105,7 +99,7 @@ export interface OnDragStart extends OnGestoDragStart {
  * @extends Gesto.OnDrag
  */
 export interface OnDrag extends OnGestoDrag {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 /**
  * @typedef
@@ -113,7 +107,7 @@ export interface OnDrag extends OnGestoDrag {
  * @extends Gesto.OnDragEnd
  */
 export interface OnDragEnd extends OnGestoDragEnd {
-    dragElement: HTMLElement;
+  dragElement: HTMLElement;
 }
 /**
  * @typedef
@@ -126,8 +120,8 @@ export interface OnDragEnd extends OnGestoDragEnd {
  * @memberof Guides
  * @extends Gesto.OnAddGuide
  */
- export interface OnAddGuide {
-    posNewGuide?: number;
+export interface OnAddGuide {
+  posNewGuide?: number;
 }
 
 /**
@@ -136,26 +130,26 @@ export interface OnDragEnd extends OnGestoDragEnd {
  * @extends Gesto.OnDeleteGuide
  */
 export interface OnDeleteGuide {
-    deletedIndexGuide?: number;
-    deletedPosGuide?: number;
+  deletedIndexGuide?: number;
+  deletedPosGuide?: number;
 }
 
 export interface OnClickRuler extends OnGestoDragEnd {
-    pos: number;
+  pos: number;
 }
 /**
  * @typedef
  * @memberof Guides
  */
 export interface GuidesInterface {
-    getGuides(): number[];
-    scroll(pos: number): void;
-    scrollGuides(pos: number, zoom?: number): void;
-    loadGuides(guides: number[]): void;
-    deleteSelectedGuide(event: KeyboardEvent): void;
-    clearAllGuides(): void;
-    resetSelected(e: MouseEvent): void;
-    resize(): void;
+  getGuides(): number[];
+  scroll(pos: number): void;
+  scrollGuides(pos: number, zoom?: number): void;
+  loadGuides(guides: number[]): void;
+  deleteSelectedGuide(event: KeyboardEvent): void;
+  clearAllGuides(): void;
+  resetSelected(e: MouseEvent): void;
+  resize(): void;
 }
 
 /**
@@ -163,11 +157,11 @@ export interface GuidesInterface {
  * @memberof Guides
  */
 export interface GuidesEvents {
-    changeGuides: OnChangeGuides;
-    dragStart: OnDragStart;
-    drag: OnDrag;
-    dragEnd: OnDragEnd;
-    clickRuler: OnClickRuler;
-    deleteGuide: OnDeleteGuide;
-    addGuide: OnAddGuide;
+  changeGuides: OnChangeGuides;
+  dragStart: OnDragStart;
+  drag: OnDrag;
+  dragEnd: OnDragEnd;
+  clickRuler: OnClickRuler;
+  deleteGuide: OnDeleteGuide;
+  addGuide: OnAddGuide;
 }
