@@ -10,7 +10,9 @@ export const GUIDES = prefix('guides');
 export const GUIDE = prefix('guide');
 export const DRAGGING = prefix('dragging');
 export const DISPLAY_DRAG = prefix('display-drag');
-export const GUIDES_CSS = prefixCSS('scena-', `
+export const GUIDES_CSS = prefixCSS(
+  'scena-',
+  `
 {
     position: relative;
     width: 100%;
@@ -140,39 +142,31 @@ canvas {
 .adder.dragging {
     display: block;
 }
-`);
+`,
+);
 
 export const PROPERTIES: Array<keyof GuidesOptions> = [
-    'className',
-    'rulerStyle',
-    'snapThreshold',
-    'snaps',
-    'displayDragPos',
-    'cspNonce',
-    'dragPosFormat',
-    'defaultGuides',
-    'showGuides',
-    ...RULER_PROPERTIES,
+  'className',
+  'rulerStyle',
+  'snapThreshold',
+  'snaps',
+  'displayDragPos',
+  'cspNonce',
+  'dragPosFormat',
+  'defaultGuides',
+  'showGuides',
+  ...RULER_PROPERTIES,
 ];
 
 export const METHODS = [
-    'getGuides',
-    'loadGuides',
-    'scroll',
-    'scrollGuides',
-    'resize',
-    'deleteSelectedGuide',
-    'resetSelected',
-    'clearAllGuides',
+  'getGuides',
+  'loadGuides',
+  'scroll',
+  'scrollGuides',
+  'resize',
+  'deleteSelectedGuide',
+  'resetSelected',
+  'clearAllGuides',
 ] as const;
 
-export const EVENTS = [
-    'changeGuides',
-    'dragStart',
-    'drag',
-    'dragEnd',
-    'clickRuler',
-    'deleteGuide',
-    'addGuide',
-    'resetGuides',
-] as const;
+export const EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'] as const;
