@@ -51,7 +51,7 @@ class Guides extends EventEmitter<GuidesEvents> {
     super();
     const events: any = {};
 
-    EVENTS.forEach((name) => {
+    EVENTS.forEach(name => {
       events[camelize(`on ${name}`)] = (e: any) => this.trigger(name as any, e);
     });
 

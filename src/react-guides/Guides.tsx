@@ -29,7 +29,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     onDrag: () => {},
     onDragEnd: () => {},
     displayDragPos: false,
-    dragPosFormat: (v) => v,
+    dragPosFormat: v => v,
     defaultGuides: [],
     lockGuides: false,
     showGuides: true,
@@ -87,7 +87,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     const rulerProps: RulerProps = {};
 
-    RULER_PROPERTIES.forEach((name) => {
+    RULER_PROPERTIES.forEach(name => {
       if (name === 'style') {
         return;
       }
@@ -131,7 +131,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const { type, zoom, showGuides, guideStyle, displayGuidePos, guidePosStyle = {} } = props as Required<GuidesProps>;
     const translateName = this.getTranslateName();
     const guides = this.state.guides;
-    const guidePosFormat = props.guidePosFormat || props.dragPosFormat || ((v) => v);
+    const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
     const selectedGuides = this.state.selectedGuides;
     this.guideElements = [];
     if (showGuides) {
@@ -143,7 +143,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             key={i}
             data-index={i}
             data-pos={pos}
-            onClick={(e) => this.selectGuide(pos, e)}
+            onClick={e => this.selectGuide(pos, e)}
             style={{
               ...guideStyle,
               transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
@@ -164,7 +164,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.gesto = new Gesto(this.manager.getElement(), {
       container: document.body,
     })
-      .on('dragStart', (e) => {
+      .on('dragStart', e => {
         const { type, zoom, lockGuides } = this.props;
 
         if (lockGuides === true) {
@@ -245,7 +245,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   public deleteSelectedGuide() {
     const guides = this.getGuides();
     const guidesClone = this.getGuides();
-    const index = guides.findIndex((guide) => {
+    const index = guides.findIndex(guide => {
       if (this.state.selectedGuides.includes(guide)) {
         return guide;
       }
@@ -463,7 +463,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const { datas, distX, distY } = e;
     const props = this.props;
     const { type, zoom, snaps, snapThreshold, displayDragPos, digit } = props;
-    const dragPosFormat = props.dragPosFormat || ((v) => v);
+    const dragPosFormat = props.dragPosFormat || (v => v);
     const isHorizontal = type === 'horizontal';
     const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
     const offsetPos = datas.offsetPos;
@@ -483,7 +483,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       if (displayDragPos) {
         const displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
         this.displayElement.style.cssText +=
-          'display: block;' + 'transform: translate(-50%, -50%) ' + `translate(${displayPos.map((v) => `${v}px`).join(', ')})`;
+          'display: block;' + 'transform: translate(-50%, -50%) ' + `translate(${displayPos.map(v => `${v}px`).join(', ')})`;
         this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
       }
       const target = datas.target;
