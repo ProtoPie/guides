@@ -775,7 +775,6 @@ version: 0.18.1
     function removeEvent(el, type, listener, options) {
       el.removeEventListener(type, listener, options);
     }
-    //# sourceMappingURL=utils.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1057,7 +1056,6 @@ version: 0.18.1
 
       return EventEmitter;
     }();
-    //# sourceMappingURL=event-emitter.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1107,7 +1105,6 @@ version: 0.18.1
         });
       };
     }
-    //# sourceMappingURL=utils.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1509,7 +1506,6 @@ version: 0.18.1
     }(React.PureComponent);
 
     var PROPERTIES = ["type", "width", "height", "unit", "zoom", "direction", "textAlign", "font", "segment", "mainLineSize", "longLineSize", "shortLineSize", "lineOffset", "textOffset", "negativeRuler", "range", "scrollPos", "style", "backgroundColor", "rangeBackgroundColor", "lineColor", "textColor", "textBackgroundColor", "textFormat", "portalContainer"];
-    //# sourceMappingURL=ruler.esm.js.map
 
     /*
     Copyright (c) 2020 Daybrush
@@ -1736,7 +1732,6 @@ version: 0.18.1
 
       return matrix;
     }
-    //# sourceMappingURL=matrix.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -1893,7 +1888,6 @@ version: 0.18.1
         };
       });
     }
-    //# sourceMappingURL=css-to-mat.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -2875,7 +2869,6 @@ version: 0.18.1
       };
       return Gesto;
     }(EventEmitter);
-    //# sourceMappingURL=gesto.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -3006,7 +2999,6 @@ version: 0.18.1
         }
       };
     }
-    //# sourceMappingURL=styled.esm.js.map
 
     /*
     Copyright (c) 2019 Daybrush
@@ -3155,7 +3147,6 @@ version: 0.18.1
         }(StyledElement)
       );
     }
-    //# sourceMappingURL=styled.esm.js.map
 
     function prefix() {
       var classNames = [];
@@ -3164,7 +3155,6 @@ version: 0.18.1
       }
       return prefixNames.apply(void 0, __spreadArrays(['scena-'], classNames));
     }
-    //# sourceMappingURL=utils.js.map
 
     var RULER = prefix('ruler');
     var ADDER = prefix('guide', 'adder');
@@ -3176,7 +3166,6 @@ version: 0.18.1
     var PROPERTIES$1 = __spreadArrays(['className', 'rulerStyle', 'snapThreshold', 'snaps', 'displayDragPos', 'cspNonce', 'dragPosFormat', 'defaultGuides', 'showGuides'], PROPERTIES);
     var METHODS = ['getGuides', 'loadGuides', 'scroll', 'scrollGuides', 'resize', 'deleteSelectedGuide', 'resetSelected', 'clearAllGuides'];
     var EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'];
-    //# sourceMappingURL=consts.js.map
 
     var GuidesElement = styled$1('div', GUIDES_CSS);
     var Guides = /*#__PURE__*/function (_super) {
@@ -3672,8 +3661,6 @@ version: 0.18.1
       return Guides;
     }(React.PureComponent);
 
-    //# sourceMappingURL=index.js.map
-
     var InnerGuides = /*#__PURE__*/function (_super) {
       __extends(InnerGuides, _super);
       function InnerGuides(props) {
@@ -3693,7 +3680,6 @@ version: 0.18.1
       };
       return InnerGuides;
     }(React.Component);
-    //# sourceMappingURL=InnerGuides.js.map
 
     var Guides$1 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
@@ -3773,7 +3759,6 @@ version: 0.18.1
        */], Guides);
       return Guides;
     }(EventEmitter);
-    //# sourceMappingURL=GuidesManager.js.map
 
     var Guides$2 = /*#__PURE__*/function (_super) {
       __extends(Guides, _super);
@@ -3782,7 +3767,6 @@ version: 0.18.1
       }
       return Guides;
     }(Guides$1);
-    //# sourceMappingURL=index.js.map
 
     return Guides$2;
 
