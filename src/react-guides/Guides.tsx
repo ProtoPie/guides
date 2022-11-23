@@ -1,523 +1,503 @@
 import { addClass, hasClass, removeClass } from '@daybrush/utils';
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '@scena/react-ruler';
-import { calculateMatrixDist,getDistElementMatrix } from 'css-to-mat';
+import autobind from 'autobind-decorator';
+import { calculateMatrixDist, getDistElementMatrix } from 'css-to-mat';
 import { ref, refs } from 'framework-utils';
 import Gesto, { OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface,GuidesProps, GuidesState, OnDragStart } from './types';
+import { GuidesInterface, GuidesProps, GuidesState, OnDragStart } from './types';
 import { prefix } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
-    public static defaultProps: GuidesProps = {
-        className: '',
-        type: 'horizontal',
-        zoom: 1,
-        style: {},
-        snapThreshold: 5,
-        snaps: [],
-        digit: 0,
-        onClickRuler: () => { },
-        onAddGuide: () => { },        
-        onDeleteGuide: () => { },
-        onChangeGuides: () => { },
-        onDragStart: () => { },
-        onDrag: () => { },
-        onDragEnd: () => { },
-        displayDragPos: false,
-        dragPosFormat: v => v,
-        defaultGuides: [],
-        lockGuides: false,
-        showGuides: true,
-        guideStyle: {},
-        dragGuideStyle: {},
-        guidePosStyle: {},
-        portalContainer: null,
-    };
-    public state: GuidesState = {
-        guides: [],
-        selectedGuides: [],
-    };
-    public adderElement!: HTMLElement;
-    public scrollPos = 0;
-    public ruler!: Ruler;
-    private manager!: StyledElement<HTMLElement>;
-    private guidesElement!: HTMLElement;
-    private displayElement!: HTMLElement;
-    private originElement!: HTMLElement;
-    private gesto!: Gesto;
-    private guideElements: HTMLElement[] = [];
-    private _isFirstMove = false;
-    private _pointerEventsTimer: NodeJS.Timeout;
+  public static defaultProps: GuidesProps = {
+    className: '',
+    type: 'horizontal',
+    zoom: 1,
+    style: {},
+    snapThreshold: 5,
+    snaps: [],
+    digit: 0,
+    onClickRuler: () => {},
+    onAddGuide: () => {},
+    onDeleteGuide: () => {},
+    onChangeGuides: () => {},
+    onDragStart: () => {},
+    onDrag: () => {},
+    onDragEnd: () => {},
+    displayDragPos: false,
+    dragPosFormat: (v) => v,
+    defaultGuides: [],
+    lockGuides: false,
+    showGuides: true,
+    guideStyle: {},
+    dragGuideStyle: {},
+    guidePosStyle: {},
+    portalContainer: null,
+  };
+  public state: GuidesState = {
+    guides: [],
+    selectedGuides: [],
+  };
+  public adderElement!: HTMLElement;
+  public scrollPos = 0;
+  public ruler!: Ruler;
+  private manager!: StyledElement<HTMLElement>;
+  private guidesElement!: HTMLElement;
+  private displayElement!: HTMLElement;
+  private originElement!: HTMLElement;
+  private gesto!: Gesto;
+  private guideElements: HTMLElement[] = [];
+  private _isFirstMove = false;
+  private _pointerEventsTimer: NodeJS.Timeout;
 
-    constructor(props: Required<GuidesProps>) {
-        super(props);
-        window.addEventListener('keydown', (e: KeyboardEvent) => {
-            if(e.code === 'Backspace' && this.state.selectedGuides.length) {
-                this.deleteSelectedGuide();
-            }
-        });
+  constructor(props: Required<GuidesProps>) {
+    super(props);
 
-        window.addEventListener('click', (e: MouseEvent) => {
-            this.resetSelected();
-            e.stopPropagation();
-        });
+    window.addEventListener('keydown', this.deleteSelectedGuide);
+    window.addEventListener('click', this.resetSelected);
+  }
+
+  public disablePointerEventsOnScroll() {
+    if (!this.props?.showGuides) {
+      return;
     }
+    this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
+    this.guidesElement.style.pointerEvents = 'none';
+    this._pointerEventsTimer = setTimeout(() => {
+      this.guidesElement.style.pointerEvents = 'auto';
+    }, 300);
+  }
 
-    public disablePointerEventsOnScroll() {
-        if(!this.props?.showGuides) {
-            return;
-        }
-        this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
-        this.guidesElement.style.pointerEvents = 'none';
-        this._pointerEventsTimer = setTimeout(() => {
-            this.guidesElement.style.pointerEvents = 'auto';
-        }, 300);
-    }
+  public render() {
+    const { className, type, zoom, style, rulerStyle, displayDragPos, cspNonce, dragGuideStyle, portalContainer } = this
+      .props as Required<GuidesProps>;
+    const props = this.props;
+    const translateName = this.getTranslateName();
 
-    public render() {
-        const {
-            className,
-            type,
-            zoom,
-            style,
-            rulerStyle,
-            displayDragPos,
-            cspNonce,
-            dragGuideStyle,
-            portalContainer,
-        } = this.props as Required<GuidesProps>;
-        const props = this.props;
-        const translateName = this.getTranslateName();
+    const rulerProps: RulerProps = {};
 
-        const rulerProps: RulerProps = {};
-
-        RULER_PROPERTIES.forEach(name => {
-            if (name === 'style') {
-                return;
-            }
-            (rulerProps as any)[name] = props[name];
-        });
-        return <GuidesElement
-            ref={ref(this, 'manager')}
-            cspNonce={cspNonce}
-            className={`${prefix('manager', type)} ${className}`}
-            portalContainer={portalContainer}
-            style={style}
-        >
-            <div className={prefix('guide-origin')} ref={ref(this, 'originElement')}></div>
-            <Ruler
-                ref={ref(this, 'ruler')}
-                style={rulerStyle}
-                {...rulerProps}
-            />
-            <div className={GUIDES} ref={ref(this, 'guidesElement')} style={{
-                transform: `${translateName}(${-this.scrollPos * zoom}px)`,
-            }}>
-                {displayDragPos && <div className={DISPLAY_DRAG}
-                    ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
-                <div className={ADDER} ref={ref(this, 'adderElement')} />
-                {this.renderGuides()}
-            </div>
-        </GuidesElement>;
-    }
-
-    private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-        this.setState({
-            selectedGuides: [pos],
-        });
-        e.stopPropagation();
-        e.preventDefault();
-    }
-
-    public renderGuides() {
-        const props = this.props;
-        const {
-            type,
-            zoom,
-            showGuides,
-            guideStyle,
-            displayGuidePos,
-            guidePosStyle = {},
-        } = props as Required<GuidesProps>;
-        const translateName = this.getTranslateName();
-        const guides = this.state.guides;
-        const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
-        const selectedGuides = this.state.selectedGuides;
-        this.guideElements = [];
-        if (showGuides) {
-            return guides.map((pos, i) => {
-                return (
-                    <div className={`${prefix('guide', type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
-                        ref={refs(this, 'guideElements', i)}
-                        key={i}
-                        data-index={i}
-                        data-pos={pos}
-                        onClick={(e) => this.selectGuide(pos, e)}
-                        style={{
-                            ...guideStyle,
-                            transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
-                        }}>
-                            {displayGuidePos && <div className={prefix('guide-pos')} style={guidePosStyle || {}}>
-                                {guidePosFormat!(pos)}
-                            </div>}
-                        </div>
-                    );
-            });
-        }
+    RULER_PROPERTIES.forEach((name) => {
+      if (name === 'style') {
         return;
+      }
+      (rulerProps as any)[name] = props[name];
+    });
+    return (
+      <GuidesElement
+        ref={ref(this, 'manager')}
+        cspNonce={cspNonce}
+        className={`${prefix('manager', type)} ${className}`}
+        portalContainer={portalContainer}
+        style={style}
+      >
+        <div className={prefix('guide-origin')} ref={ref(this, 'originElement')}></div>
+        <Ruler ref={ref(this, 'ruler')} style={rulerStyle} {...rulerProps} />
+        <div
+          className={GUIDES}
+          ref={ref(this, 'guidesElement')}
+          style={{
+            transform: `${translateName}(${-this.scrollPos * zoom}px)`,
+          }}
+        >
+          {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
+          <div className={ADDER} ref={ref(this, 'adderElement')} />
+          {this.renderGuides()}
+        </div>
+      </GuidesElement>
+    );
+  }
+
+  private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    this.setState({
+      selectedGuides: [pos],
+    });
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  public renderGuides() {
+    const props = this.props;
+    const { type, zoom, showGuides, guideStyle, displayGuidePos, guidePosStyle = {} } = props as Required<GuidesProps>;
+    const translateName = this.getTranslateName();
+    const guides = this.state.guides;
+    const guidePosFormat = props.guidePosFormat || props.dragPosFormat || ((v) => v);
+    const selectedGuides = this.state.selectedGuides;
+    this.guideElements = [];
+    if (showGuides) {
+      return guides.map((pos, i) => {
+        return (
+          <div
+            className={`${prefix('guide', type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
+            ref={refs(this, 'guideElements', i)}
+            key={i}
+            data-index={i}
+            data-pos={pos}
+            onClick={(e) => this.selectGuide(pos, e)}
+            style={{
+              ...guideStyle,
+              transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
+            }}
+          >
+            {displayGuidePos && (
+              <div className={prefix('guide-pos')} style={guidePosStyle || {}}>
+                {guidePosFormat!(pos)}
+              </div>
+            )}
+          </div>
+        );
+      });
     }
-    public componentDidMount() {
-        this.gesto = new Gesto(this.manager.getElement(), {
-            container: document.body,
-        }).on('dragStart', e => {
-            const {
-                type,
-                zoom,
-                lockGuides,
-            } = this.props;
+    return;
+  }
+  public componentDidMount() {
+    this.gesto = new Gesto(this.manager.getElement(), {
+      container: document.body,
+    })
+      .on('dragStart', this.onDragStart)
+      .on('drag', this.onDrag)
+      .on('dragEnd', this.onDragEnd);
+    // pass array of guides on mount data to create gridlines or something like that in ui
+    this.setState({ guides: this.props.defaultGuides || [] });
+  }
 
-            if (lockGuides === true) {
-                e.stop();
-                return;
-            }
-            const inputEvent = e.inputEvent;
-            const target = inputEvent.target;
-            const datas = e.datas;
-            const canvasElement = this.ruler.canvasElement;
-            const guidesElement = this.guidesElement;
-            const isHorizontal = type === 'horizontal';
-            const originRect = this.originElement.getBoundingClientRect();
-            const matrix = getDistElementMatrix(this.manager.getElement());
-            const offsetPos = calculateMatrixDist(matrix, [
-                e.clientX - originRect.left,
-                e.clientY - originRect.top,
-            ]);
-            offsetPos[0] -= guidesElement.offsetLeft;
-            offsetPos[1] -= guidesElement.offsetTop;
-            offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * zoom!;
+  private onDragStart(e: OnDragStart) {
+    const { type, zoom, lockGuides } = this.props;
 
-            datas.offsetPos = offsetPos;
-            datas.matrix = matrix;
-
-            const isLockAdd = lockGuides && lockGuides.indexOf('add') > -1;
-            const isLockRemove = lockGuides && lockGuides.indexOf('remove') > -1;
-            const isLockChange = lockGuides && lockGuides.indexOf('change') > -1;
-
-            if (target === canvasElement) {
-                if (isLockAdd) {
-                    e.stop();
-                    return;
-                }
-                datas.fromRuler = true;
-                datas.target = this.adderElement;
-                // add
-            } else if (hasClass(target, GUIDE)) {
-                if (isLockRemove && isLockChange) {
-                    e.stop();
-                    return;
-                }
-                datas.target = target;
-                // change
-            } else {
-                e.stop();
-                return false;
-            }
-            this.onDragStart(e as OnDragStart);
-        }).on('drag', this.onDrag).on('dragEnd', this.onDragEnd);
-        // pass array of guides on mount data to create gridlines or something like that in ui
-        this.setState({ guides: this.props.defaultGuides || [] });
+    if (lockGuides === true) {
+      e.stop();
+      return;
     }
-    public componentWillUnmount() {
-        this.gesto.unset();
+    const inputEvent = e.inputEvent;
+    const target = inputEvent.target;
+    const datas = e.datas;
+    const canvasElement = this.ruler.canvasElement;
+    const guidesElement = this.guidesElement;
+    const isHorizontal = type === 'horizontal';
+    const originRect = this.originElement.getBoundingClientRect();
+    const matrix = getDistElementMatrix(this.manager.getElement());
+    const offsetPos = calculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
+    offsetPos[0] -= guidesElement.offsetLeft;
+    offsetPos[1] -= guidesElement.offsetTop;
+    offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * zoom!;
+
+    datas.offsetPos = offsetPos;
+    datas.matrix = matrix;
+
+    const isLockAdd = lockGuides && lockGuides.indexOf('add') > -1;
+    const isLockRemove = lockGuides && lockGuides.indexOf('remove') > -1;
+    const isLockChange = lockGuides && lockGuides.indexOf('change') > -1;
+
+    if (target === canvasElement) {
+      if (isLockAdd) {
+        e.stop();
+        return;
+      }
+      datas.fromRuler = true;
+      datas.target = this.adderElement;
+      // add
+    } else if (hasClass(target, GUIDE)) {
+      if (isLockRemove && isLockChange) {
+        e.stop();
+        return;
+      }
+      datas.target = target;
+      // change
+    } else {
+      e.stop();
+      return false;
     }
-    public componentDidUpdate(prevProps: any) {
-        if (prevProps.defaultGuides !== this.props.defaultGuides) {
-            // to dynamically update guides from code rather than dragging guidelines
-            this.setState({ guides: this.props.defaultGuides || [] });
+
+    this.resetSelected();
+    this.props.onDragStart(e);
+    this._isFirstMove = true;
+  }
+
+  public componentWillUnmount() {
+    this.gesto.unset();
+    window.removeEventListener('keydown', this.deleteSelectedGuide);
+    window.removeEventListener('click', this.resetSelected);
+  }
+
+  public componentDidUpdate(prevProps: any) {
+    if (prevProps.defaultGuides !== this.props.defaultGuides) {
+      // to dynamically update guides from code rather than dragging guidelines
+      this.setState({ guides: this.props.defaultGuides || [] });
+    }
+  }
+  /**
+   * Load the current guidelines.
+   * @memberof Guides
+   * @instance
+   */
+  public loadGuides(guides: number[]) {
+    this.setState({
+      guides,
+    });
+  }
+
+  @autobind
+  public deleteSelectedGuide(event: KeyboardEvent) {
+    if (event.code === 'Backspace' && this.state.selectedGuides.length) {
+      const guides = this.getGuides();
+      const guidesClone = this.getGuides().slice();
+      const index = guides.findIndex((guide) => {
+        if (this.state.selectedGuides.includes(guide)) {
+          return guide;
         }
+      });
+
+      guides.splice(index, 1);
+
+      this.setState({
+        guides,
+        selectedGuides: [],
+      });
+
+      this.props.onDeleteGuide!({
+        deletedPosGuide: guidesClone[index],
+        deletedIndexGuide: index,
+      });
     }
+  }
+
+  /**
+   * Clear all guidelines
+   * @memberof Guides
+   * @instance
+   */
+  public clearAllGuides() {
+    this.setState({
+      guides: [],
+    });
+  }
+
+  /**
+   * Get current guidelines.
+   * @memberof Guides
+   * @instance
+   */
+  public getGuides(): number[] {
+    return this.state.guides;
+  }
+  /**
+   * Scroll the positions of the guidelines opposite the ruler.
+   * @memberof Guides
+   * @instance
+   */
+  public scrollGuides(pos: number, zoom = 1) {
+    const guidesElement = this.guidesElement;
+
+    this.disablePointerEventsOnScroll();
+
+    this.scrollPos = pos;
+    guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
+
+    const guides = this.state.guides;
+    this.guideElements.forEach((el, i) => {
+      if (!el) {
+        return;
+      }
+      el.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
+    });
+  }
+  /**
+   * Recalculate the size of the ruler.
+   * @memberof Guides
+   * @instance
+   */
+  public resize() {
+    this.ruler.resize();
+  }
+  /**
+   * Scroll the position of the ruler.
+   * @memberof Guides
+   * @instance
+   */
+  public scroll(pos: number) {
+    this.ruler.scroll(pos);
+  }
+
+  private onDrag = (e: any) => {
+    if (this._isFirstMove) {
+      this._isFirstMove = false;
+      addClass(e.datas.target, DRAGGING);
+    }
+    const nextPos = this.movePos(e);
+
     /**
-     * Load the current guidelines.
+     * When dragging, the drag event is called.
      * @memberof Guides
-     * @instance
+     * @event drag
+     * @param {OnDrag} - Parameters for the drag event
      */
-    public loadGuides(guides: number[]) {
-        this.setState({
-            guides,
-        });
+    this.props.onDrag!({
+      ...e,
+      dragElement: e.datas.target,
+    });
+    return nextPos;
+  };
+  private onDragEnd = (e: OnDragEnd) => {
+    const { datas, isDrag, distX, distY } = e;
+
+    if (!isDrag) {
+      return;
     }
 
-    /**
-     * Delete the selected guideline.
-     * @memberof Guides
-     * @instance
-     */
-    public deleteSelectedGuide() {
-        const guides = this.getGuides();
-        const guidesClone = this.getGuides();
-        const index = guides.findIndex(guide => {
-            if(this.state.selectedGuides.includes(guide)) {
-                return guide;
-            }
-        });
+    const pos = this.movePos(e);
+    let guides = this.state.guides;
+    const { onChangeGuides, onAddGuide, zoom, displayDragPos, digit, lockGuides } = this.props;
+    const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
-        guides.splice(index, 1);
-        
-        this.setState({
-            guides,
-            selectedGuides: [],
-        });
-        
-        this.props.onDeleteGuide!({
-            deletedPosGuide: guidesClone[index],
-            deletedIndexGuide: index,
-        });
+    if (displayDragPos) {
+      this.displayElement.style.cssText += 'display: none;';
     }
 
-    /**
-     * Clear all guidelines
-     * @memberof Guides
-     * @instance
-     */
-    public clearAllGuides() {
-        this.setState({
-            guides: [],
-        });
-    }
+    removeClass(datas.target, DRAGGING);
 
-    /**
-     * Get current guidelines.
-     * @memberof Guides
-     * @instance
-     */
-    public getGuides(): number[] {
-        return this.state.guides;
-    }
-    /**
-     * Scroll the positions of the guidelines opposite the ruler.
-     * @memberof Guides
-     * @instance
-     */
-    public scrollGuides(pos: number, zoom = 1) {
-        const guidesElement = this.guidesElement;
-
-        this.disablePointerEventsOnScroll();
-
-        this.scrollPos = pos;
-        guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
-
-        const guides = this.state.guides;
-        this.guideElements.forEach((el, i) => {
-            if (!el) {
-                return;
-            }
-            el.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
-        });
-    }
-    /**
-     * Recalculate the size of the ruler.
-     * @memberof Guides
-     * @instance
-     */
-    public resize() {
-        this.ruler.resize();
-    }
-    /**
-     * Scroll the position of the ruler.
-     * @memberof Guides
-     * @instance
-     */
-    public scroll(pos: number) {
-        this.ruler.scroll(pos);
-    }
-
-    private onDragStart = (e: OnDragStart) => {
-        this.resetSelected();
-        this.props.onDragStart(e);
-        this._isFirstMove = true;
-    }
-
-    private onDrag = (e: any) => { 
-        if (this._isFirstMove) {
-            this._isFirstMove = false;
-            addClass(e.datas.target, DRAGGING);
-        }
-        const nextPos = this.movePos(e);
-
+    if (datas.fromRuler) {
+      if (this._isFirstMove) {
         /**
-         * When dragging, the drag event is called.
+         * When click the ruler, the click ruler is called.
          * @memberof Guides
-         * @event drag
-         * @param {OnDrag} - Parameters for the drag event
+         * @event clickRuler
+         * @param {OnClickRuler} - Parameters for the clickRuler event
          */
-        this.props.onDrag!({
-            ...e,
-            dragElement: e.datas.target,
+        this.props.onClickRuler!({
+          ...e,
+          pos: 0,
         });
-        return nextPos;
-    }
-    private onDragEnd = (e: OnDragEnd) => {
-        const { datas, isDrag, distX, distY } = e;
-
-        if(!isDrag) {
-            return;
-        }
-
-        const pos = this.movePos(e);
-        let guides = this.state.guides;
-        const { onChangeGuides, onAddGuide, zoom, displayDragPos, digit, lockGuides } = this.props;
-        const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
-
-        if (displayDragPos) {
-            this.displayElement.style.cssText += 'display: none;';
-        }
-
-        removeClass(datas.target, DRAGGING);
-
-        if (datas.fromRuler) {
-            if (this._isFirstMove) {
-                /**
-                 * When click the ruler, the click ruler is called.
-                 * @memberof Guides
-                 * @event clickRuler
-                 * @param {OnClickRuler} - Parameters for the clickRuler event
-                 */
-                this.props.onClickRuler!({
-                    ...e,
-                    pos: 0,
-                });
-            }
-            if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
-                this.setState({
-                    guides: [...guides, guidePos],
-                }, () => {
-                    /**
-                     * The `changeGuides` event occurs when the guideline is added / removed / changed.
-                     * @memberof Guides
-                     * @event changeGuides
-                     * @param {OnChangeGuides} - Parameters for the changeGuides event
-                     */
-                    onChangeGuides!({
-                        guides: this.state.guides,
-                        distX,
-                        distY,
-                        isAdd: true,
-                        isRemove: false,
-                        isChange: false,
-                    });
-
-                    onAddGuide!({
-                        posNewGuide: guidePos,
-                    });
-                });
-            }
-        } else {
-            const index = datas.target.getAttribute('data-index');
-            let isRemove = false;
-            let isChange = false;
-
-            guides = [...guides];
-
-            if (guidePos < this.scrollPos) {
-                if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
-                    return;
-                }
-                const deletedPosGuide = guides[index];
-                guides.splice(index, 1);
-                this.props.onDeleteGuide!({
-                    deletedIndexGuide: index,
-                    deletedPosGuide,
-                });
-                isRemove = true;
-            } else if (guides.indexOf(guidePos) > -1) {
-                return;
-            } else {
-                if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
-                    return;
-                }
-                guides[index] = guidePos;
-                isChange = true;
-            }
-            this.setState({
-                guides,
-            }, () => {
-                const nextGuides = this.state.guides;
-                onChangeGuides!({
-                    distX,
-                    distY,
-                    guides: nextGuides,
-                    isAdd: false,
-                    isChange,
-                    isRemove,
-                });
+      }
+      if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
+        this.setState(
+          {
+            guides: [...guides, guidePos],
+          },
+          () => {
+            /**
+             * The `changeGuides` event occurs when the guideline is added / removed / changed.
+             * @memberof Guides
+             * @event changeGuides
+             * @param {OnChangeGuides} - Parameters for the changeGuides event
+             */
+            onChangeGuides!({
+              guides: this.state.guides,
+              distX,
+              distY,
+              isAdd: true,
+              isRemove: false,
+              isChange: false,
             });
+
+            onAddGuide!({
+              posNewGuide: guidePos,
+            });
+          },
+        );
+      }
+    } else {
+      const index = datas.target.getAttribute('data-index');
+      let isRemove = false;
+      let isChange = false;
+
+      guides = [...guides];
+
+      if (guidePos < this.scrollPos) {
+        if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
+          return;
         }
-        /**
-         * When the drag finishes, the dragEnd event is called.
-         * @memberof Guides
-         * @event dragEnd
-         * @param {OnDragEnd} - Parameters for the dragEnd event
-         */
-        this.props.onDragEnd!({
-            ...e,
-            dragElement: datas.target,
+        const deletedPosGuide = guides[index];
+        guides.splice(index, 1);
+        this.props.onDeleteGuide!({
+          deletedIndexGuide: index,
+          deletedPosGuide,
         });
-    }
-    private movePos(e: any) {
-        const { datas, distX, distY } = e;
-        const props = this.props;
-        const {
-            type, zoom, snaps, snapThreshold,
-            displayDragPos,
-            digit,
-        } = props;
-        const dragPosFormat = props.dragPosFormat || (v => v);
-        const isHorizontal = type === 'horizontal';
-        const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
-        const offsetPos = datas.offsetPos;
-        const offsetX = matrixPos[0] + offsetPos[0];
-        const offsetY = matrixPos[1] + offsetPos[1];
-        let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
-        let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0));
-        const guideSnaps = snaps!.slice().sort((a, b) => {
-            return Math.abs(guidePos - a) - Math.abs(guidePos - b);
-        });
-
-        if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
-            guidePos = guideSnaps[0];
-            nextPos = guidePos * zoom!;
+        isRemove = true;
+      } else if (guides.indexOf(guidePos) > -1) {
+        return;
+      } else {
+        if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
+          return;
         }
-        if (!datas.fromRuler || !this._isFirstMove) {
-            if (displayDragPos) {
-                const displayPos = type === 'horizontal'
-                    ? [offsetX, nextPos]
-                    : [nextPos, offsetY];
-                this.displayElement.style.cssText += 'display: block;'
-                    + 'transform: translate(-50%, -50%) '
-                    + `translate(${displayPos.map(v => `${v}px`).join(', ')})`;
-                this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
-            }
-            const target = datas.target;
-
-            target.setAttribute('data-pos', guidePos);
-            target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
-        }
-
-        return nextPos;
-
+        guides[index] = guidePos;
+        isChange = true;
+      }
+      this.setState(
+        {
+          guides,
+        },
+        () => {
+          const nextGuides = this.state.guides;
+          onChangeGuides!({
+            distX,
+            distY,
+            guides: nextGuides,
+            isAdd: false,
+            isChange,
+            isRemove,
+          });
+        },
+      );
     }
-    private getTranslateName() {
-        return this.props.type === 'horizontal' ? 'translateY' : 'translateX';
+    /**
+     * When the drag finishes, the dragEnd event is called.
+     * @memberof Guides
+     * @event dragEnd
+     * @param {OnDragEnd} - Parameters for the dragEnd event
+     */
+    this.props.onDragEnd!({
+      ...e,
+      dragElement: datas.target,
+    });
+  };
+  private movePos(e: any) {
+    const { datas, distX, distY } = e;
+    const props = this.props;
+    const { type, zoom, snaps, snapThreshold, displayDragPos, digit } = props;
+    const dragPosFormat = props.dragPosFormat || ((v) => v);
+    const isHorizontal = type === 'horizontal';
+    const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
+    const offsetPos = datas.offsetPos;
+    const offsetX = matrixPos[0] + offsetPos[0];
+    const offsetY = matrixPos[1] + offsetPos[1];
+    let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
+    let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0));
+    const guideSnaps = snaps!.slice().sort((a, b) => {
+      return Math.abs(guidePos - a) - Math.abs(guidePos - b);
+    });
+
+    if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
+      guidePos = guideSnaps[0];
+      nextPos = guidePos * zoom!;
+    }
+    if (!datas.fromRuler || !this._isFirstMove) {
+      if (displayDragPos) {
+        const displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
+        this.displayElement.style.cssText +=
+          'display: block;' + 'transform: translate(-50%, -50%) ' + `translate(${displayPos.map((v) => `${v}px`).join(', ')})`;
+        this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
+      }
+      const target = datas.target;
+
+      target.setAttribute('data-pos', guidePos);
+      target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
     }
 
-    public resetSelected() {
-        this.setState({
-            selectedGuides:[],
-        });
-    }
+    return nextPos;
+  }
+  private getTranslateName() {
+    return this.props.type === 'horizontal' ? 'translateY' : 'translateX';
+  }
+
+  @autobind
+  public resetSelected(e?: MouseEvent) {
+    this.setState({
+      selectedGuides: [],
+    });
+    e && e.stopPropagation();
+  }
 }

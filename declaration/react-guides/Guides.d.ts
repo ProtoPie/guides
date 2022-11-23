@@ -24,7 +24,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     componentWillUnmount(): void;
     componentDidUpdate(prevProps: any): void;
     loadGuides(guides: number[]): void;
-    deleteSelectedGuide(): void;
+    deleteSelectedGuide(event: KeyboardEvent): void;
     clearAllGuides(): void;
     getGuides(): number[];
     scrollGuides(pos: number, zoom?: number): void;

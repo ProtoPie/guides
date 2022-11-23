@@ -152,9 +152,9 @@ export interface GuidesInterface {
     scroll(pos: number): void;
     scrollGuides(pos: number, zoom?: number): void;
     loadGuides(guides: number[]): void;
-    deleteSelectedGuide(): void;
+    deleteSelectedGuide(event: KeyboardEvent): void;
     clearAllGuides(): void;
-    resetSelected(): void;
+    resetSelected(e: MouseEvent): void;
     resize(): void;
 }
 
