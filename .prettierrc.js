@@ -1,14 +1,14 @@
 module.exports = {
   tabWidth: 2,
-  trailingComma: 'all',
-  singleQuote: true,
   printWidth: 140,
-  overrides: [
-    {
-      files: '[*.html]',
-      options: {
-        printWidth: 150
-      }
-    }
-  ]
+  useTabs: false,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
+  bracketSpacing: true,
+  bracketSameLine: false,
+  jsxSingleQuote: false,
+  quoteProps: 'as-needed',
+  arrowParens: 'avoid',
+  insertPragma: false,
 };
