@@ -481,12 +481,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     if (!datas.fromRuler || !this._isFirstMove) {
       if (displayDragPos) {
-        const transform = type === 'horizontal' 
-            ? this.calcHorizontalTransform(offsetX, nextPos) 
-            : this.calcVerticalTransform(nextPos, offsetY);
-        this.displayElement.style.cssText += 'display: block;'
-            + 'transform: translate(-50%, -50%) '
-            + transform;
+        const translate = type === 'horizontal' 
+            ? this.calcHorizontalTransform(nextPos) 
+            : this.calcVerticalTransform(nextPos);
+        this.displayElement.style.cssText += 'display: block; transform: ' + translate;
         this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
     }
       const target = datas.target;
@@ -507,13 +505,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     });
   }
 
-  private calcHorizontalTransform(offsetX: number, nextPos: number) {
-    const displayPos = [offsetX, nextPos];
-    return `translate(${displayPos.map((v, i) => !i ? '-6px' : `${v - 10}px` ).join(', ')}) rotate(-90deg)`;
-}
+  private calcHorizontalTransform(nextPos: number): string {
+    const translateY = `${nextPos - 10}px`;
+    return `translate(-18px, ${translateY}) rotate(-90deg)`;
+  }
 
-private calcVerticalTransform(nextPos: number, offsetY: number) {
-    const displayPos = [nextPos, offsetY];
-    return `translate(${displayPos.map((v, i) => !i ? `${v + 16}px` : '9px' ).join(', ')})`;
-}
+  private calcVerticalTransform(nextPos: number): string {
+    const translateX = `${nextPos + 8}px`;
+    return `translate(${translateX}, 1px)`;
+  }
 }
