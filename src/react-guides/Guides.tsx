@@ -119,9 +119,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    this.setState({
-      selectedGuides: [pos],
-    });
+    // we should detect if the last event was dragging event
+    // in such case we don't wan't to make guide selected
+    if (!this.gesto.isDragging()) {
+      this.setState({
+        selectedGuides: [pos],
+      });
+    }
     e.stopPropagation();
     e.preventDefault();
   }
@@ -481,9 +485,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     if (!datas.fromRuler || !this._isFirstMove) {
       if (displayDragPos) {
-        const translate = type === 'horizontal' 
-            ? this.calcHorizontalTransform(nextPos) 
-            : this.calcVerticalTransform(nextPos);
+        const translate = type === 'horizontal' ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
         this.displayElement.style.cssText += 'display: block; transform: ' + translate;
         this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
       }
