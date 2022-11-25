@@ -7,6 +7,8 @@ export interface GuidesState {
   selectedGuides: number[];
 }
 
+export type LockGuides = boolean | Array<'add' | 'change' | 'remove'>;
+
 /**
  * @typedef
  * @memberof Guides
@@ -39,7 +41,7 @@ export interface GuidesOptions extends RulerProps {
   dragPosFormat?: (value: number) => string | number;
   defaultGuides?: number[];
   showGuides?: boolean;
-  lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
+  lockGuides?: LockGuides;
   /**
    * pos digit of guidelines (default: 0)
    */

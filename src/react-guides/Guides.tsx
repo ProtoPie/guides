@@ -8,7 +8,7 @@ import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface, GuidesProps, GuidesState, OnDragStart } from './types';
+import { GuidesInterface, GuidesProps, GuidesState, OnDragStart, GuidesOptions, LockGuides } from './types';
 import { prefix } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
@@ -123,7 +123,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   public renderGuides() {
     const props = this.props;
     const { type, zoom, showGuides, guideStyle, displayGuidePos, guidePosStyle = {} } = props as Required<GuidesProps>;
-    const translateName = this.getTranslateName();
     const guides = this.state.guides;
     const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
     const selectedGuides = this.state.selectedGuides;
@@ -140,7 +139,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             onClick={e => this.selectGuide(pos, e)}
             style={{
               ...guideStyle,
-              transform: `${translateName}(${pos * zoom}px) translateZ(0px)`,
+              transform: `${this.getTranslateName()}(${pos * zoom}px) translateZ(0px)`,
             }}
           >
             {displayGuidePos && (
@@ -152,8 +151,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         );
       });
     }
-    return;
   }
+
   public componentDidMount() {
     this.gesto = new Gesto(this.manager.getElement(), {
       container: document.body,
@@ -166,7 +165,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private onDragStart(e: OnDragStart) {
-    const { type, zoom, lockGuides } = this.props;
+    this.resetSelected();
+    this._isFirstMove = true;
+
+    const { type, zoom, lockGuides, onDragStart } = this.props;
 
     if (lockGuides === true) {
       e.stop();
@@ -188,9 +190,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     datas.offsetPos = offsetPos;
     datas.matrix = matrix;
 
-    const isLockAdd = lockGuides && lockGuides.indexOf('add') > -1;
-    const isLockRemove = lockGuides && lockGuides.indexOf('remove') > -1;
-    const isLockChange = lockGuides && lockGuides.indexOf('change') > -1;
+    const isLockAdd = this.isLockType(lockGuides, 'add');
+    const isLockRemove = this.isLockType(lockGuides, 'remove')
+    const isLockChange = this.isLockType(lockGuides, 'change')
 
     if (target === canvasElement) {
       if (isLockAdd) {
@@ -212,9 +214,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       return false;
     }
 
-    this.resetSelected();
-    this.props.onDragStart(e);
-    this._isFirstMove = true;
+    onDragStart(e);
+  }
+
+  private isLockType(lockGuides: LockGuides, type: string): boolean {
+    return lockGuides && (lockGuides as string[]).indexOf(type)> -1;
   }
 
   public componentWillUnmount() {
