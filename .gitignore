@@ -9,6 +9,7 @@ jsdoc/
 doc/
 outjs/
 build/
+dist/
 .vscode/
 rollup-plugin-visualizer/
 statistics/
