@@ -7,12 +7,12 @@
     "types": "declaration/index.d.ts",
     "scripts": {
         "start": "rollup -c",
+        "postinstall": "npm install rollup && rollup -c",
         "build": "npm start && npm run declaration",
         "dev": "rollup -c -w",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "lint": "npx eslint src/**/*.{ts,tsx}",
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
-        "prepare": "husky install",
         "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
     },
     "repository": {
@@ -32,7 +32,6 @@
         "eslint": "^8.26.0",
         "eslint-plugin-react": "^7.31.10",
         "eslint-plugin-unused-imports": "^2.0.0",
-        "husky": "^8.0.0",
         "rollup": "^1.32.1",
         "rollup-plugin-css-bundle": "^1.0.4",
         "rollup-plugin-react-compat": "^0.1.0",
@@ -40,9 +39,6 @@
         "typescript": "^3.5.2"
     },
     "dependencies": {
-        "gesto": "^1.0.0",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0",
         "@daybrush/utils": "^1.1.1",
         "@scena/event-emitter": "^1.0.4",
         "@scena/react-ruler": "^0.11.0",
@@ -53,7 +49,10 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-simple-import-sort": "^8.0.0",
+        "gesto": "^1.0.0",
         "prettier": "^2.7.1",
-        "react-css-styled": "^1.0.4"
+        "react": "^16.12.0",
+        "react-css-styled": "^1.0.4",
+        "react-dom": "^16.12.0"
     }
 }
