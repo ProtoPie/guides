@@ -71,7 +71,7 @@ canvas {
 
 :host.horizontal .display-drag {
     bottom: 100%;
-    left: 15px;
+    left: 19px;
 }
 
 :host.horizontal .guides {
