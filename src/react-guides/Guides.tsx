@@ -481,9 +481,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
     if (!datas.fromRuler || !this._isFirstMove) {
       if (displayDragPos) {
-        const displayPos = type === 'horizontal' ? [offsetX, nextPos] : [nextPos, offsetY];
-        this.displayElement.style.cssText +=
-          'display: block;' + 'transform: translate(-50%, -50%) ' + `translate(${displayPos.map(v => `${v}px`).join(', ')})`;
+        const translate = type === 'horizontal' 
+            ? this.calcHorizontalTransform(nextPos) 
+            : this.calcVerticalTransform(nextPos);
+        this.displayElement.style.cssText += 'display: block; transform: ' + translate;
         this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
       }
       const target = datas.target;
@@ -502,5 +503,15 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.setState({
       selectedGuides: [],
     });
+  }
+
+  private calcHorizontalTransform(nextPos: number): string {
+    const translateY = `${nextPos - 10}px`;
+    return `translate(-18px, ${translateY}) rotate(-90deg)`;
+  }
+
+  private calcVerticalTransform(nextPos: number): string {
+    const translateX = `${nextPos + 8}px`;
+    return `translate(${translateX}, 1px)`;
   }
 }

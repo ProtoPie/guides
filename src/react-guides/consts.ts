@@ -39,9 +39,12 @@ canvas {
 .guide-pos {
     position: absolute;
     font-weight: bold;
-    font-size: 12px;
-    color: #f33;
+    color: #E04169;
+    width: 50px;
+    text-align: center;
+    backdrop-filter: blur(20px);
 }
+
 .horizontal .guide-pos {
     bottom: 100%;
     left: 50%;
@@ -49,20 +52,28 @@ canvas {
 }
 .vertical .guide-pos {
     left: calc(100% + 2px);
-    top: 50%;
+    top: 10px;
     transform: translateY(-50%);
 }
 .display-drag {
     position: absolute;
-    will-change: transform;
     z-index: 2000;
     font-weight: bold;
     font-size: 12px;
-    display: none;
-    left: 20px;
-    top: -20px;
-    color: #f33;
+    display: block;
+    color: #E04169;
+    font-size: 10px;
+    line-height: 12px;
+    padding: 0 1px;
+    width: max-content;
+    backdrop-filter: blur(20px);
 }
+
+:host.horizontal .display-drag {
+    bottom: 100%;
+    left: 19px;
+}
+
 :host.horizontal .guides {
     width: 100%;
     height: 0;
