@@ -62,14 +62,9 @@ canvas {
     color: #E04169;
     font-size: 10px;
     line-height: 12px;
-    padding: 0 4px;
+    padding: 0px 1px 0px;
     width: max-content;
     backdrop-filter: blur(20px);
-}
-
-:host.horizontal .display-drag {
-    bottom: 100%;
-    left: 19px;
 }
 
 :host.horizontal .guides {

@@ -508,8 +508,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private calcHorizontalTransform(nextPos: number): string {
-    const translateY = `${nextPos - 12}px`;
-    return `translate(-22px, ${translateY}) rotate(-90deg)`;
+    const translateY = `${nextPos - 20}px`;
+    return `translateY(${translateY}) rotate(-90deg)`;
   }
 
   private calcVerticalTransform(nextPos: number): string {
