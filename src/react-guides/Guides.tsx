@@ -363,7 +363,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
     if (displayDragPos) {
-      this.displayElement.style.cssText += 'display: none;';
+      // this.displayElement.style.cssText += 'display: none;';
     }
 
     removeClass(datas.target, DRAGGING);
@@ -508,12 +508,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private calcHorizontalTransform(nextPos: number): string {
-    const translateY = `${nextPos - 10}px`;
-    return `translate(-18px, ${translateY}) rotate(-90deg)`;
+    const translateY = `${nextPos - 12}px`;
+    return `translate(-22px, ${translateY}) rotate(-90deg)`;
   }
 
   private calcVerticalTransform(nextPos: number): string {
     const translateX = `${nextPos + 8}px`;
-    return `translate(${translateX}, 1px)`;
+    return `translate(${translateX}, 2px)`;
   }
 }

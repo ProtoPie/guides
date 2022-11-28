@@ -58,13 +58,11 @@ canvas {
 .display-drag {
     position: absolute;
     z-index: 2000;
-    font-weight: bold;
-    font-size: 12px;
     display: block;
     color: #E04169;
     font-size: 10px;
     line-height: 12px;
-    padding: 0 1px;
+    padding: 0 4px;
     width: max-content;
     backdrop-filter: blur(20px);
 }
