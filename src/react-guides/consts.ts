@@ -10,7 +10,9 @@ export const GUIDES = prefix('guides');
 export const GUIDE = prefix('guide');
 export const DRAGGING = prefix('dragging');
 export const DISPLAY_DRAG = prefix('display-drag');
-export const GUIDES_CSS = prefixCSS('scena-', `
+export const GUIDES_CSS = prefixCSS(
+  'scena-',
+  `
 {
     position: relative;
     width: 100%;
@@ -37,9 +39,12 @@ canvas {
 .guide-pos {
     position: absolute;
     font-weight: bold;
-    font-size: 12px;
-    color: #f33;
+    color: #E04169;
+    width: 50px;
+    text-align: center;
+    backdrop-filter: blur(20px);
 }
+
 .horizontal .guide-pos {
     bottom: 100%;
     left: 50%;
@@ -47,20 +52,28 @@ canvas {
 }
 .vertical .guide-pos {
     left: calc(100% + 2px);
-    top: 50%;
+    top: 10px;
     transform: translateY(-50%);
 }
 .display-drag {
     position: absolute;
-    will-change: transform;
     z-index: 2000;
     font-weight: bold;
     font-size: 12px;
-    display: none;
-    left: 20px;
-    top: -20px;
-    color: #f33;
+    display: block;
+    color: #E04169;
+    font-size: 10px;
+    line-height: 12px;
+    padding: 0 1px;
+    width: max-content;
+    backdrop-filter: blur(20px);
 }
+
+:host.horizontal .display-drag {
+    bottom: 100%;
+    left: 19px;
+}
+
 :host.horizontal .guides {
     width: 100%;
     height: 0;
@@ -71,7 +84,8 @@ canvas {
 }
 .guide {
     position: absolute;
-    background: #f33;
+    background: #E04169;
+    opacity: 0.5;
     z-index: 2;
 }
 .selected {
@@ -98,11 +112,13 @@ canvas {
 }
 :host.horizontal .dragging,
 :host.horizontal .selected {
-    height: 2px
+    height: 1px;
+    opacity: 1;
 }
 :host.vertical .dragging,
 :host.vertical .selected {
-    width: 2px
+    width: 1px;
+    opacity: 1;
 }
 .mobile :host.horizontal .guide {
     transform: scale(1, 2);
@@ -129,39 +145,31 @@ canvas {
 .adder.dragging {
     display: block;
 }
-`);
+`,
+);
 
 export const PROPERTIES: Array<keyof GuidesOptions> = [
-    'className',
-    'rulerStyle',
-    'snapThreshold',
-    'snaps',
-    'displayDragPos',
-    'cspNonce',
-    'dragPosFormat',
-    'defaultGuides',
-    'showGuides',
-    ...RULER_PROPERTIES,
+  'className',
+  'rulerStyle',
+  'snapThreshold',
+  'snaps',
+  'displayDragPos',
+  'cspNonce',
+  'dragPosFormat',
+  'defaultGuides',
+  'showGuides',
+  ...RULER_PROPERTIES,
 ];
 
 export const METHODS = [
-    'getGuides',
-    'loadGuides',
-    'scroll',
-    'scrollGuides',
-    'resize',
-    'deleteSelectedGuide',
-    'resetSelected',
-    'clearAllGuides',
+  'getGuides',
+  'loadGuides',
+  'scroll',
+  'scrollGuides',
+  'resize',
+  'deleteSelectedGuide',
+  'resetSelected',
+  'clearAllGuides',
 ] as const;
 
-export const EVENTS = [
-    'changeGuides',
-    'dragStart',
-    'drag',
-    'dragEnd',
-    'clickRuler',
-    'deleteGuide',
-    'addGuide',
-    'resetGuides',
-] as const;
+export const EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'] as const;
