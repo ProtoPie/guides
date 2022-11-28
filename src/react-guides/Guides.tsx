@@ -363,7 +363,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const guidePos = parseFloat((pos / zoom!).toFixed(digit || 0));
 
     if (displayDragPos) {
-      // this.displayElement.style.cssText += 'display: none;';
+      this.displayElement.style.cssText += 'display: none;';
     }
 
     removeClass(datas.target, DRAGGING);
