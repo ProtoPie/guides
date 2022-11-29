@@ -1,12 +1,11 @@
-import { camelize } from '@daybrush/utils';
 import EventEmitter from '@scena/event-emitter';
-import { Properties, ref } from 'framework-utils';
 import * as React from 'react';
 import { render } from 'react-dom';
 
 import InnerGuides from './InnerGuides';
 import { EVENTS, METHODS, PROPERTIES } from './react-guides/consts';
 import { GuidesEvents, GuidesInterface, GuidesOptions } from './react-guides/types';
+import { Properties, ref } from './react-guides/utils';
 
 @Properties(METHODS as any, (prototype, property) => {
   if (prototype[property]) {
@@ -52,7 +51,7 @@ class Guides extends EventEmitter<GuidesEvents> {
     const events: any = {};
 
     EVENTS.forEach(name => {
-      events[camelize(`on ${name}`)] = (e: any) => this.trigger(name as any, e);
+      events[this.getEventKeyByName(name)] = (e: any) => this.trigger(name as any, e);
     });
 
     render(<InnerGuides {...options} {...events} container={container} ref={ref(this, 'innerGuides')} />, this.tempElement);
@@ -74,6 +73,9 @@ class Guides extends EventEmitter<GuidesEvents> {
   }
   private getInnerGuides() {
     return this.innerGuides.guides;
+  }
+  private getEventKeyByName(eventName: string) {
+    return 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
   }
 }
 interface Guides extends GuidesInterface {}

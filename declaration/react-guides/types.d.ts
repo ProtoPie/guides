@@ -1,6 +1,9 @@
-import { IObject } from '@daybrush/utils';
 import { RulerProps } from '@scena/react-ruler/declaration/types';
 import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
+
+export interface IObject<T> {
+    [name: string]: T;
+}
 export interface GuidesState {
     guides: number[];
     selectedGuides: number[];
