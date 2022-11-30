@@ -1,14 +1,12 @@
-import { addClass, hasClass, removeClass } from '@daybrush/utils';
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '@scena/react-ruler';
 import { calculateMatrixDist, getDistElementMatrix } from 'css-to-mat';
-import { ref, refs } from 'framework-utils';
 import Gesto, { OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, OnDragStart } from './types';
-import { prefix } from './utils';
+import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
 
@@ -203,7 +201,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
           datas.fromRuler = true;
           datas.target = this.adderElement;
           // add
-        } else if (hasClass(target, GUIDE)) {
+        } else if (target.classList.contains(GUIDE)) {
           if (isLockRemove && isLockChange) {
             e.stop();
             return;
@@ -334,7 +332,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private onDrag = (e: any) => {
     if (this._isFirstMove) {
       this._isFirstMove = false;
-      addClass(e.datas.target, DRAGGING);
+      e.datas.target.classList.add(DRAGGING);
     }
     const nextPos = this.movePos(e);
 
@@ -366,7 +364,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.displayElement.style.cssText += 'display: none;';
     }
 
-    removeClass(datas.target, DRAGGING);
+    datas.target.classList.remove(DRAGGING)
 
     if (datas.fromRuler) {
       if (this._isFirstMove) {

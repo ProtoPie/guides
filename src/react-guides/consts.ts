@@ -1,8 +1,7 @@
 import { PROPERTIES as RULER_PROPERTIES } from '@scena/react-ruler';
-import { prefixCSS } from 'framework-utils';
 
 import { GuidesOptions } from './types';
-import { prefix } from './utils';
+import { prefix, prefixCSS } from './utils';
 
 export const RULER = prefix('ruler');
 export const ADDER = prefix('guide', 'adder');
