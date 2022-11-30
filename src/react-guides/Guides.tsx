@@ -373,12 +373,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
   }
 
-  private addGuideDragEnd(event) {
+  private addGuideDragEnd(event: OnDragEnd) {
     this.props.onClickRuler!({
       ...event,
       pos: 0,
     });
-    
+
     const guidePos = this.getGuidesPosition(event);
 
     if (guidePos >= this.scrollPos && this.state.guides.indexOf(guidePos) < 0) {
@@ -394,7 +394,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
   }
 
-  private removeGuideDragEnd(event) {
+  private removeGuideDragEnd(event: OnDragEnd) {
     const { lockGuides } = this.props;
 
     if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
@@ -417,7 +417,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     });
   }
 
-  private changeGuideDragEnd(event) {
+  private changeGuideDragEnd(event: OnDragEnd) {
     const { lockGuides } = this.props;
     if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
       return;
@@ -433,7 +433,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     });
   }
 
-  private updateGuidePosition(event, guides, { isAdd = false, isChange = false, isRemove = false }) {
+  private updateGuidePosition(event: OnDragEnd, guides: number[], { isAdd = false, isChange = false, isRemove = false }) {
     const { distX, distY } = event;
 
     this.setState({ guides }, () => {
