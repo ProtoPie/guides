@@ -51,7 +51,7 @@ class Guides extends EventEmitter<GuidesEvents> {
     const events: any = {};
 
     EVENTS.forEach(name => {
-      events[this.getEventKeyByName(name)] = (e: any) => this.trigger(name as any, e);
+      events[this.getEventKeyByName(name)] = (e: any) => this.trigger(name as keyof GuidesEvents, e);
     });
 
     render(<InnerGuides {...options} {...events} container={container} ref={ref(this, 'innerGuides')} />, this.tempElement);
