@@ -36,4 +36,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     private movePos;
     private getTranslateName;
     resetSelected(): void;
+    private calcHorizontalTransform;
+    private calcVerticalTransform;
 }

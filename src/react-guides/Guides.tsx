@@ -1,15 +1,13 @@
-import { addClass, hasClass, removeClass } from '@daybrush/utils';
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '@scena/react-ruler';
 import autobind from 'autobind-decorator';
 import { calculateMatrixDist, getDistElementMatrix } from 'css-to-mat';
-import { ref, refs } from 'framework-utils';
 import Gesto, { OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
-import { prefix } from './utils';
+import { GuidesInterface, GuidesProps, GuidesState, OnDragStart } from './types';
+import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
 
@@ -201,14 +199,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
 
     const canvasElement = this.ruler.canvasElement;
-    const target = event.inputEvent.target;
+    const target: HTMLElement = event.inputEvent.target;
 
     event.datas.offsetPos = this.offsetPosition(event);
     event.datas.matrix = this.matrix;
 
     if (target === canvasElement) {
       this.createGuide(event);
-    } else if (hasClass(target, GUIDE)) {
+    } else if (target.classList.contains(GUIDE)) {
       this.changeGuide(event);
     }
 
@@ -366,7 +364,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private onDrag = (e: any) => {
     if (this._isFirstMove) {
       this._isFirstMove = false;
-      addClass(e.datas.target, DRAGGING);
+      e.datas.target.classList.add(DRAGGING);
     }
     const nextPos = this.movePos(e);
 
@@ -398,7 +396,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.displayElement.style.cssText += 'display: none;';
     }
 
-    removeClass(datas.target, DRAGGING);
+    datas.target.classList.remove(DRAGGING)
 
     if (datas.fromRuler) {
       if (this._isFirstMove) {

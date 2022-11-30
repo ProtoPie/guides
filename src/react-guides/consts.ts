@@ -1,8 +1,7 @@
 import { PROPERTIES as RULER_PROPERTIES } from '@scena/react-ruler';
-import { prefixCSS } from 'framework-utils';
 
 import { GuidesOptions } from './types';
-import { prefix } from './utils';
+import { prefix, prefixCSS } from './utils';
 
 export const RULER = prefix('ruler');
 export const ADDER = prefix('guide', 'adder');
@@ -84,7 +83,8 @@ canvas {
 }
 .guide {
     position: absolute;
-    background: #f33;
+    background: #E04169;
+    opacity: 0.5;
     z-index: 2;
 }
 .selected {
@@ -111,11 +111,13 @@ canvas {
 }
 :host.horizontal .dragging,
 :host.horizontal .selected {
-    height: 2px
+    height: 1px;
+    opacity: 1;
 }
 :host.vertical .dragging,
 :host.vertical .selected {
-    width: 2px
+    width: 1px;
+    opacity: 1;
 }
 .mobile :host.horizontal .guide {
     transform: scale(1, 2);
