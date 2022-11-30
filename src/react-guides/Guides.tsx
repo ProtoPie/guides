@@ -8,7 +8,7 @@ import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import { ADDER, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface, GuidesProps, GuidesState, OnDragStart, GuidesOptions, LockGuides } from './types';
+import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
 import { prefix } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
@@ -74,19 +74,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   public render() {
-    const { className, type, zoom, style, rulerStyle, displayDragPos, cspNonce, dragGuideStyle, portalContainer } = this
-      .props as Required<GuidesProps>;
-    const props = this.props;
-    const translateName = this.getTranslateName();
+    const { className, type, style, rulerStyle, cspNonce, portalContainer } = this.props as Required<GuidesProps>;
 
-    const rulerProps: RulerProps = {};
-
-    RULER_PROPERTIES.forEach(name => {
-      if (name === 'style') {
-        return;
-      }
-      (rulerProps as any)[name] = props[name];
-    });
     return (
       <GuidesElement
         ref={ref(this, 'manager')}
@@ -95,21 +84,41 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         portalContainer={portalContainer}
         style={style}
       >
-        <div className={prefix('guide-origin')} ref={ref(this, 'originElement')}></div>
-        <Ruler ref={ref(this, 'ruler')} style={rulerStyle} {...rulerProps} />
-        <div
-          className={GUIDES}
-          ref={ref(this, 'guidesElement')}
-          style={{
-            transform: `${translateName}(${-this.scrollPos * zoom}px)`,
-          }}
-        >
-          {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
-          <div className={ADDER} ref={ref(this, 'adderElement')} />
-          {this.renderGuides()}
-        </div>
+        <div className={prefix('guide-origin')} ref={ref(this, 'originElement')} />
+        <Ruler ref={ref(this, 'ruler')} style={rulerStyle} {...this.rulerProps} />
+        {this.renderGuidesElements()};
       </GuidesElement>
     );
+  }
+
+  private renderGuidesElements() {
+    const { zoom, displayDragPos, dragGuideStyle } = this.props;
+    const transform = `${this.getTranslateName()}(${-this.scrollPos * zoom}px)`;
+    return (
+      <div
+        className={GUIDES}
+        ref={ref(this, 'guidesElement')}
+        style={{
+          transform,
+        }}
+      >
+        {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
+        <div className={ADDER} ref={ref(this, 'adderElement')} />
+        {this.renderGuides()}
+      </div>
+    );
+  }
+
+  private get rulerProps(): RulerProps {
+    const result = {};
+    RULER_PROPERTIES.forEach(name => {
+      if (name === 'style') {
+        return;
+      }
+      result[name] = this.props[name];
+    });
+
+    return result;
   }
 
   private selectGuide(pos: number, e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -125,17 +134,14 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   public renderGuides() {
-    const props = this.props;
-    const { type, zoom, showGuides, guideStyle, displayGuidePos, guidePosStyle = {} } = props as Required<GuidesProps>;
-    const guides = this.state.guides;
-    const guidePosFormat = props.guidePosFormat || props.dragPosFormat || (v => v);
-    const selectedGuides = this.state.selectedGuides;
+    const { zoom, showGuides, guideStyle = {} } = this.props as Required<GuidesProps>;
+
     this.guideElements = [];
     if (showGuides) {
-      return guides.map((pos, i) => {
+      return this.state.guides.map((pos, i) => {
         return (
           <div
-            className={`${prefix('guide', type)} ${selectedGuides.includes(pos) ? prefix('selected') : ''}`}
+            className={this.currentGuideClassName(pos)}
             ref={refs(this, 'guideElements', i)}
             key={i}
             data-index={i}
@@ -146,15 +152,31 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
               transform: `${this.getTranslateName()}(${pos * zoom}px) translateZ(0px)`,
             }}
           >
-            {displayGuidePos && (
-              <div className={prefix('guide-pos')} style={guidePosStyle || {}}>
-                {guidePosFormat!(pos)}
-              </div>
-            )}
+            {this.displayGuidePosition(pos)}
           </div>
         );
       });
     }
+  }
+
+  private displayGuidePosition(position) {
+    if (this.props.displayGuidePos) {
+      const guidePosFormat = this.guidePositionFormat();
+
+      return (
+        <div className={prefix('guide-pos')} style={this.props.guidePosStyle || {}}>
+          {guidePosFormat(position)}
+        </div>
+      );
+    }
+  }
+
+  private currentGuideClassName(position: number) {
+    return `${prefix('guide', this.props.type)} ${this.state.selectedGuides.includes(position) ? prefix('selected') : ''}`;
+  }
+
+  private guidePositionFormat() {
+    return this.props.guidePosFormat || this.props.dragPosFormat || (v => v);
   }
 
   public componentDidMount() {
@@ -164,65 +186,81 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       .on('dragStart', this.onDragStart)
       .on('drag', this.onDrag)
       .on('dragEnd', this.onDragEnd);
-    // pass array of guides on mount data to create gridlines or something like that in ui
-    this.setState({ guides: this.props.defaultGuides || [] });
   }
 
-  private onDragStart(e: OnDragStart) {
+  @autobind
+  private onDragStart(event: OnDragStart) {
     this.resetSelected();
     this._isFirstMove = true;
 
-    const { type, zoom, lockGuides, onDragStart } = this.props;
+    const { lockGuides, onDragStart } = this.props;
 
     if (lockGuides === true) {
-      e.stop();
+      event.stop();
       return;
     }
-    const inputEvent = e.inputEvent;
-    const target = inputEvent.target;
-    const datas = e.datas;
+
     const canvasElement = this.ruler.canvasElement;
-    const guidesElement = this.guidesElement;
-    const isHorizontal = type === 'horizontal';
-    const originRect = this.originElement.getBoundingClientRect();
-    const matrix = getDistElementMatrix(this.manager.getElement());
-    const offsetPos = calculateMatrixDist(matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
-    offsetPos[0] -= guidesElement.offsetLeft;
-    offsetPos[1] -= guidesElement.offsetTop;
-    offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * zoom!;
+    const target = event.inputEvent.target;
 
-    datas.offsetPos = offsetPos;
-    datas.matrix = matrix;
-
-    const isLockAdd = this.isLockType(lockGuides, 'add');
-    const isLockRemove = this.isLockType(lockGuides, 'remove')
-    const isLockChange = this.isLockType(lockGuides, 'change')
+    event.datas.offsetPos = this.offsetPosition(event);
+    event.datas.matrix = this.matrix;
 
     if (target === canvasElement) {
-      if (isLockAdd) {
-        e.stop();
-        return;
-      }
-      datas.fromRuler = true;
-      datas.target = this.adderElement;
-      // add
+      this.createGuide(event);
     } else if (hasClass(target, GUIDE)) {
-      if (isLockRemove && isLockChange) {
-        e.stop();
-        return;
-      }
-      datas.target = target;
-      // change
-    } else {
-      e.stop();
-      return false;
+      this.changeGuide(event);
     }
 
-    onDragStart(e);
+    onDragStart(event);
+  }
+
+  private createGuide(event: OnDragStart) {
+    const isLockAdd = this.isLockType(this.props.lockGuides, 'add');
+    const datas = event.datas;
+
+    if (isLockAdd) {
+      event.stop();
+      return;
+    }
+
+    datas.fromRuler = true;
+    datas.target = this.adderElement;
+  }
+
+  private changeGuide(event: OnDragStart) {
+    const isLockRemove = this.isLockType(this.props.lockGuides, 'remove');
+    const isLockChange = this.isLockType(this.props.lockGuides, 'change');
+    const target = event.inputEvent.target;
+    const datas = event.datas;
+
+    if (isLockRemove && isLockChange) {
+      event.stop();
+      return;
+    }
+
+    datas.fromRuler = false;
+    datas.target = target;
+  }
+
+  private offsetPosition(e: OnDragStart) {
+    const originRect = this.originElement.getBoundingClientRect();
+    const isHorizontal = this.props.type === 'horizontal';
+
+    const offsetPos = calculateMatrixDist(this.matrix, [e.clientX - originRect.left, e.clientY - originRect.top]);
+    offsetPos[0] -= this.guidesElement.offsetLeft;
+    offsetPos[1] -= this.guidesElement.offsetTop;
+    offsetPos[isHorizontal ? 1 : 0] += this.scrollPos * this.props.zoom;
+
+    return offsetPos;
+  }
+
+  private get matrix() {
+    return getDistElementMatrix(this.manager.getElement());
   }
 
   private isLockType(lockGuides: LockGuides, type: string): boolean {
-    return lockGuides && (lockGuides as string[]).indexOf(type)> -1;
+    return lockGuides && (lockGuides as string[]).indexOf(type) > -1;
   }
 
   public componentWillUnmount() {
@@ -273,11 +311,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     }
   }
 
-  /**
-   * Clear all guidelines
-   * @memberof Guides
-   * @instance
-   */
   public clearAllGuides() {
     this.setState({
       guides: [],
