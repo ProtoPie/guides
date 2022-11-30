@@ -38,7 +38,6 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@daybrush/utils": "^1.1.1",
         "@scena/event-emitter": "^1.0.4",
         "@scena/react-ruler": "^0.11.0",
         "css-to-mat": "^1.0.3",
