@@ -10,6 +10,7 @@ doc/
 outjs/
 build/
 dist/
+declaration/
 .vscode/
 rollup-plugin-visualizer/
 statistics/

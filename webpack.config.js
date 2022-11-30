@@ -1,18 +1,26 @@
 const webpack = require('webpack');
 const path = require('path');
+const TerserPlugin = require("terser-webpack-plugin");
 
-module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
-  entry: './src/index.ts',
+module.exports = (_env, argv) => ({
+  mode: argv.mode === 'production' ? 'production' : 'development',
+  devtool: argv.mode === 'production' ? false : 'inline-source-map',
+  entry: {
+    guides: './src/index.ts',
+  },
+  name: 'guides',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'guides.js',
+    filename: '[name].js',
     library: 'guides',
     libraryTarget: 'umd',
+  },
+  optimization: {
+    minimize: argv.mode === 'production' ? true : false,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
@@ -22,4 +30,4 @@ module.exports = {
       },
     ],
   },
-};
+});
