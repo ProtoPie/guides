@@ -352,6 +352,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const target = event.datas.target;
 
     target.classList.remove(DRAGGING);
+    // inside those next function calls "event" object can be modified
     this.updateGuidesDragEnd(event);
     this.hideDragPosition();
 
