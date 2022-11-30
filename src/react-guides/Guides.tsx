@@ -97,7 +97,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       <GuidesElement
         ref={ref(this, 'manager')}
         cspNonce={cspNonce}
-        className={`${prefix('manager', type)} ${className}`}
+        className={`${prefix('manager', type)}`}
         portalContainer={portalContainer}
         style={style}
       >
@@ -110,7 +110,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             transform: `${translateName}(${-this.scrollPos * zoom}px)`,
           }}
         >
-          {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
+          {displayDragPos && <div className={`${prefix('wrapper-pos')} ${className}`} ref={ref(this, 'displayElement')}></div>}
           <div className={ADDER} ref={ref(this, 'adderElement')} />
           {this.renderGuides()}
         </div>
@@ -486,8 +486,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     if (!datas.fromRuler || !this._isFirstMove) {
       if (displayDragPos) {
         const translate = type === 'horizontal' ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
-        this.displayElement.style.cssText += 'display: block; transform: ' + translate;
-        this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
+        this.displayElement.style.cssText += 'display: flex; transform: ' + translate;
+        this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${dragPosFormat!(guidePos)}</div>`;
       }
       const target = datas.target;
 
@@ -508,8 +508,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private calcHorizontalTransform(nextPos: number): string {
-    const translateY = `${nextPos - 20}px`;
-    return `translateY(${translateY}) rotate(-90deg)`;
+    const translateY = `${nextPos - 25}px`;
+    return `translateY(${translateY}) translateX(-5px) rotate(-90deg)`;
   }
 
   private calcVerticalTransform(nextPos: number): string {
