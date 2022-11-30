@@ -12,7 +12,7 @@ import { prefix, ref, refs } from './utils';
 const GuidesElement = styled('div', GUIDES_CSS);
 
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
-  public static defaultProps: GuidesProps = defaultProps;
+  public static defaultProps: GuidesProps = { ...defaultProps };
   public state: GuidesState = {
     guides: [],
     selectedGuides: [],
@@ -341,9 +341,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private hideDragPosition() {
-    if (this.props.displayDragPos) {
-      this.displayElement.style.cssText += 'display: none;';
-    }
+    this.displayElement.style.cssText += 'display: none;';
   }
 
   private onDragEnd = (event: OnDragEnd) => {
@@ -353,11 +351,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     const target = event.datas.target;
 
-    this.hideDragPosition();
-
     target.classList.remove(DRAGGING);
-
     this.updateGuidesDragEnd(event);
+    this.hideDragPosition();
 
     this.props.onDragEnd!({
       ...event,
@@ -378,28 +374,27 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private addGuideDragEnd(event) {
-    console.log('Guides ~ addGuideDragEnd ~ event', event);
     this.props.onClickRuler!({
       ...event,
       pos: 0,
     });
     
     const guidePos = this.getGuidesPosition(event);
-    console.log('Guides ~ addGuideDragEnd ~ guidePos', guidePos);
-    const guides = [...this.state.guides, guidePos];
-    console.log('Guides ~ addGuideDragEnd ~ guides', guides);
-    console.log('Guides ~ addGuideDragEnd ~ scrollPos', this.scrollPos);
-    console.log('Guides ~ addGuideDragEnd ~ guides.indexOf(guidePos) < 0', guides.indexOf(guidePos) < 0);
 
-    if (guidePos >= this.scrollPos && guides.indexOf(guidePos) < 0) {
+    if (guidePos >= this.scrollPos && this.state.guides.indexOf(guidePos) < 0) {
+      const guides = [...this.state.guides, guidePos];
+
       this.updateGuidePosition(event, guides, {
         isAdd: true,
+      });
+
+      this.props.onAddGuide!({
+        posNewGuide: guidePos,
       });
     }
   }
 
   private removeGuideDragEnd(event) {
-    console.log('Guides ~ removeGuideDragEnd ~ event', event);
     const { lockGuides } = this.props;
 
     if (lockGuides && (lockGuides === true || lockGuides.indexOf('remove') > -1)) {
@@ -423,7 +418,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private changeGuideDragEnd(event) {
-    console.log('Guides ~ changeGuideDragEnd ~ event', event);
     const { lockGuides } = this.props;
     if (lockGuides && (lockGuides === true || lockGuides.indexOf('change') > -1)) {
       return;
@@ -441,7 +435,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
   private updateGuidePosition(event, guides, { isAdd = false, isChange = false, isRemove = false }) {
     const { distX, distY } = event;
-    console.log('Guides ~ updateGuidePosition ~ guides', guides);
 
     this.setState({ guides }, () => {
       this.props.onChangeGuides!({
