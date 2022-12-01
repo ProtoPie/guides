@@ -14,12 +14,12 @@ module.exports = (_env, argv) => ({
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: '[name].js',
+    filename: '[name].min.js',
     library: 'guides',
     libraryTarget: 'umd',
   },
   optimization: {
-    minimize: argv.mode === 'production' ? true : false,
+    minimize: true,
     minimizer: [new TerserPlugin()],
   },
   module: {

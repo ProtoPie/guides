@@ -2,7 +2,7 @@
     "name": "@protopie/guides",
     "version": "1.0.1",
     "description": "A Vanilla Guides component that can draw ruler and manage guidelines.",
-    "main": "./dist/guides.js",
+    "main": "./dist/guides.min.js",
     "sideEffects": false,
     "types": "declaration/index.d.ts",
     "scripts": {
