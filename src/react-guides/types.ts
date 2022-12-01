@@ -51,7 +51,6 @@ export interface GuidesOptions extends RulerProps {
   guideStyle?: Record<string, any>;
   dragGuideStyle?: Record<string, any>;
   displayGuidePos?: boolean;
-  guidePosFormat?: (value: number) => string | number;
   guidePosStyle?: IObject<any>;
   portalContainer?: HTMLElement | null;
 }
