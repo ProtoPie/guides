@@ -66,8 +66,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private renderGuidesElements() {
-    const { zoom, displayDragPos, dragGuideStyle } = this.props;
-    const transform = `${this.getTranslateName()}(${-this.scrollPos * zoom}px)`;
+    const transform = `${this.getTranslateName()}(${-this.scrollPos * this.props.zoom}px)`;
+
     return (
       <div
         className={GUIDES}
@@ -76,10 +76,16 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
           transform,
         }}
       >
-        {displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={dragGuideStyle} />}
+        {this.dragPositionElement()}
         <div className={ADDER} ref={ref(this, 'adderElement')} />
         {this.renderGuides()}
       </div>
+    );
+  }
+
+  private dragPositionElement() {
+    return (
+      this.props.displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
     );
   }
 
@@ -108,10 +114,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   public renderGuides() {
-    const { zoom, showGuides, guideStyle = {} } = this.props as Required<GuidesProps>;
+    const { guideStyle = {} } = this.props as Required<GuidesProps>;
 
     this.guideElements = [];
-    if (showGuides) {
+    if (this.props.showGuides) {
       return this.state.guides.map((pos, i) => {
         return (
           <div
@@ -123,7 +129,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
             onClick={e => this.selectGuide(pos, e)}
             style={{
               ...guideStyle,
-              transform: `${this.getTranslateName()}(${pos * zoom}px) translateZ(0px)`,
+              transform: `${this.getTranslateName()}(${pos * this.props.zoom}px) translateZ(0px)`,
             }}
           >
             {this.displayGuidePosition(pos)}
@@ -167,26 +173,27 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.resetSelected();
     this._isFirstMove = true;
 
-    const { lockGuides, onDragStart } = this.props;
-
-    if (lockGuides === true) {
+    if (this.props.lockGuides === true) {
       event.stop();
       return;
     }
 
-    const canvasElement = this.ruler.canvasElement;
+    this.dragStart(event);
+  }
+
+  private dragStart(event: OnDragStart) {
     const target: HTMLElement = event.inputEvent.target;
 
     event.datas.offsetPos = this.offsetPosition(event);
     event.datas.matrix = this.matrix;
 
-    if (target === canvasElement) {
+    if (target === this.ruler.canvasElement) {
       this.createGuide(event);
     } else if (target.classList.contains(GUIDE)) {
       this.changeGuide(event);
     }
 
-    onDragStart(event);
+    this.props.onDragStart!(event);
   }
 
   private createGuide(event: OnDragStart) {
@@ -454,40 +461,65 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     return this.calcGuidePosition(position, this.props.zoom);
   }
 
-  private movePos(e: any) {
-    const { datas, distX, distY } = e;
-    const props = this.props;
-    const { type, zoom, snaps, snapThreshold, displayDragPos, digit } = props;
-    const dragPosFormat = props.dragPosFormat || (v => v);
-    const isHorizontal = type === 'horizontal';
-    const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
-    const offsetPos = datas.offsetPos;
-    const offsetX = matrixPos[0] + offsetPos[0];
-    const offsetY = matrixPos[1] + offsetPos[1];
-    let nextPos = Math.round(isHorizontal ? offsetY : offsetX);
-    let guidePos = parseFloat((nextPos / zoom!).toFixed(digit || 0));
-    const guideSnaps = snaps!.slice().sort((a, b) => {
-      return Math.abs(guidePos - a) - Math.abs(guidePos - b);
-    });
+  private movePos(event: OnDrag | OnDragEnd) {
+    const { datas } = event;
+    const { nextPos, guidePos } = this.getCurrentAndNextPosition(event);
 
-    if (guideSnaps.length && Math.abs(guideSnaps[0] * zoom! - nextPos) < snapThreshold!) {
-      guidePos = guideSnaps[0];
-      nextPos = guidePos * zoom!;
-    }
     if (!datas.fromRuler || !this._isFirstMove) {
-      if (displayDragPos) {
-        const translate = type === 'horizontal' ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
-        this.displayElement.style.cssText += 'display: block; transform: ' + translate;
-        this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
-      }
+      this.showDragPosition(nextPos, guidePos);
+      
       const target = datas.target;
-
       target.setAttribute('data-pos', guidePos);
       target.style.transform = `${this.getTranslateName()}(${nextPos}px)`;
     }
 
     return nextPos;
   }
+
+  private get isHorizontal() {
+    return this.props.type === 'horizontal';
+  }
+
+  private showDragPosition(nextPos: number, guidePos: number) {
+    const dragPosFormat = this.props.dragPosFormat || (v => v);
+
+    if (this.props.displayDragPos) {
+      const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
+      this.displayElement.style.cssText += 'display: block; transform: ' + translate;
+      this.displayElement.innerHTML = `${dragPosFormat!(guidePos)}`;
+    }
+  }
+
+  // Calculates position of next move
+  // If snap enabled, next position will be snap treshhold
+  private getCurrentAndNextPosition(event: OnDrag | OnDragEnd): { nextPos: number; guidePos: number } {
+    const { datas, distX, distY } = event;
+    const matrixPos = calculateMatrixDist(datas.matrix, [distX, distY]);
+    const offsetX = matrixPos[0] + datas.offsetPos[0];
+    const offsetY = matrixPos[1] + datas.offsetPos[1];
+    const nextPos = Math.round(this.isHorizontal ? offsetY : offsetX);
+    const guidePos = this.currentGuidePos(nextPos);
+    const guideSnaps = this.sortSnapsTresholdToClosesGuide(guidePos);
+    const result = { nextPos, guidePos };
+
+    if (guideSnaps.length && Math.abs(guideSnaps[0] * this.props.zoom! - nextPos) < this.props.snapThreshold!) {
+      result.guidePos = guideSnaps[0];
+      result.nextPos = result.guidePos * this.props.zoom!;
+    }
+
+    return result;
+  }
+
+  private currentGuidePos(nextPos: number) {
+    return parseFloat((nextPos / this.props.zoom!).toFixed(this.props.digit || 0));
+  }
+
+  private sortSnapsTresholdToClosesGuide(guidePos: number) {
+    return this.props.snaps!.slice().sort((a, b) => {
+      return Math.abs(guidePos - a) - Math.abs(guidePos - b);
+    });
+  }
+
   private getTranslateName() {
     return this.props.type === 'horizontal' ? 'translateY' : 'translateX';
   }
