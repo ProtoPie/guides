@@ -36,17 +36,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     window.addEventListener('click', this.resetSelected);
   }
 
-  public disablePointerEventsOnScroll() {
-    if (!this.props?.showGuides) {
-      return;
-    }
-    this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
-    this.guidesElement.style.pointerEvents = 'none';
-    this._pointerEventsTimer = setTimeout(() => {
-      this.guidesElement.style.pointerEvents = 'auto';
-    }, 300);
-  }
-
   public loadGuides(guides: number[]) {
     this.setState({
       guides,
@@ -503,6 +492,17 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
   private hideDragPosition() {
     this.displayElement.style.cssText += 'display: none;';
+  }
+
+  private disablePointerEventsOnScroll() {
+    if (!this.props?.showGuides) {
+      return;
+    }
+    this._pointerEventsTimer && clearTimeout(this._pointerEventsTimer);
+    this.guidesElement.style.pointerEvents = 'none';
+    this._pointerEventsTimer = setTimeout(() => {
+      this.guidesElement.style.pointerEvents = 'auto';
+    }, 300);
   }
 
   private isLockType(lockGuides: LockGuides, type: string): boolean {
