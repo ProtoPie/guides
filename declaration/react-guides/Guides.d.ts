@@ -1,6 +1,8 @@
 import Ruler from '@scena/react-ruler';
 import * as React from 'react';
+
 import { GuidesInterface, GuidesProps, GuidesState } from './types';
+
 export default class Guides extends React.PureComponent<GuidesProps, GuidesState> implements GuidesInterface {
     static defaultProps: GuidesProps;
     state: GuidesState;
