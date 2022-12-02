@@ -57,7 +57,8 @@ canvas {
     z-index: 2000;
     font-weight: 400;
     font-size: 10px;
-    color: #f33;
+    width: 100%;
+    color: #E04169;
 }
 :host.horizontal .guides {
     width: 100%;
@@ -79,9 +80,9 @@ canvas {
 
 .wrapper-pos {
     position: absolute;
-    min-width: 30px;
+    min-width: 35px;
     min-height: 14px;
-    color: #E04169;
+    text-align: center;
     backdrop-filter: blur(3px);
     justify-content: center;
     display: none;
