@@ -6,10 +6,10 @@
     "sideEffects": false,
     "types": "declaration/index.d.ts",
     "scripts": {
-        "build": "npx webpack",
-        "build:prod": "npx webpack --mode production",
-        "start": "npx webpack -w",
-        "postinstall": "npm i webpack && npm i webpack-cli && npm run build:prod && npm run declaration",
+        "start": "rollup -c",
+        "postinstall": "npm install rollup && rollup -c",
+        "build": "npm start && npm run declaration",
+        "dev": "rollup -c -w",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "lint": "npx eslint src/**/*.{ts,tsx}",
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
@@ -22,6 +22,7 @@
     "author": "Protopie",
     "license": "MIT",
     "devDependencies": {
+        "@daybrush/builder": "^0.1.2",
         "@daybrush/jsdoc": "^0.3.9",
         "@types/react": "^16.9.17",
         "@types/react-dom": "^16.9.4",
@@ -31,11 +32,11 @@
         "eslint": "^8.26.0",
         "eslint-plugin-react": "^7.31.10",
         "eslint-plugin-unused-imports": "^2.0.0",
-        "ts-loader": "^9.4.1",
+        "rollup": "^1.32.1",
+        "rollup-plugin-css-bundle": "^1.0.4",
+        "rollup-plugin-react-compat": "^0.1.0",
         "tslint": "^5.18.0",
-        "typescript": "^3.5.2",
-        "webpack": "^5.75.0",
-        "webpack-cli": "^4.10.0"
+        "typescript": "^3.5.2"
     },
     "dependencies": {
         "@scena/event-emitter": "^1.0.4",
