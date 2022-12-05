@@ -526,7 +526,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private calcVerticalTransform(nextPos: number): string {
-    const translateX = `${nextPos + 8}px`;
+    const translateX = `${nextPos + 2}px`;
     return `translate(${translateX}, 2px)`;
   }
 }
