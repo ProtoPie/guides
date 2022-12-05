@@ -1,6 +1,6 @@
 import { PROPERTIES as RULER_PROPERTIES } from '@scena/react-ruler';
 
-import { GuidesOptions } from './types';
+import { GuidesOptions, GuidesProps } from './types';
 import { prefix, prefixCSS } from './utils';
 
 export const RULER = prefix('ruler');
@@ -81,6 +81,7 @@ canvas {
 .wrapper-pos {
     position: absolute;
     min-width: 35px;
+    width: max-content;
     min-height: 14px;
     text-align: center;
     backdrop-filter: blur(3px);
@@ -180,3 +181,29 @@ export const METHODS = [
 ] as const;
 
 export const EVENTS = ['changeGuides', 'dragStart', 'drag', 'dragEnd', 'clickRuler', 'deleteGuide', 'addGuide', 'resetGuides'] as const;
+
+export const defaultProps: GuidesProps = {
+  className: '',
+  type: 'horizontal',
+  zoom: 1,
+  style: {},
+  snapThreshold: 5,
+  snaps: [],
+  digit: 0,
+  onClickRuler: () => {},
+  onAddGuide: () => {},
+  onDeleteGuide: () => {},
+  onChangeGuides: () => {},
+  onDragStart: () => {},
+  onDrag: () => {},
+  onDragEnd: () => {},
+  displayDragPos: false,
+  dragPosFormat: v => v,
+  defaultGuides: [],
+  lockGuides: false,
+  showGuides: true,
+  guideStyle: {},
+  dragGuideStyle: {},
+  guidePosStyle: {},
+  portalContainer: null,
+};
