@@ -6,7 +6,6 @@
     "sideEffects": false,
     "types": "declaration/index.d.ts",
     "scripts": {
-        "build": "npx webpack",
         "build:prod": "npx webpack --mode production",
         "start": "npx webpack -w",
         "postinstall": "npm i webpack && npm i webpack-cli && npm run build:prod && npm run declaration",
