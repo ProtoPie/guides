@@ -130,7 +130,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       <GuidesElement
         ref={ref(this, 'manager')}
         cspNonce={cspNonce}
-        className={`${prefix('manager', type)} ${className}`}
+        className={`${prefix('manager', type)}`}
         portalContainer={portalContainer}
         style={style}
       >
@@ -181,7 +181,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
   private renderGuidesElements() {
     const transform = `${this.getTranslateName()}(${-this.scrollPos * this.props.zoom}px)`;
-
     return (
       <div
         className={GUIDES}
@@ -198,8 +197,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private dragPositionElement() {
+    const { className } = this.props as Required<GuidesProps>;
     return (
-      this.props.displayDragPos && <div className={DISPLAY_DRAG} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
+      this.props.displayDragPos && <div className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
     );
   }
 
@@ -486,7 +486,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     if (this.props.displayDragPos) {
       const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
       this.displayElement.style.cssText += 'display: block; transform: ' + translate;
-      this.displayElement.innerHTML = `${this.props.dragPosFormat(guidePos)}`;
+      this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${this.props.dragPosFormat(guidePos)}</div>`;
     }
   }
 
@@ -522,12 +522,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private calcHorizontalTransform(nextPos: number): string {
-    const translateY = `${nextPos - 10}px`;
-    return `translate(-18px, ${translateY}) rotate(-90deg)`;
+    const translateY = `${nextPos - 25}px`;
+    return `translateY(${translateY}) translateX(-8px) rotate(-90deg)`;
   }
 
   private calcVerticalTransform(nextPos: number): string {
-    const translateX = `${nextPos + 8}px`;
-    return `translate(${translateX}, 1px)`;
+    const translateX = `${nextPos + 2}px`;
+    return `translate(${translateX}, 2px)`;
   }
 }

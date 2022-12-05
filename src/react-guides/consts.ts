@@ -38,12 +38,9 @@ canvas {
 .guide-pos {
     position: absolute;
     font-weight: bold;
+    font-size: 10px;
     color: #E04169;
-    width: 50px;
-    text-align: center;
-    backdrop-filter: blur(20px);
 }
-
 .horizontal .guide-pos {
     bottom: 100%;
     left: 50%;
@@ -51,28 +48,18 @@ canvas {
 }
 .vertical .guide-pos {
     left: calc(100% + 2px);
-    top: 10px;
+    top: 50%;
     transform: translateY(-50%);
 }
 .display-drag {
     position: absolute;
+    will-change: transform;
     z-index: 2000;
-    font-weight: bold;
-    font-size: 12px;
-    display: block;
-    color: #E04169;
+    font-weight: 400;
     font-size: 10px;
-    line-height: 12px;
-    padding: 0 1px;
-    width: max-content;
-    backdrop-filter: blur(20px);
+    width: 100%;
+    color: #E04169;
 }
-
-:host.horizontal .display-drag {
-    bottom: 100%;
-    left: 19px;
-}
-
 :host.horizontal .guides {
     width: 100%;
     height: 0;
@@ -90,6 +77,28 @@ canvas {
 .selected {
     background: #8169FF;
 }
+
+.wrapper-pos {
+    position: absolute;
+    min-width: 35px;
+    width: max-content;
+    min-height: 14px;
+    text-align: center;
+    justify-content: center;
+    display: none;
+    z-index: 2;
+}
+
+.light {
+    background: #fff;
+    box-shadow: 0px -9px 9px 8px #fff;
+}
+
+.dark {
+    background: #444;
+    box-shadow: 0px -9px 9px 8px #444;
+}
+
 .guide.dragging:before {
     position: absolute;
     content: "";
