@@ -84,17 +84,17 @@ canvas {
     width: max-content;
     min-height: 14px;
     text-align: center;
-    backdrop-filter: blur(3px);
     justify-content: center;
     display: none;
+    z-index: 2;
 }
 
-.wrapper-pos.light {
+.light {
     background: #fff;
     box-shadow: 0px -9px 9px 8px #fff;
 }
 
-.wrapper-pos.dark {
+.dark {
     background: #444;
     box-shadow: 0px -9px 9px 8px #444;
 }
