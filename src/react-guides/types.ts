@@ -151,7 +151,7 @@ export interface GuidesInterface {
   loadGuides(guides: number[]): void;
   deleteSelectedGuide(event: KeyboardEvent): void;
   clearAllGuides(): void;
-  resetSelected(e: MouseEvent): void;
+  resetSelected(e?: MouseEvent): void;
   resize(): void;
 }
 
