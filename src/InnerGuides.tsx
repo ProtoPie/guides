@@ -1,9 +1,9 @@
-import { ref } from 'framework-utils';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 
 import ReactGuides from './react-guides';
 import { GuidesOptions } from './react-guides/types';
+import { ref } from './react-guides/utils';
 
 export interface InnerGuidesProps extends GuidesOptions {
   container?: HTMLElement;

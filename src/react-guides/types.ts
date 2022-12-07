@@ -1,11 +1,15 @@
-import { IObject } from '@daybrush/utils';
 import { RulerProps } from '@scena/react-ruler/declaration/types';
 import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
 
+export interface IObject<T> {
+  [name: string]: T;
+}
 export interface GuidesState {
   guides: number[];
   selectedGuides: number[];
 }
+
+export type LockGuides = boolean | Array<'add' | 'change' | 'remove'>;
 
 /**
  * @typedef
@@ -39,7 +43,7 @@ export interface GuidesOptions extends RulerProps {
   dragPosFormat?: (value: number) => string | number;
   defaultGuides?: number[];
   showGuides?: boolean;
-  lockGuides?: boolean | Array<'add' | 'change' | 'remove'>;
+  lockGuides?: LockGuides;
   /**
    * pos digit of guidelines (default: 0)
    */
@@ -47,7 +51,6 @@ export interface GuidesOptions extends RulerProps {
   guideStyle?: Record<string, any>;
   dragGuideStyle?: Record<string, any>;
   displayGuidePos?: boolean;
-  guidePosFormat?: (value: number) => string | number;
   guidePosStyle?: IObject<any>;
   portalContainer?: HTMLElement | null;
 }
@@ -146,9 +149,9 @@ export interface GuidesInterface {
   scroll(pos: number): void;
   scrollGuides(pos: number, zoom?: number): void;
   loadGuides(guides: number[]): void;
-  deleteSelectedGuide(): void;
+  deleteSelectedGuide(event: KeyboardEvent): void;
   clearAllGuides(): void;
-  resetSelected(): void;
+  resetSelected(e: MouseEvent): void;
   resize(): void;
 }
 
