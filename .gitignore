@@ -12,6 +12,7 @@ build/
 dist/
 .vscode/
 rollup-plugin-visualizer/
+declaration/
 statistics/
 .scene_cache
 *.mp4
