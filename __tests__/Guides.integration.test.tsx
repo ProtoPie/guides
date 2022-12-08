@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import { render } from 'enzyme';
 import * as React from 'react';
 
