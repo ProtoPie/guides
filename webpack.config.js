@@ -19,7 +19,7 @@ module.exports = (_env, argv) => ({
     libraryTarget: 'umd',
   },
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [new TerserPlugin()],
   },
   module: {
