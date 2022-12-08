@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import ReactGuides from './react-guides';
 import { GuidesOptions } from './react-guides/types';
-import { ref } from './react-guides/utils';
+import { ref } from './utils';
 
 export interface InnerGuidesProps extends GuidesOptions {
   container?: HTMLElement;

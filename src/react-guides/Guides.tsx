@@ -5,9 +5,9 @@ import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
+import { prefix, ref, refs } from '../utils';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
-import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
 
