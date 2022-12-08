@@ -9,7 +9,6 @@
         "build:prod": "npx webpack --mode production",
         "start": "npx webpack -w",
         "postinstall": "npm i webpack && npm i webpack-cli && npm run build:prod && npm run declaration",
-        "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "lint": "npx eslint src/**/*.{ts,tsx}",
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
         "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
@@ -21,12 +20,10 @@
     "author": "Protopie",
     "license": "MIT",
     "devDependencies": {
-        "@daybrush/jsdoc": "^0.3.9",
         "@types/react": "^16.9.17",
         "@types/react-dom": "^16.9.4",
         "@typescript-eslint/eslint-plugin": "^5.41.0",
         "@typescript-eslint/parser": "^5.41.0",
-        "daybrush-jsdoc-template": "^1.6.0",
         "eslint": "^8.26.0",
         "eslint-plugin-react": "^7.31.10",
         "eslint-plugin-unused-imports": "^2.0.0",
@@ -38,7 +35,6 @@
     },
     "dependencies": {
         "@scena/event-emitter": "^1.0.4",
-        "@scena/react-ruler": "^0.11.0",
         "autobind-decorator": "^2.4.0",
         "css-to-mat": "^1.0.3",
         "eslint-config-prettier": "^8.5.0",

@@ -1,10 +1,10 @@
-import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '@scena/react-ruler';
 import autobind from 'autobind-decorator';
 import { calculateMatrixDist, getDistElementMatrix } from 'css-to-mat';
 import Gesto, { OnDrag, OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
+import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
 import { prefix, ref, refs } from './utils';
@@ -199,7 +199,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private dragPositionElement() {
     const { className } = this.props as Required<GuidesProps>;
     return (
-      this.props.displayDragPos && <div className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
+      this.props.displayDragPos && (
+        <div 
+          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} 
+          ref={ref(this, 'displayElement')} 
+          style={this.props.dragGuideStyle} 
+        />
+      )
     );
   }
 
