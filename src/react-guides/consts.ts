@@ -1,5 +1,4 @@
-import { PROPERTIES as RULER_PROPERTIES } from '@scena/react-ruler';
-
+import { PROPERTIES as RULER_PROPERTIES } from '../react-ruler';
 import { GuidesOptions, GuidesProps } from './types';
 import { prefix, prefixCSS } from './utils';
 

@@ -1,5 +1,6 @@
-import { RulerProps } from '@scena/react-ruler/declaration/types';
 import { OnDrag as OnGestoDrag, OnDragEnd as OnGestoDragEnd, OnDragStart as OnGestoDragStart } from 'gesto';
+
+import { RulerProps } from '../react-ruler';
 
 export interface IObject<T> {
   [name: string]: T;
