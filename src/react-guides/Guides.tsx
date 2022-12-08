@@ -199,7 +199,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private dragPositionElement() {
     const { className } = this.props as Required<GuidesProps>;
     return (
-      this.props.displayDragPos && <div className={`${prefix('wrapper-pos')} ${prefix(className)}`} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
+      this.props.displayDragPos && (
+        <div
+          className={`${prefix('wrapper-pos', className)}`}
+          ref={ref(this, 'displayElement')}
+          style={this.props.dragGuideStyle}
+        />
+      )
     );
   }
 
