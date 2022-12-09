@@ -491,7 +491,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private showDragPosition(nextPos: number, guidePos: number) {
     if (this.props.displayDragPos) {
       const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
-      this.displayElement.style.cssText += 'display: flex; transform: ' + translate;
+      this.displayElement.style.cssText += `display: flex; transform: ${translate}`;
       this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${this.props.dragPosFormat(guidePos)}</div>`;
     }
   }
