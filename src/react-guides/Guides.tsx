@@ -199,8 +199,13 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private dragPositionElement() {
     const { className } = this.props as Required<GuidesProps>;
     return (
-      // eslint-disable-next-line max-len
-      this.props.displayDragPos && <div className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} ref={ref(this, 'displayElement')} style={this.props.dragGuideStyle} />
+      this.props.displayDragPos && (
+        <div 
+          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} 
+          ref={ref(this, 'displayElement')} 
+          style={this.props.dragGuideStyle} 
+        />
+      )
     );
   }
 

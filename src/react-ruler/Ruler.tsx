@@ -138,24 +138,21 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const maxRange = Math.ceil((scrollPos * nextZoom + size) / zoomUnit);
     
     // Draw Range Background
-    this.drawRangeBackground(scrollPos, nextZoom);
+    this.drawRangeBackground(isHorizontal, containerSize, scrollPos, nextZoom);
 
     // Render Segments First
-    this.renderSegments(scrollPos, nextZoom, zoomUnit, minRange, mainLineSize);
+    this.renderSegments(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, mainLineSize);
 
     // Render Labels
-    this.renderLabes(scrollPos, nextZoom, zoomUnit, minRange, maxRange, mainLineSize);
+    this.renderLabes(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, maxRange, mainLineSize);
   }
 
-  private drawRangeBackground(scrollPos: number, zoom: number) {
+  private drawRangeBackground(isHorizontal: boolean, containerSize: number, scrollPos: number, zoom: number) {
     const {
-      type,
       range = [-Infinity, Infinity],
       rangeBackgroundColor,
     } = this.props;
     const context = this._canvasContext;
-    const isHorizontal = type === 'horizontal';
-    const barSize = isHorizontal ? this._height : this._width;
 
     if (rangeBackgroundColor !== 'transparent' && range[0] !== -Infinity && range[1] !== Infinity) {
       const rangeStart = (range[0] - scrollPos) * zoom;
@@ -163,29 +160,33 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
       context.save();
       context.fillStyle = rangeBackgroundColor;
       if (isHorizontal) {
-        context.fillRect(rangeStart, 0, rangeEnd, barSize);
+        context.fillRect(rangeStart, 0, rangeEnd, containerSize);
       } else {
-        context.fillRect(0, rangeStart, barSize, rangeEnd);
+        context.fillRect(0, rangeStart, containerSize, rangeEnd);
       }
 
       context.restore();
     }
   }
 
-  private renderSegments(scrollPos: number,  zoom: number, zoomUnit: number, minRange: number, mainLineSize: number) {
+  private renderSegments(
+    isHorizontal: boolean, 
+    containerSize: number, 
+    scrollPos: number,  
+    zoom: number, zoomUnit: 
+    number, 
+    minRange: number, 
+    mainLineSize: number,
+  ) {
     const {
       unit,
-      type,
       direction,
       negativeRuler = true,
       segment = 10,
       range = [-Infinity, Infinity],
     } = this.props;
     const context = this._canvasContext;
-    const isHorizontal = type === 'horizontal';
     const isNegative = negativeRuler !== false;
-    const containerSize = isHorizontal ? this._height : this._width;
-    const barSize = isHorizontal ? this._height : this._width;
     const size = isHorizontal ? this._width : this._height;
 
     for (let i = 0; i <= length; ++i) {
@@ -216,10 +217,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
             origin = 0;
             break;
           case 'center':
-            origin = barSize / 2 - lineSize / 2;
+            origin = containerSize / 2 - lineSize / 2;
             break;
           case 'end':
-            origin = barSize - lineSize;
+            origin = containerSize - lineSize;
             break;
         }
 
@@ -234,10 +235,18 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     context.stroke();
   }
 
-  private renderLabes(scrollPos: number,  zoom: number, zoomUnit: number, minRange: number, maxRange: number, mainLineSize: number) {
+  private renderLabes(
+    isHorizontal: boolean, 
+    containerSize: number,
+    scrollPos: number,  
+    zoom: number, 
+    zoomUnit: number, 
+    minRange: number, 
+    maxRange: number, 
+    mainLineSize: number,
+  ) {
     const {
       unit,
-      type,
       textBackgroundColor,
       direction,
       negativeRuler = true,
@@ -247,12 +256,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const context = this._canvasContext;
     const textAlign = this.props.textAlign || 'left';
     const textOffset = this.props.textOffset || [0, 0];
-    const isHorizontal = type === 'horizontal';
     const isNegative = negativeRuler !== false;
     const size = isHorizontal ? this._width : this._height;
     const length = maxRange - minRange;
     const alignOffset = Math.max(['left', 'center', 'right'].indexOf(textAlign) - 1, -1);
-    const barSize = isHorizontal ? this._height : this._width;
 
     for (let i = 0; i <= length; ++i) {
       const value = i + minRange;
@@ -273,10 +280,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
           origin = 17;
           break;
         case 'center':
-          origin = barSize / 2;
+          origin = containerSize / 2;
           break;
         case 'end':
-          origin = barSize - 17;
+          origin = containerSize - 17;
           break;
       }
 

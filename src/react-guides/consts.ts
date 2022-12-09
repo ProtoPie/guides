@@ -1,6 +1,6 @@
 import { PROPERTIES as RULER_PROPERTIES } from '../react-ruler';
-import { GuidesOptions, GuidesProps } from './types';
 import { prefix, prefixCSS } from '../utils';
+import { GuidesOptions, GuidesProps } from './types';
 
 export const RULER = prefix('ruler');
 export const ADDER = prefix('guide', 'adder');
