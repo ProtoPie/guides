@@ -6,7 +6,7 @@ import styled, { StyledElement } from 'react-css-styled';
 
 import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
+import { GuidesInterface, GuidesProps, GuidesState, IObject, LockGuides, OnDragStart } from './types';
 import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
@@ -124,7 +124,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   public render() {
-    const { className, type, style, rulerStyle, cspNonce, portalContainer } = this.props as Required<GuidesProps>;
+    const { type, style, cspNonce, portalContainer } = this.props as Required<GuidesProps>;
 
     return (
       <GuidesElement
@@ -135,12 +135,27 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         style={style}
       >
         <div className={prefix('guide-origin')} ref={ref(this, 'originElement')} />
-        <Ruler ref={ref(this, 'ruler')} style={rulerStyle} {...this.rulerProps} />
+        <Ruler ref={ref(this, 'ruler')} style={this._rulerStyle} {...this.rulerProps} />
         {this.renderGuidesElements()};
       </GuidesElement>
     );
   }
 
+  private get _rulerStyle() {
+    let styles: IObject<any>;
+    if(this.props.type === 'horizontal') {
+      styles = {
+        ...this.props.rulerStyle,
+        borderBottomColor: this.props.theme === 'dark' ? '#777777' : '#BBBBBB'
+      }
+    } else {
+      styles = {
+        ...this.props.rulerStyle,
+        borderRightColor: this.props.theme === 'dark' ? '#777777' : '#BBBBBB',
+      }
+    }
+    return styles;
+  }
   private renderGuides() {
     const { guideStyle = {} } = this.props as Required<GuidesProps>;
 
@@ -197,11 +212,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private dragPositionElement() {
-    const { className } = this.props as Required<GuidesProps>;
+    const { theme } = this.props as Required<GuidesProps>;
     return (
       this.props.displayDragPos && (
         <div 
-          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(className)}`} 
+          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(theme)}`} 
           ref={ref(this, 'displayElement')} 
           style={this.props.dragGuideStyle} 
         />

@@ -1,6 +1,7 @@
 import { convertUnitSize } from '@daybrush/utils';
 import { ref } from 'framework-utils';
 import * as React from 'react';
+import { DARK_THEME, LIGHT_THEME } from './consts';
 
 import { RulerInterface, RulerProps } from './types';
 
@@ -25,6 +26,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     lineColor: '#777777',
     range: [-Infinity, Infinity],
     rangeBackgroundColor: 'transparent',
+    theme: 'dark'
   };
   public divisionsElement!: HTMLElement;
   public state = {
@@ -84,17 +86,16 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const {
       unit,
       type,
-      backgroundColor,
-      lineColor,
-      textColor,
       textBackgroundColor,
       direction,
       negativeRuler = true,
       segment = 10,
       textFormat,
+      theme,
       range = [-Infinity, Infinity],
       rangeBackgroundColor,
     } = props as Required<RulerProps>;
+    const { backgroundColor,  lineColor, textColor } = theme === 'dark' ? DARK_THEME : LIGHT_THEME;
     const width = this.width;
     const height = this.height;
     const state = this.state;
@@ -111,15 +112,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const shortLineSize = convertUnitSize(`${props.shortLineSize || 7}`, containerSize);
     const lineOffset = props.lineOffset || [0, 0];
 
-    if (backgroundColor === 'transparent') {
-      // Clear existing paths & text
-      context.clearRect(0, 0, width * 2, height * 2);
-    } else {
-      // Draw the background
-      context.rect(0, 0, width * 2, height * 2);
-      context.fillStyle = backgroundColor;
-      context.fill();
-    }
+    // Draw the background
+    context.rect(0, 0, width * 2, height * 2);
+    context.fillStyle = backgroundColor;
+    context.fill();
 
     context.save();
     context.scale(2, 2);

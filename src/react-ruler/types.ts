@@ -157,4 +157,9 @@ export interface RulerProps {
    * portal container for other frameworks
    */
   portalContainer?: HTMLElement;
+  /**
+   * color of theme
+   * @default dark
+   */
+  theme?: 'dark' | 'light';
 }

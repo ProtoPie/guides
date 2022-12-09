@@ -26,5 +26,17 @@ export const PROPERTIES: Array<keyof RulerProps> = [
   'textBackgroundColor',
   'textFormat',
   'portalContainer',
+  'theme',
 ];
 export const METHODS: Array<keyof RulerInterface> = ['scroll', 'resize'];
+
+export const DARK_THEME = {
+  backgroundColor: '#444',
+  lineColor: '#777777',
+  textColor: '#FFFFFF'
+}
+export const LIGHT_THEME = {
+  backgroundColor: '#FFFFFF',
+  lineColor: '#BBBBBB',
+  textColor: '#BBBBBB'
+}

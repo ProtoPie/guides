@@ -205,4 +205,5 @@ export const defaultProps: GuidesProps = {
   dragGuideStyle: {},
   guidePosStyle: {},
   portalContainer: null,
+  theme: 'dark'
 };
