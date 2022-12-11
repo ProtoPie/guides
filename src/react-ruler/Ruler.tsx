@@ -47,6 +47,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     this._zoom = props.zoom!;
     return <canvas ref={ref(this, 'canvasElement')} {...portalAttributes} style={this.props.style} />;
   }
+
   public componentDidMount() {
     const canvas = this.canvasElement;
     const context = canvas.getContext('2d')!;
@@ -58,6 +59,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   public componentDidUpdate() {
     this.resize();
   }
+
   /**
    * @method Ruler#scroll
    * @param scrollPos
@@ -65,6 +67,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   public scroll(scrollPos: number, nextZoom?: number) {
     this.draw(scrollPos, nextZoom);
   }
+
   /**
    * @method Ruler#resize
    */
@@ -78,17 +81,13 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     canvas.height = this._height * 2;
     this.draw(scrollPos, nextZoom);
   }
+
   private draw(scrollPos: number = this.state.scrollPos, nextZoom = this._zoom) {
     this._zoom = nextZoom;
-    const context = this._canvasContext;
     const props = this.props;
     const {
       unit,
       type,
-      backgroundColor,
-      lineColor,
-      textColor,
-      direction,
     } = props as Required<RulerProps>;
     const width = this._width;
     const height = this._height;
@@ -96,9 +95,38 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     state.scrollPos = scrollPos;
     const isHorizontal = type === 'horizontal';
     
-    const font = props.font || '10px sans-serif';
+    
     const containerSize = isHorizontal ? height : width;
     const mainLineSize = convertUnitSize(`${props.mainLineSize || '100%'}`, containerSize);
+    const size = isHorizontal ? width : height;
+    const zoomUnit = nextZoom * unit;
+    const minRange = Math.floor((scrollPos * nextZoom) / zoomUnit);
+    const maxRange = Math.ceil((scrollPos * nextZoom + size) / zoomUnit);
+
+    this.setInitialContextParameters();
+    //this.drawRangeBackground(isHorizontal, containerSize, scrollPos, nextZoom);
+    //this.renderSegments(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, mainLineSize);
+    this.renderLabels(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, maxRange, mainLineSize);
+  }
+
+  private getCanvasTextBaseline(): CanvasTextBaseline {
+    switch (this.props.direction) {
+      case 'start': return 'top';
+      case 'center': return 'middle';
+      case 'end': return 'bottom';
+    }
+  }
+
+  private setInitialContextParameters() {
+    const {
+      backgroundColor,
+      lineColor,
+      textColor,
+    } = this.props as Required<RulerProps>;
+    const context = this._canvasContext;
+    const width = this._width;
+    const height = this._height;
+    const font = this.props.font || '10px sans-serif';
 
     if (backgroundColor === 'transparent') {
       // Clear existing paths & text
@@ -116,35 +144,9 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     context.lineWidth = 1;
     context.font = font;
     context.fillStyle = textColor;
-
-    switch (direction) {
-      case 'start':
-        context.textBaseline = 'top';
-        break;
-      case 'center':
-        context.textBaseline = 'middle';
-        break;
-      case 'end':
-        context.textBaseline = 'bottom';
-        break;
-    }
-
+    context.textBaseline = this.getCanvasTextBaseline();
     context.translate(0.5, 0);
     context.beginPath();
-
-    const size = isHorizontal ? width : height;
-    const zoomUnit = nextZoom * unit;
-    const minRange = Math.floor((scrollPos * nextZoom) / zoomUnit);
-    const maxRange = Math.ceil((scrollPos * nextZoom + size) / zoomUnit);
-    
-    // Draw Range Background
-    this.drawRangeBackground(isHorizontal, containerSize, scrollPos, nextZoom);
-
-    // Render Segments First
-    this.renderSegments(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, mainLineSize);
-
-    // Render Labels
-    this.renderLabes(isHorizontal, containerSize, scrollPos, nextZoom, zoomUnit, minRange, maxRange, mainLineSize);
   }
 
   private drawRangeBackground(isHorizontal: boolean, containerSize: number, scrollPos: number, zoom: number) {
@@ -235,7 +237,41 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     context.stroke();
   }
 
-  private renderLabes(
+  private getLabelBackgroundOffset(textAlign: CanvasTextAlign, textSize: number):number {
+    switch (textAlign) {
+      case 'left': return 0;
+      case 'center': return -textSize / 2;
+      case 'right': return -textSize;
+    }
+  }
+
+  private getLabelStartCoordinates(
+    isHorizontal: boolean, 
+    containerSize: number, 
+    textAlign: CanvasTextAlign,
+    startPos: number,
+  ): [number, number] {
+    let origin = 0;
+    
+    switch (this.props.direction) {
+      case 'start':
+        origin = 17;
+        break;
+      case 'center':
+        origin = containerSize / 2;
+        break;
+      case 'end':
+        origin = containerSize - 17;
+    }
+
+    const alignOffset = Math.max(['left', 'center', 'right'].indexOf(textAlign) - 1, -1);
+
+    return isHorizontal 
+      ? [startPos + alignOffset * -3, origin] 
+      : [origin, startPos + alignOffset * 3]
+  }
+
+  private renderLabels(
     isHorizontal: boolean, 
     containerSize: number,
     scrollPos: number,  
@@ -248,7 +284,6 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const {
       unit,
       textBackgroundColor,
-      direction,
       negativeRuler = true,
       textFormat,
       range = [-Infinity, Infinity],
@@ -259,7 +294,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const isNegative = negativeRuler !== false;
     const size = isHorizontal ? this._width : this._height;
     const length = maxRange - minRange;
-    const alignOffset = Math.max(['left', 'center', 'right'].indexOf(textAlign) - 1, -1);
+    
 
     for (let i = 0; i <= length; ++i) {
       const value = i + minRange;
@@ -274,20 +309,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
         continue;
       }
 
-      let origin = 0;
-      switch (direction) {
-        case 'start':
-          origin = 17;
-          break;
-        case 'center':
-          origin = containerSize / 2;
-          break;
-        case 'end':
-          origin = containerSize - 17;
-          break;
-      }
-
-      const [startX, startY] = isHorizontal ? [startPos + alignOffset * -3, origin] : [origin, startPos + alignOffset * 3];
+      const [startX, startY] = this.getLabelStartCoordinates(isHorizontal, containerSize, textAlign, startPos);
 
       let text = `${startValue}`;
 
@@ -297,25 +319,16 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
 
       context.textAlign = textAlign;
 
-      let backgroundOffset = 0;
       const textSize = context.measureText(text).width;
-      switch (textAlign) {
-        case 'left':
-          backgroundOffset = 0;
-          break;
-        case 'center':
-          backgroundOffset = -textSize / 2;
-          break;
-        case 'right':
-          backgroundOffset = -textSize;
-          break;
-      }
+      const backgroundOffset = this.getLabelBackgroundOffset(textAlign, textSize);
 
       if (isHorizontal) {
         context.save();
         context.fillStyle = textBackgroundColor;
         context.fillRect(startX + textOffset[0] + backgroundOffset, 0, textSize, mainLineSize);
         context.restore();
+
+        context.fillText(text, startX + textOffset[0], startY + textOffset[1]);
       } else {
         context.save();
         context.translate(0, startY + textOffset[1]);
@@ -323,11 +336,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
         context.fillStyle = textBackgroundColor;
         context.fillRect(backgroundOffset, 0, textSize, mainLineSize);
         context.restore();
-      }
 
-      if (isHorizontal) {
-        context.fillText(text, startX + textOffset[0], startY + textOffset[1]);
-      } else {
         context.save();
         context.translate(startX + textOffset[0], startY + textOffset[1]);
         context.rotate(-Math.PI / 2);
