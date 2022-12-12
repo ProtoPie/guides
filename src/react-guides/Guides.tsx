@@ -124,7 +124,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   public render() {
-    const { className, type, style, rulerStyle, cspNonce, portalContainer } = this.props as Required<GuidesProps>;
+    const { type, style, rulerStyle, cspNonce, portalContainer } = this.props as Required<GuidesProps>;
 
     return (
       <GuidesElement
@@ -321,7 +321,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.createGuide(event);
     } else if (guidePos < this.scrollPos) {
       this.removeGuide(event);
-    } else if (this.state.guides.includes(guidePos)) {
+    } else {
       this.changeGuide(event);
     }
   }
