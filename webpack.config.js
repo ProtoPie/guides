@@ -1,3 +1,4 @@
+/* eslint-disable */
 const webpack = require('webpack');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -19,13 +20,16 @@ module.exports = (_env, argv) => ({
     libraryTarget: 'umd',
   },
   optimization: {
-    minimize: false,
+    minimize: argv.mode === 'production',
     minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
+        exclude: [
+          /\.test.tsx?$/
+        ],
         loader: 'ts-loader',
         options: { 
           allowTsInNodeModules: true, 
