@@ -219,11 +219,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private dragPositionElement() {
-    const { theme } = this.props as Required<GuidesProps>;
     return (
       this.props.displayDragPos && (
         <div
-          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(theme)}`}
+          className={`${prefix('wrapper-pos', this.props.theme)}`}
           ref={ref(this, 'displayElement')}
           style={this.props.dragGuideStyle}
         />
@@ -513,7 +512,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private showDragPosition(nextPos: number, guidePos: number) {
     if (this.props.displayDragPos) {
       const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
-      this.displayElement.style.cssText += 'display: block; transform: ' + translate;
+      this.displayElement.style.cssText += `display: flex; transform: ${translate}`;
       this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${this.props.dragPosFormat(guidePos)}</div>`;
     }
   }
@@ -551,11 +550,11 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
   private calcHorizontalTransform(nextPos: number): string {
     const translateY = `${nextPos - 25}px`;
-    return `translateY(${translateY}) translateX(-8px) rotate(-90deg)`;
+    return `translate(-64px, ${translateY}) rotate(-90deg)`;
   }
 
   private calcVerticalTransform(nextPos: number): string {
-    const translateX = `${nextPos + 2}px`;
+    const translateX = `${nextPos - 60}px`;
     return `translate(${translateX}, 2px)`;
   }
 }

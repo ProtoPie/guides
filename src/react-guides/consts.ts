@@ -56,8 +56,7 @@ canvas {
     z-index: 2000;
     font-weight: 400;
     font-size: 10px;
-    width: 100%;
-    color: #E04169;
+    color: #E04169; 
 }
 :host.horizontal .guides {
     width: 100%;
@@ -79,9 +78,8 @@ canvas {
 
 .wrapper-pos {
     position: absolute;
-    min-width: 35px;
-    width: max-content;
-    min-height: 14px;
+    width: 150px;
+    min-height: 18px;
     text-align: center;
     justify-content: center;
     display: none;
@@ -89,13 +87,21 @@ canvas {
 }
 
 .light {
-    background: #fff;
-    box-shadow: 0px -9px 9px 8px #fff;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 15%,
+        rgba(255, 255, 255, 0.4) 85%,
+        rgba(255, 255, 255, 0) 100%);
 }
 
 .dark {
-    background: #444;
-    box-shadow: 0px -9px 9px 8px #444;
+    background: linear-gradient(90deg,
+        rgba(68, 68, 64, 0) 0%,
+        rgba(68, 68, 68, 0.6) 15%,
+        rgba(68, 68, 68, 0.9) 35%,
+        rgba(68, 68, 68, 0.9) 65%,
+        rgba(68, 68, 68, 0.6) 85%,
+        rgba(68, 68, 68, 0) 100%);
 }
 
 .guide.dragging:before {
