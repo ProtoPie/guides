@@ -4,9 +4,9 @@ import Gesto, { OnDrag, OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
-import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
+import Ruler, { DARK_THEME, LIGHT_THEME, PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
-import { GuidesInterface, GuidesProps, GuidesState, IObject, LockGuides, OnDragStart } from './types';
+import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
 import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
@@ -28,6 +28,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private guideElements: HTMLElement[] = [];
   private _isFirstMove = false;
   private _pointerEventsTimer: NodeJS.Timeout;
+  private _offset = 20;
 
   constructor(props: Required<GuidesProps>) {
     super(props);
@@ -142,19 +143,25 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   }
 
   private get _rulerStyle() {
-    let styles: IObject<any>;
-    if(this.props.type === 'horizontal') {
-      styles = {
-        ...this.props.rulerStyle,
-        borderBottomColor: this.props.theme === 'dark' ? '#777777' : '#BBBBBB'
-      }
-    } else {
-      styles = {
-        ...this.props.rulerStyle,
-        borderRightColor: this.props.theme === 'dark' ? '#777777' : '#BBBBBB',
-      }
-    }
-    return styles;
+    return this.props.type === 'horizontal' ? {
+          ...this.props.rulerStyle,
+          marginLeft: `${this._offset}px`,
+          width: `calc(100% - ${this._offset}px)`,
+          height: '100%',
+          borderRight: 'none',
+          borderBottomWidth: '0.5px',
+          borderBottomStyle: 'solid',
+          borderBottomColor: this.props.theme === 'dark' ? DARK_THEME.borderColor : LIGHT_THEME.borderColor,
+        } : {
+          ...this.props.rulerStyle,
+          marginTop: `${this._offset}px`,
+          height: `calc(100% - ${this._offset}px)`,
+          width: '100%',
+          borderBottom: 'none',
+          borderRightWidth: '0.5px',
+          borderRightStyle: 'solid',
+          borderRightColor: this.props.theme === 'dark' ? DARK_THEME.borderColor : LIGHT_THEME.borderColor,
+        };
   }
   private renderGuides() {
     const { guideStyle = {} } = this.props as Required<GuidesProps>;
@@ -215,10 +222,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     const { theme } = this.props as Required<GuidesProps>;
     return (
       this.props.displayDragPos && (
-        <div 
-          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(theme)}`} 
-          ref={ref(this, 'displayElement')} 
-          style={this.props.dragGuideStyle} 
+        <div
+          className={`${prefix('wrapper-pos')} ${DISPLAY_DRAG} ${prefix(theme)}`}
+          ref={ref(this, 'displayElement')}
+          style={this.props.dragGuideStyle}
         />
       )
     );
