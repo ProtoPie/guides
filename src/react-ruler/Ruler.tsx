@@ -257,11 +257,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   }
 
   private renderLabels(renderOptions: RulerRenderOptions) {
-    const { isHorizontal, scrollPos, zoom, zoomUnit, minRange, maxRange } = renderOptions;
-    const { unit, negativeRuler = true, range = [-Infinity, Infinity] } = this.props;
+    const { scrollPos, zoom, minRange, maxRange } = renderOptions;
+    const { unit, negativeRuler = true } = this.props;
     const context = this._canvasContext;
     const isNegative = negativeRuler !== false;
-    const size = isHorizontal ? this._width : this._height;
     const length = maxRange - minRange;
 
     for (let i = 0; i <= length; ++i) {
@@ -273,10 +272,6 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
       const startValue = value * unit;
       const startPos = (startValue - scrollPos) * zoom;
 
-      if (startPos < -zoomUnit || startPos >= size + unit * zoom || startValue < range[0] || startValue > range[1]) {
-        continue;
-      }
-
       this.renderLabel(renderOptions, startValue, startPos);
     }
 
@@ -284,9 +279,14 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   }
 
   private renderLabel(renderOptions: RulerRenderOptions, startValue: number, startPos: number) {
-    const { isHorizontal, containerSize, mainLineSize } = renderOptions;
-    const { textBackgroundColor, textFormat } = this.props;
+    const { isHorizontal, zoom, zoomUnit, containerSize, mainLineSize } = renderOptions;
+    const { unit, textBackgroundColor, textFormat, range = [-Infinity, Infinity] } = this.props;
     const context = this._canvasContext;
+    const size = isHorizontal ? this._width : this._height;
+
+    if (startPos < -zoomUnit || startPos >= size + unit * zoom || startValue < range[0] || startValue > range[1]) {
+      return;
+    }
 
     const textAlign = this.props.textAlign || 'left';
     const textOffset = this.props.textOffset || [0, 0];
