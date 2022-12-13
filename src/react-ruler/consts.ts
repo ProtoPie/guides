@@ -36,6 +36,7 @@ export const DARK_THEME: ThemeInterface = {
   textColor: '#FFFFFF',
   borderColor: '#777777',
 }
+
 export const LIGHT_THEME: ThemeInterface = {
   backgroundColor: '#FFFFFF',
   lineColor: '#BBBBBB',

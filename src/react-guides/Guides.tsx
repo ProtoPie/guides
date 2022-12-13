@@ -4,7 +4,7 @@ import Gesto, { OnDrag, OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
-import Ruler, { DARK_THEME, LIGHT_THEME, PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
+import Ruler, { DARK_THEME, LIGHT_THEME, PROPERTIES as RULER_PROPERTIES, RulerProps, ThemeInterface } from '../react-ruler';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
 import { prefix, ref, refs } from './utils';
@@ -151,7 +151,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
           borderRight: 'none',
           borderBottomWidth: '0.5px',
           borderBottomStyle: 'solid',
-          borderBottomColor: this.props.theme === 'dark' ? DARK_THEME.borderColor : LIGHT_THEME.borderColor,
+          borderBottomColor: this._getCurrentTheme().backgroundColor,
         } : {
           ...this.props.rulerStyle,
           marginTop: `${this._offset}px`,
@@ -160,9 +160,15 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
           borderBottom: 'none',
           borderRightWidth: '0.5px',
           borderRightStyle: 'solid',
-          borderRightColor: this.props.theme === 'dark' ? DARK_THEME.borderColor : LIGHT_THEME.borderColor,
+          borderRightColor: this._getCurrentTheme().backgroundColor,
         };
   }
+
+  private _getCurrentTheme(): ThemeInterface {
+    const currentTheme = this.props.theme === 'dark' ? DARK_THEME : LIGHT_THEME;
+    return currentTheme;
+  }
+
   private renderGuides() {
     const { guideStyle = {} } = this.props as Required<GuidesProps>;
 

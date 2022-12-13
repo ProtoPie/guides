@@ -3,7 +3,7 @@ import { ref } from 'framework-utils';
 import * as React from 'react';
 
 import { DARK_THEME, LIGHT_THEME } from './consts';
-import { RulerInterface, RulerProps } from './types';
+import { RulerInterface, RulerProps, ThemeInterface } from './types';
 
 export default class Ruler extends React.PureComponent<RulerProps> implements RulerInterface {
   public static defaultProps: RulerProps = {
@@ -21,7 +21,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     textAlign: 'center',
     style: { width: '100%', height: '100%' },
     backgroundColor: '#333333',
-    font: '10px Inter',
+    font: '10px Inter, sans-serif',
     textColor: '#ffffff',
     textBackgroundColor: 'transparent',
     lineColor: '#777777',
@@ -96,7 +96,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
       range = [-Infinity, Infinity],
       rangeBackgroundColor,
     } = props as Required<RulerProps>;
-    const { backgroundColor, lineColor, textColor } = theme === 'dark' ? DARK_THEME : LIGHT_THEME;
+    const { backgroundColor, lineColor, textColor } = this._getTheme(theme);
     const width = this.width;
     const height = this.height;
     const state = this.state;
@@ -104,8 +104,8 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     const context = this.canvasContext;
     const isHorizontal = type === 'horizontal';
     const isNegative = negativeRuler !== false;
-    const font = props.font || '10px Inter';
-    const textAlign = props.textAlign || 'left';
+    const font = props.font;
+    const textAlign = props.textAlign;
     const textOffset = isHorizontal ? [0, 10] : [10, 0];
     const containerSize = isHorizontal ? height : width;
     const mainLineSize = convertUnitSize(`${props.mainLineSize || '100%'}`, containerSize);
@@ -283,5 +283,9 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     }
 
     context.restore();
+  }
+
+  private _getTheme(theme: 'dark' | 'light'): ThemeInterface {
+    return theme === 'dark' ? DARK_THEME : LIGHT_THEME
   }
 }
