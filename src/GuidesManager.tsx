@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import InnerGuides from './InnerGuides';
 import { EVENTS, METHODS, PROPERTIES } from './react-guides/consts';
 import { GuidesEvents, GuidesInterface, GuidesOptions } from './react-guides/types';
-import { Properties, ref } from './react-guides/utils';
+import { Properties, ref } from './utils';
 
 @Properties(METHODS as any, (prototype, property) => {
   if (prototype[property]) {

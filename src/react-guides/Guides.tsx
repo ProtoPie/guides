@@ -5,9 +5,9 @@ import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
 import Ruler, { DARK_THEME, LIGHT_THEME, PROPERTIES as RULER_PROPERTIES, RulerProps, ThemeInterface } from '../react-ruler';
+import { prefix, ref, refs } from '../utils';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
-import { prefix, ref, refs } from './utils';
 
 const GuidesElement = styled('div', GUIDES_CSS);
 
@@ -348,7 +348,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.createGuide(event);
     } else if (guidePos < this.scrollPos) {
       this.removeGuide(event);
-    } else if (this.state.guides.includes(guidePos)) {
+    } else {
       this.changeGuide(event);
     }
   }
