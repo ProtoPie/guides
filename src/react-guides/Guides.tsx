@@ -4,7 +4,7 @@ import Gesto, { OnDrag, OnDragEnd } from 'gesto';
 import * as React from 'react';
 import styled, { StyledElement } from 'react-css-styled';
 
-import Ruler, { DARK_THEME, LIGHT_THEME, PROPERTIES as RULER_PROPERTIES, RulerProps, ThemeInterface } from '../react-ruler';
+import Ruler, { PROPERTIES as RULER_PROPERTIES, RulerProps } from '../react-ruler';
 import { prefix, ref, refs } from '../utils';
 import { ADDER, defaultProps, DISPLAY_DRAG, DRAGGING, GUIDE, GUIDES, GUIDES_CSS } from './consts';
 import { GuidesInterface, GuidesProps, GuidesState, LockGuides, OnDragStart } from './types';
@@ -136,38 +136,12 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
         style={style}
       >
         <div className={prefix('guide-origin')} ref={ref(this, 'originElement')} />
-        <Ruler ref={ref(this, 'ruler')} style={this._rulerStyle} {...this.rulerProps} />
+        <Ruler ref={ref(this, 'ruler')} {...this.rulerProps} />
         {this.renderGuidesElements()};
       </GuidesElement>
     );
   }
 
-  private get _rulerStyle() {
-    return this.props.type === 'horizontal' ? {
-          ...this.props.rulerStyle,
-          marginLeft: `${this._offset}px`,
-          width: `calc(100% - ${this._offset}px)`,
-          height: '100%',
-          borderRight: 'none',
-          borderBottomWidth: '0.5px',
-          borderBottomStyle: 'solid',
-          borderBottomColor: this._getCurrentTheme().backgroundColor,
-        } : {
-          ...this.props.rulerStyle,
-          marginTop: `${this._offset}px`,
-          height: `calc(100% - ${this._offset}px)`,
-          width: '100%',
-          borderBottom: 'none',
-          borderRightWidth: '0.5px',
-          borderRightStyle: 'solid',
-          borderRightColor: this._getCurrentTheme().backgroundColor,
-        };
-  }
-
-  private _getCurrentTheme(): ThemeInterface {
-    const currentTheme = this.props.theme === 'dark' ? DARK_THEME : LIGHT_THEME;
-    return currentTheme;
-  }
 
   private renderGuides() {
     const { guideStyle = {} } = this.props as Required<GuidesProps>;

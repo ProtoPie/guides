@@ -1,8 +1,9 @@
 import { convertUnitSize } from '@daybrush/utils';
 import * as React from 'react';
 
-import { DARK_THEME, LIGHT_THEME } from './consts';
+import { IObject } from '../react-guides';
 import { ref } from '../utils';
+import { DARK_THEME, LIGHT_THEME } from './consts';
 import { RulerInterface, RulerProps, RulerRenderOptions, ThemeInterface } from './types';
 
 export default class Ruler extends React.PureComponent<RulerProps> implements RulerInterface {
@@ -19,7 +20,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     segment: 1,
     direction: 'end',
     textAlign: 'center',
-    style: { width: '100%', height: '100%' },
+    style: { zIndex: 10 },
     backgroundColor: '#333333',
     font: '10px Inter, sans-serif',
     textColor: '#ffffff',
@@ -38,6 +39,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   private _width = 0;
   private _height = 0;
   private _zoom = 0;
+  private _offset = 20;
 
   public render() {
     const props = this.props;
@@ -48,7 +50,31 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
       portalAttributes = { portalContainer };
     }
     this._zoom = props.zoom!;
-    return <canvas ref={ref(this, 'canvasElement')} {...portalAttributes} style={this.props.style} />;
+    return <canvas ref={ref(this, 'canvasElement')} {...portalAttributes} style={this._rulerStyle} />;
+  }
+
+  private get _rulerStyle(): IObject<any> {
+    return this.props.type === 'horizontal'
+      ? {
+          ...this.props.style,
+          marginLeft: `${this._offset}px`,
+          width: `calc(100% - ${this._offset}px)`,
+          height: '100%',
+          borderRight: 'none',
+          borderBottomWidth: '0.5px',
+          borderBottomStyle: 'solid',
+          borderBottomColor: this.currentTheme.backgroundColor,
+        }
+      : {
+          ...this.props.style,
+          marginTop: `${this._offset}px`,
+          height: `calc(100% - ${this._offset}px)`,
+          width: '100%',
+          borderBottom: 'none',
+          borderRightWidth: '0.5px',
+          borderRightStyle: 'solid',
+          borderRightColor: this.currentTheme.backgroundColor,
+        };
   }
 
   public componentDidMount() {
@@ -122,7 +148,7 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   }
 
   private renderBackground() {
-    const { backgroundColor, lineColor, textColor } = this._getTheme(this.props.theme);
+    const { backgroundColor, lineColor, textColor } = this.currentTheme;
     const context = this._canvasContext;
     const width = this._width;
     const height = this._height;
@@ -239,10 +265,10 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
   }
 
   private getSegmentLineSize(segmentIndex: number, mainLineSize: number, longLineSize: number, shortLineSize: number) {
-    if(segmentIndex === 0) {
+    if (segmentIndex === 0) {
       return mainLineSize;
     }
-    if(segmentIndex % 2 === 0) {
+    if (segmentIndex % 2 === 0) {
       return longLineSize;
     }
     return shortLineSize;
@@ -250,11 +276,11 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
 
   private getSegmentMargin(lineSize: number, containerSize: number) {
     switch (this.props.direction) {
-      case 'start': 
+      case 'start':
         return 0;
-      case 'center': 
+      case 'center':
         return containerSize / 2 - lineSize / 2;
-      case 'end': 
+      case 'end':
         return containerSize - lineSize;
     }
   }
@@ -286,8 +312,8 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
     context.restore();
   }
 
-  private _getTheme(theme: 'dark' | 'light'): ThemeInterface {
-    return theme === 'dark' ? DARK_THEME : LIGHT_THEME
+  public get currentTheme(): ThemeInterface {
+    return this.props.theme === 'dark' ? DARK_THEME : LIGHT_THEME;
   }
 
   private renderLabel(renderOptions: RulerRenderOptions, startValue: number, startPos: number) {

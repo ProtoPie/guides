@@ -175,7 +175,7 @@ export interface ThemeInterface {
  * @typedef
  * @memberof Ruler
  */
- export interface RulerRenderOptions {
+export interface RulerRenderOptions {
   isHorizontal: boolean, 
   containerSize: number, 
   scrollPos: number,  
