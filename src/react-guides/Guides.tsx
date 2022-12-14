@@ -28,7 +28,6 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
   private guideElements: HTMLElement[] = [];
   private _isFirstMove = false;
   private _pointerEventsTimer: NodeJS.Timeout;
-  private _offset = 20;
 
   constructor(props: Required<GuidesProps>) {
     super(props);
