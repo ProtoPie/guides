@@ -202,7 +202,7 @@ export const defaultProps: GuidesProps = {
   onDragStart: () => {},
   onDrag: () => {},
   onDragEnd: () => {},
-  displayDragPos: false,
+  displayDragPos: true,
   dragPosFormat: v => v,
   defaultGuides: [],
   lockGuides: false,
@@ -211,4 +211,8 @@ export const defaultProps: GuidesProps = {
   dragGuideStyle: {},
   guidePosStyle: {},
   portalContainer: null,
+  theme: 'dark',
+  rulerStyle: {
+    zIndex: 10,
+  },
 };
