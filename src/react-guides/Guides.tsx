@@ -510,7 +510,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this._pointerEventsTimer = setTimeout(() => {
       this.guidesElement.style.pointerEvents = 'auto';
     }, 300);
-    return true;
+
+    return this.guidesElement.style.pointerEvents;
   }
 
   private isLockType(lockGuides: LockGuides, type: string): boolean {
