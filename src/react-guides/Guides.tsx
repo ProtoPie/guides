@@ -483,7 +483,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     });
   }
 
-  private currentGuidePos(nextPos: number) {
+  private currentGuidePos(nextPos: number): number {
     return parseFloat((nextPos / this.props.zoom!).toFixed(this.props.digit || 0));
   }
 
@@ -492,7 +492,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
       this.displayElement.style.cssText += `display: flex; transform: ${translate}`;
       this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${this.props.dragPosFormat(guidePos)}</div>`;
+      return translate;
     }
+    return;
   }
 
   private hideDragPosition() {
@@ -508,6 +510,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this._pointerEventsTimer = setTimeout(() => {
       this.guidesElement.style.pointerEvents = 'auto';
     }, 300);
+    return true;
   }
 
   private isLockType(lockGuides: LockGuides, type: string): boolean {

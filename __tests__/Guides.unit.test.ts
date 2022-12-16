@@ -1,7 +1,7 @@
 import Gesto from 'gesto';
 import { defaultProps, GUIDE } from '../src/react-guides/consts';
 import Guides from '../src/react-guides/Guides';
-import { GuidesProps, GuidesState } from '../src/react-guides/types';
+import { GuidesProps, GuidesState, LockGuides } from '../src/react-guides/types';
 import Ruler, { RulerProps } from '../src/react-ruler';
 
 const defaultGuides: number[] = [];
@@ -28,6 +28,9 @@ describe('Guides', () => {
     expect(guidesInstance).toBeDefined();
   });
 
+  it('should get ruler props', () => {
+    expect(guidesInstance?.['rulerProps']).toBeInstanceOf(Object);
+  });
   it('should be get guides', () => {
     guidesInstance?.getGuides();
     expect(guidesInstance?.state.guides).toEqual(defaultGuides);
@@ -145,6 +148,20 @@ describe('Guides', () => {
   it("shouldn't delete guide after drag it to the top", () => {
     guidesInstance?.loadGuides(guidesTest);
     defaultProps.lockGuides = true;
+    const element = document.createElement('div');
+    element.setAttribute('data-index', indexOfDeletedGuide.toString());
+    const event = {
+      datas: {
+        target: element,
+      },
+    };
+    expect(guidesInstance?.['removeGuide'](event as any)).toBeUndefined();
+    expect(guidesInstance?.getGuides()).toEqual(guidesTest);
+  });
+
+  it("shouldn't delete guide after drag it to the top because lockGuides is [remove]", () => {
+    guidesInstance?.loadGuides(guidesTest);
+    defaultProps.lockGuides = ['remove'];
     const element = document.createElement('div');
     element.setAttribute('data-index', indexOfDeletedGuide.toString());
     const event = {
@@ -279,9 +296,14 @@ describe('Guides', () => {
     expect(guidesInstance?.['displayGuidePosition'](1)).toBeUndefined();
   });
 
+  it("shouldn't disable pointer events on scroll", () => {
+    defaultProps.showGuides = false;
+    expect(guidesInstance?.['disablePointerEventsOnScroll']()).toBeUndefined();
+  });
+
   it('should disable pointer events on scroll', () => {
     defaultProps.showGuides = true;
-    expect(guidesInstance?.['disablePointerEventsOnScroll']()).toBeUndefined();
+    expect(guidesInstance?.['disablePointerEventsOnScroll']()).toBeTruthy();
   });
 
   it('should calculate guide pos', () => {
@@ -290,7 +312,44 @@ describe('Guides', () => {
     const nextPos = 5;
     const result = 5;
     expect(guidesInstance?.['currentGuidePos'](nextPos)).toBe(result);
-  })
+  });
+
+  it('should calculate guide position', () => {
+    const position = 5;
+    const zoom = 2;
+    defaultProps.digit = undefined;
+    expect(guidesInstance?.['calcGuidePosition'](position, zoom)).toEqual(3);
+  });
+
+  it('should return guides position', () => {
+    jest.spyOn(guidesInstance as any, 'drag').mockImplementation(() => 3);
+    jest.spyOn(guidesInstance as any, 'calcGuidePosition').mockImplementation();
+    guidesInstance?.['getGuidesPosition']({} as any);
+    expect(guidesInstance?.['calcGuidePosition']).toBeCalledWith(3, defaultProps.zoom);
+  });
+
+  it('should return true value for lock guides if type considers in lockGuides', () => {
+    const lockGuides: LockGuides = ['add'];
+    expect(guidesInstance?.['isLockType'](lockGuides, 'add')).toBeTruthy();
+  });
+
+  it("should return false value for lock guides if type doesn't consider in lockGuides", () => {
+    const lockGuides: LockGuides = ['add'];
+    expect(guidesInstance?.['isLockType'](lockGuides, 'added')).toBeFalsy();
+  });
+
+  it('should return translate style if displayDragPos is true', () => {
+    defaultProps.displayDragPos = true;
+    const result = 'translate(-64px, 0px) rotate(-90deg)';
+    jest.spyOn(guidesInstance as any, 'isHorizontal', 'get').mockImplementation(() => true);
+    jest.spyOn(guidesInstance as any, 'calcHorizontalTransform').mockImplementation(() => result);
+    expect(guidesInstance?.['showDragPosition'](1, 1)).toEqual(result);
+  });
+
+  it("shouldn't return translate style if displayDragPos is false", () => {
+    defaultProps.displayDragPos = false;
+    expect(guidesInstance?.['showDragPosition'](1, 1)).toBeUndefined();
+  });
 });
 
 function initVariables() {
