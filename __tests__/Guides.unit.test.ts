@@ -142,6 +142,20 @@ describe('Guides', () => {
     expect(guidesInstance?.getGuides()).toEqual(newGuides);
   });
 
+  it("shouldn't delete guide after drag it to the top", () => {
+    guidesInstance?.loadGuides(guidesTest);
+    defaultProps.lockGuides = true;
+    const element = document.createElement('div');
+    element.setAttribute('data-index', indexOfDeletedGuide.toString());
+    const event = {
+      datas: {
+        target: element,
+      },
+    };
+    expect(guidesInstance?.['removeGuide'](event as any)).toBeUndefined();
+    expect(guidesInstance?.getGuides()).toEqual(guidesTest);
+  });
+
   it('should called scroll for ruler', () => {
     jest.spyOn(guidesInstance!.ruler, 'scroll').mockImplementation();
     guidesInstance?.scroll(selectedGuide);
@@ -192,6 +206,23 @@ describe('Guides', () => {
       guidesInstance?.['dragStart'](event as any);
       expect(guidesInstance?.['startChangeExistGuide']).toHaveBeenCalled();
     });
+
+    it('should called dragStar in onDragStart', () => {
+      defaultProps.lockGuides = false;
+      jest.spyOn(guidesInstance as any, 'dragStart').mockImplementation();
+      guidesInstance?.['onDragStart']({} as any);
+      expect(guidesInstance?.['dragStart']).toHaveBeenCalled();
+    });
+
+    it("shouldn't called dragStar in onDragStart", () => {
+      defaultProps.lockGuides = true;
+      const event = {
+        stop() {},
+      };
+      jest.spyOn(guidesInstance as any, 'dragStart').mockImplementation();
+      expect(guidesInstance?.['onDragStart'](event as any)).toBeUndefined();
+      expect(guidesInstance?.['dragStart']).not.toHaveBeenCalled();
+    });
   });
   describe('dargEnd', () => {
     it('should called createGuide in dragEnd', () => {
@@ -234,6 +265,32 @@ describe('Guides', () => {
       expect(guidesInstance?.['changeGuide']).toHaveBeenCalled();
     });
   });
+
+  it('should return style for transform position', () => {
+    expect(guidesInstance?.['transformPosition'](3)).toContain(((defaultProps as Required<GuidesProps>).zoom * 3).toString());
+  });
+  it('should display guide position', () => {
+    defaultProps.displayGuidePos = true;
+    expect(guidesInstance?.['displayGuidePosition'](1)).toBeDefined();
+  });
+
+  it("shouldn't display guide position", () => {
+    defaultProps.displayGuidePos = false;
+    expect(guidesInstance?.['displayGuidePosition'](1)).toBeUndefined();
+  });
+
+  it('should disable pointer events on scroll', () => {
+    defaultProps.showGuides = true;
+    expect(guidesInstance?.['disablePointerEventsOnScroll']()).toBeUndefined();
+  });
+
+  it('should calculate guide pos', () => {
+    defaultProps.zoom = 1;
+    defaultProps.digit = 0;
+    const nextPos = 5;
+    const result = parseFloat((nextPos / guidesInstance?.props.zoom!).toFixed(guidesInstance?.props.digit || 0));
+    expect(guidesInstance?.['currentGuidePos'](nextPos)).toBe(result);
+  })
 });
 
 function initVariables() {
@@ -247,6 +304,7 @@ function createInstance(): Guides {
   const guides: Guides = new Guides(defaultProps as Required<GuidesProps>);
   guides.setState = setState;
   guides['displayElement'] = document.createElement('div');
+  guides['guidesElement'] = document.createElement('div');
   guides['gesto'] = createGesto();
   guides.ruler = new Ruler({} as RulerProps);
 
