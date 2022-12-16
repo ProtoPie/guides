@@ -288,7 +288,7 @@ describe('Guides', () => {
     defaultProps.zoom = 1;
     defaultProps.digit = 0;
     const nextPos = 5;
-    const result = parseFloat((nextPos / guidesInstance?.props.zoom!).toFixed(guidesInstance?.props.digit || 0));
+    const result = 5;
     expect(guidesInstance?.['currentGuidePos'](nextPos)).toBe(result);
   })
 });
