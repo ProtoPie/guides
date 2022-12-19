@@ -1,6 +1,6 @@
 import { PROPERTIES as RULER_PROPERTIES } from '../react-ruler';
+import { prefix, prefixCSS } from '../utils';
 import { GuidesOptions, GuidesProps } from './types';
-import { prefix, prefixCSS } from './utils';
 
 export const RULER = prefix('ruler');
 export const ADDER = prefix('guide', 'adder');
@@ -202,7 +202,7 @@ export const defaultProps: GuidesProps = {
   onDragStart: () => {},
   onDrag: () => {},
   onDragEnd: () => {},
-  displayDragPos: false,
+  displayDragPos: true,
   dragPosFormat: v => v,
   defaultGuides: [],
   lockGuides: false,
@@ -211,4 +211,8 @@ export const defaultProps: GuidesProps = {
   dragGuideStyle: {},
   guidePosStyle: {},
   portalContainer: null,
+  theme: 'dark',
+  rulerStyle: {
+    zIndex: 10,
+  },
 };
