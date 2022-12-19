@@ -45,6 +45,31 @@ describe('Guides', () => {
     expect(guidesInstance.getGuides()).toEqual([]);
   });
 
+  it('should scroll guides when guides elements are existing and change style for each element', () => {
+    jest.spyOn(guidesInstance as any, 'shouldShowGuide').mockImplementation();
+    guidesInstance.scrollGuides(2);
+    expect((guidesInstance as any).shouldShowGuide).toHaveBeenCalledTimes(guidesInstance['guideElements'].length);
+    expect(guidesInstance.scrollPos).toEqual(2);
+  });
+
+  it('should change style of display for guides: set none', () => {
+    guidesInstance.loadGuides([2]);
+    guidesInstance.scrollPos = 3;
+    const element = document.createElement('div');
+    expect((guidesInstance as any).shouldShowGuide(element, 0)).toEqual('none');
+  });
+
+  it('should change style of display for guides: set block', () => {
+    guidesInstance.loadGuides([2]);
+    guidesInstance.scrollPos = -3;
+    const element = document.createElement('div');
+    expect((guidesInstance as any).shouldShowGuide(element, 0)).toEqual('block');
+  });
+
+  it("shouldn't change style display for guides", () => {
+    expect((guidesInstance as any).shouldShowGuide(null, 0)).toBeUndefined();
+  });
+
   describe('selected guides', () => {
     it('should select a guide', () => {
       (guidesInstance as any).selectGuide(selectedGuide, eventMouse as any);
@@ -504,12 +529,15 @@ describe('Guides', () => {
 
 function createInstance(): Guides {
   const guides: Guides = new Guides(defaultProps as Required<GuidesProps>);
+  const elementsGuide: any = [];
+  elementsGuide.push('<div></div>', '<div></div>');
   guides.setState = setState;
   guides['displayElement'] = document.createElement('div');
   guides['guidesElement'] = document.createElement('div');
   guides['gesto'] = createGesto();
   guides['originElement'] = document.createElement('div');
   guides.ruler = new Ruler({} as RulerProps);
+  guides['guideElements'] = elementsGuide;
 
   return guides;
 }

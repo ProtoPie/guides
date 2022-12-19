@@ -104,15 +104,19 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.scrollPos = pos;
     guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
 
-    const guides = this.state.guides;
-    this.guideElements.forEach(shouldShowGuide);
+    this.guideElements.forEach((element, i) => {
+      this.shouldShowGuide(element, i);
+    });
+  }
 
-    function shouldShowGuide(element: HTMLElement, i: number) {
-      if (!element) {
-        return;
-      }
-      element.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
+  private shouldShowGuide(element: HTMLElement, i: number) {
+    const guides = this.state.guides;
+    if (!element) {
+      return;
     }
+    element.style.display = -this.scrollPos + guides[i] < 0 ? 'none' : 'block';
+
+    return element.style.display;
   }
 
   public resize() {
