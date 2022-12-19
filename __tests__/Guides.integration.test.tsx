@@ -2,7 +2,8 @@ import { render } from 'enzyme';
 import * as React from 'react';
 
 import Guides from '../src/react-guides/Guides';
-import { ref } from '../src/react-guides/utils';
+import { ref } from '../src/utils';
+
 
 describe('Guides', () => {
   it('should render correctly', () => {
