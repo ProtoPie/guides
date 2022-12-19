@@ -1,16 +1,15 @@
+import * as _ from 'css-to-mat';
 import Gesto from 'gesto';
 import { defaultProps, GUIDE } from '../src/react-guides/consts';
 import Guides from '../src/react-guides/Guides';
 import { GuidesProps, GuidesState, LockGuides } from '../src/react-guides/types';
 import Ruler, { RulerProps } from '../src/react-ruler';
-
 const indexOfDeletedGuide = 2;
 const guidesTest: number[] = [5, -6, 3, -4.2];
 const deletedGuide = guidesTest[indexOfDeletedGuide];
 const selectedGuide: number = guidesTest[1];
 const eventMouse: MouseEvent = new MouseEvent('click');
 
-jest.useFakeTimers();
 let isDragging = false;
 
 // Guides
@@ -162,14 +161,7 @@ describe('Guides', () => {
     it("shouldn't delete guide after drags it to the top because lockGuides is [remove]", () => {
       guidesInstance.loadGuides(guidesTest);
       defaultProps.lockGuides = ['remove'];
-      const element = document.createElement('div');
-      element.setAttribute('data-index', indexOfDeletedGuide.toString());
-      const event = {
-        datas: {
-          target: element,
-        },
-      };
-      expect((guidesInstance as any).removeGuide(event as any)).toBeUndefined();
+      expect((guidesInstance as any).removeGuide({})).toBeUndefined();
       expect(guidesInstance.getGuides()).toEqual(guidesTest);
     });
   });
@@ -181,7 +173,7 @@ describe('Guides', () => {
   });
 
   it('should call resize function for ruler', () => {
-    jest.spyOn(guidesInstance!.ruler, 'resize').mockImplementation();
+    jest.spyOn(guidesInstance.ruler, 'resize').mockImplementation();
     guidesInstance.resize();
     expect(guidesInstance.ruler.resize).toHaveBeenCalled();
   });
@@ -206,6 +198,22 @@ describe('Guides', () => {
       expect((guidesInstance as any).createFromRuler).toHaveBeenCalled();
     });
 
+    it('should create a guide from ruler', () => {
+      const event = {
+        datas: {},
+      };
+      jest.spyOn(guidesInstance as any, 'isLockType').mockReturnValue(false);
+      expect((guidesInstance as any).createFromRuler(event)).toBeTruthy();
+    });
+
+    it("shouldn't create a guide from ruler", () => {
+      const event = {
+        stop() {},
+      };
+      jest.spyOn(guidesInstance as any, 'isLockType').mockReturnValue(true);
+      expect((guidesInstance as any).createFromRuler(event)).toBeUndefined();
+    });
+
     it('should change existing guide if this guide starts to drag', () => {
       const element = document.createElement('div');
       element.classList.add(GUIDE);
@@ -223,6 +231,31 @@ describe('Guides', () => {
       };
       (guidesInstance as any).dragStart(event as any);
       expect((guidesInstance as any).startChangeExistGuide).toHaveBeenCalled();
+    });
+
+    it('should change existing guide', () => {
+      const element = document.createElement('vic');
+      const event = {
+        stop() {},
+        inputEvent: {
+          target: element,
+        },
+        datas: {},
+      };
+      jest.spyOn(guidesInstance as any, 'isLockType').mockReturnValue(false);
+      expect((guidesInstance as any).startChangeExistGuide(event)).toBeFalsy();
+    });
+
+    it("shouldn't change existing guide", () => {
+      const element = document.createElement('vic');
+      const event = {
+        stop() {},
+        inputEvent: {
+          target: element,
+        },
+      };
+      jest.spyOn(guidesInstance as any, 'isLockType').mockReturnValue(true);
+      expect((guidesInstance as any).startChangeExistGuide(event)).toBeUndefined();
     });
 
     it('should call dragStar function when drag triggers event onDragStart', () => {
@@ -258,6 +291,23 @@ describe('Guides', () => {
       expect((guidesInstance as any).createGuide).toHaveBeenCalled();
     });
 
+    it('should create a new guide when dragging is finished', () => {
+      defaultProps.scrollPos = 0;
+      jest.spyOn(guidesInstance as any, 'getGuidesPosition').mockReturnValue(2);
+
+      expect((guidesInstance as any).createGuide({})).toEqual(2);
+      expect(guidesInstance.getGuides()).toEqual([2]);
+    });
+
+    it("shouldn't create a new guide when dragging is finished", () => {
+      guidesInstance.loadGuides(guidesTest);
+      defaultProps.scrollPos = guidesTest[2] + 3;
+      jest.spyOn(guidesInstance as any, 'getGuidesPosition').mockReturnValue(guidesTest[2]);
+
+      expect((guidesInstance as any).createGuide({})).toBeUndefined();
+      expect(guidesInstance.getGuides()).toEqual(guidesTest);
+    });
+
     it('should remove a guide when drag is finished', () => {
       jest.spyOn(guidesInstance as any, 'removeGuide').mockImplementation();
       jest.spyOn(guidesInstance as any, 'getGuidesPosition').mockImplementation(() => guidesInstance.scrollPos - 1);
@@ -274,7 +324,7 @@ describe('Guides', () => {
       guidesInstance.loadGuides(guidesTest);
       jest.spyOn(guidesInstance as any, 'changeGuide').mockImplementation();
       jest.spyOn(guidesInstance as any, 'getGuidesPosition').mockImplementation(() => selectedGuide);
-      guidesInstance!.scrollPos = selectedGuide - 5;
+      guidesInstance.scrollPos = selectedGuide - 5;
       const event = {
         datas: {
           fromRuler: false,
@@ -282,6 +332,33 @@ describe('Guides', () => {
       };
       (guidesInstance as any).dragEnd(event as any);
       expect((guidesInstance as any).changeGuide).toHaveBeenCalled();
+    });
+
+    it('should change an existing drag when dragging is finished', () => {
+      defaultProps.lockGuides = false;
+      guidesInstance.loadGuides(guidesTest);
+      const event = {
+        datas: {
+          target: document.createElement('div'),
+        },
+      };
+      jest.spyOn(guidesInstance as any, 'getGuidesPosition').mockImplementation(() => guidesTest[2]);
+      expect((guidesInstance as any).changeGuide(event)).toEqual(guidesTest[2]);
+      expect(guidesInstance.getGuides()).toEqual(guidesTest);
+    });
+
+    it("shouldn't change an existing drag when dragging is finished", () => {
+      defaultProps.lockGuides = true;
+      guidesInstance.loadGuides(guidesTest);
+      expect((guidesInstance as any).changeGuide({})).toBeUndefined();
+      expect(guidesInstance.getGuides()).toEqual(guidesTest);
+    });
+
+    it("shouldn't change an existing drag when dragging is finished because lockGuides is [change]", () => {
+      guidesInstance.loadGuides(guidesTest);
+      defaultProps.lockGuides = ['change'];
+      expect((guidesInstance as any).changeGuide({})).toBeUndefined();
+      expect(guidesInstance.getGuides()).toEqual(guidesTest);
     });
   });
 
@@ -353,6 +430,76 @@ describe('Guides', () => {
     defaultProps.displayDragPos = false;
     expect((guidesInstance as any).showDragPosition(1, 1)).toBeUndefined();
   });
+
+  it('should return next pos for a guide', () => {
+    const target = document.createElement('div');
+    jest.spyOn(guidesInstance as any, 'getCurrentAndNextPosition').mockReturnValue({
+      nextPos: 4,
+    });
+    const event = {
+      datas: {
+        fromRuler: false,
+        target,
+      },
+    };
+    expect((guidesInstance as any).drag(event)).toEqual(4);
+  });
+
+  it('should return an array of position offset', () => {
+    guidesInstance.scrollPos = 1;
+    defaultProps.zoom = 2;
+    defaultProps.type = 'horizontal';
+    jest.spyOn((guidesInstance as any).originElement, 'getBoundingClientRect');
+    jest.spyOn(_, 'calculateMatrixDist').mockReturnValue([-2, 3]);
+    jest.spyOn(guidesInstance as any, 'matrix', 'get').mockImplementation();
+    expect((guidesInstance as any).offsetPosition({})).toEqual([-2, 5]);
+  });
+
+  it('should sort snaps treschold when default snaps are not empty', () => {
+    defaultProps.snaps = [3, 8, 1, 7, 5];
+    expect((guidesInstance as any).sortSnapsTresholdToClosesGuide(4)).toEqual([3, 5, 1, 7, 8]);
+  });
+
+  it('should sort snaps treschold when default snaps are empty', () => {
+    defaultProps.snaps = [];
+    expect((guidesInstance as any).sortSnapsTresholdToClosesGuide(4)).toEqual([]);
+  });
+
+  it('should get current and next positions', () => {
+    const event = {
+      datas: {
+        matrix: [1, 0],
+        offsetPos: [3, 3],
+      },
+      distY: 4,
+      distX: 5,
+    };
+    jest.spyOn(_, 'calculateMatrixDist').mockReturnValue([2, 1]);
+    jest.spyOn(guidesInstance as any, 'currentGuidePos').mockReturnValue(2);
+    jest.spyOn(guidesInstance as any, 'sortSnapsTresholdToClosesGuide').mockReturnValue([]);
+    expect((guidesInstance as any).getCurrentAndNextPosition(event)).toEqual({
+      nextPos: 4,
+      guidePos: 2,
+    });
+  });
+
+  it('should get current and next positions when guideSnaps exists', () => {
+    const event = {
+      datas: {
+        matrix: [1, 0],
+        offsetPos: [3, 3],
+      },
+      distY: 4,
+      distX: 5,
+    };
+    defaultProps.snapThreshold = 10;
+    jest.spyOn(_, 'calculateMatrixDist').mockReturnValue([2, 1]);
+    jest.spyOn(guidesInstance as any, 'sortSnapsTresholdToClosesGuide').mockReturnValue([0, 1]);
+    expect((guidesInstance as any).getCurrentAndNextPosition(event)).toEqual({
+      nextPos: 0,
+      guidePos: 0,
+    });
+  });
 });
 
 function createInstance(): Guides {
@@ -361,6 +508,7 @@ function createInstance(): Guides {
   guides['displayElement'] = document.createElement('div');
   guides['guidesElement'] = document.createElement('div');
   guides['gesto'] = createGesto();
+  guides['originElement'] = document.createElement('div');
   guides.ruler = new Ruler({} as RulerProps);
 
   return guides;

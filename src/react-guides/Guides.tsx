@@ -348,6 +348,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     datas.fromRuler = true;
     datas.target = this.adderElement;
+
+    return datas.fromRuler;
   }
 
   private startChangeExistGuide(event: OnDragStart) {
@@ -363,6 +365,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     datas.fromRuler = false;
     datas.target = target;
+
+    return datas.fromRuler;
   }
 
   // Calculates position of next move
@@ -409,7 +413,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.props.onAddGuide!({
         posNewGuide: guidePos,
       });
+      return guidePos;
     }
+
+    return;
   }
 
   private removeGuide(event: OnDragEnd) {
@@ -449,6 +456,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.updateGuidePosition(event, guides, {
       isChange: true,
     });
+
+    return guidePos;
   }
 
   private updateGuidePosition(event: OnDragEnd, guides: number[], { isAdd = false, isChange = false, isRemove = false }) {
