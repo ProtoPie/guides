@@ -1,4 +1,4 @@
-import { RulerInterface, RulerProps } from './types';
+import { RulerInterface, RulerProps, ThemeInterface } from './types';
 
 export const PROPERTIES: Array<keyof RulerProps> = [
   'type',
@@ -26,5 +26,20 @@ export const PROPERTIES: Array<keyof RulerProps> = [
   'textBackgroundColor',
   'textFormat',
   'portalContainer',
+  'theme',
 ];
 export const METHODS: Array<keyof RulerInterface> = ['scroll', 'resize'];
+
+export const DARK_THEME: ThemeInterface = {
+  backgroundColor: '#444',
+  lineColor: '#777777',
+  textColor: '#FFFFFF',
+  borderColor: '#777777',
+}
+
+export const LIGHT_THEME: ThemeInterface = {
+  backgroundColor: '#FFFFFF',
+  lineColor: '#BBBBBB',
+  textColor: '#BBBBBB',
+  borderColor: '#BBBBBB',
+}

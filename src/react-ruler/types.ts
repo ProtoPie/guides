@@ -157,4 +157,31 @@ export interface RulerProps {
    * portal container for other frameworks
    */
   portalContainer?: HTMLElement;
+  theme?: 'dark' | 'light';
+}
+
+/**
+ * @typedef
+ * @memberof ThemeRuler
+ */
+export interface ThemeInterface {
+  backgroundColor: string;
+  lineColor: string;
+  textColor: string;
+  borderColor: string;
+}
+
+/**
+ * @typedef
+ * @memberof Ruler
+ */
+export interface RulerRenderOptions {
+  isHorizontal: boolean, 
+  containerSize: number, 
+  scrollPos: number,  
+  zoom: number, 
+  zoomUnit: number, 
+  minRange: number,
+  maxRange: number, 
+  mainLineSize: number,
 }
