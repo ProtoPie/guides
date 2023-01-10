@@ -3,33 +3,11 @@ import * as React from 'react';
 
 import { IObject } from '../react-guides';
 import { ref } from '../utils';
-import { DARK_THEME, LIGHT_THEME } from './consts';
+import { DARK_THEME, defaultProps, LIGHT_THEME } from './consts';
 import { RulerInterface, RulerProps, RulerRenderOptions, ThemeInterface } from './types';
 
 export default class Ruler extends React.PureComponent<RulerProps> implements RulerInterface {
-  public static defaultProps: RulerProps = {
-    type: 'horizontal',
-    zoom: 1,
-    width: 0,
-    height: 0,
-    unit: 50,
-    negativeRuler: true,
-    mainLineSize: 4,
-    longLineSize: 10,
-    shortLineSize: 7,
-    segment: 1,
-    direction: 'end',
-    textAlign: 'center',
-    style: { zIndex: 10 },
-    backgroundColor: '#333333',
-    font: '10px Inter, sans-serif',
-    textColor: '#ffffff',
-    textBackgroundColor: 'transparent',
-    lineColor: '#777777',
-    range: [-Infinity, Infinity],
-    rangeBackgroundColor: 'transparent',
-    theme: 'dark',
-  };
+  public static defaultProps: RulerProps = { ...defaultProps };
   public divisionsElement!: HTMLElement;
   public state = {
     scrollPos: 0,
@@ -197,7 +175,11 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
         context.fillRect(0, rangeStart, containerSize, rangeEnd);
       }
       context.restore();
+
+      return [rangeStart, rangeEnd];
     }
+
+    return;
   }
 
   private isRangeBackgroundActive(): boolean {
@@ -262,6 +244,8 @@ export default class Ruler extends React.PureComponent<RulerProps> implements Ru
 
     context.moveTo(x1 + lineOffset[0], y1 + lineOffset[1]);
     context.lineTo(x2 + lineOffset[0], y2 + lineOffset[1]);
+
+    return [x1, x2, y1, y2];
   }
 
   private getSegmentLineSize(segmentIndex: number, mainLineSize: number, longLineSize: number, shortLineSize: number) {
