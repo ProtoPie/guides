@@ -104,15 +104,19 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.scrollPos = pos;
     guidesElement.style.transform = `${this.getTranslateName()}(${-pos * zoom}px)`;
 
-    const guides = this.state.guides;
-    this.guideElements.forEach(shouldShowGuide);
+    this.guideElements.forEach((element, i) => {
+      this.shouldShowGuide(element, i);
+    });
+  }
 
-    function shouldShowGuide(element: HTMLElement, i: number) {
-      if (!element) {
-        return;
-      }
-      element.style.display = -pos + guides[i] < 0 ? 'none' : 'block';
+  private shouldShowGuide(element: HTMLElement, i: number) {
+    const guides = this.state.guides;
+    if (!element) {
+      return;
     }
+    element.style.display = -this.scrollPos + guides[i] < 0 ? 'none' : 'block';
+
+    return element.style.display;
   }
 
   public resize() {
@@ -349,6 +353,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     datas.fromRuler = true;
     datas.target = this.adderElement;
+
+    return datas.fromRuler;
   }
 
   private startChangeExistGuide(event: OnDragStart) {
@@ -364,6 +370,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
 
     datas.fromRuler = false;
     datas.target = target;
+
+    return datas.fromRuler;
   }
 
   // Calculates position of next move
@@ -410,7 +418,10 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       this.props.onAddGuide!({
         posNewGuide: guidePos,
       });
+      return guidePos;
     }
+
+    return;
   }
 
   private removeGuide(event: OnDragEnd) {
@@ -450,6 +461,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this.updateGuidePosition(event, guides, {
       isChange: true,
     });
+
+    return guidePos;
   }
 
   private updateGuidePosition(event: OnDragEnd, guides: number[], { isAdd = false, isChange = false, isRemove = false }) {
@@ -484,7 +497,7 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     });
   }
 
-  private currentGuidePos(nextPos: number) {
+  private currentGuidePos(nextPos: number): number {
     return parseFloat((nextPos / this.props.zoom!).toFixed(this.props.digit || 0));
   }
 
@@ -493,7 +506,9 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
       const translate = this.isHorizontal ? this.calcHorizontalTransform(nextPos) : this.calcVerticalTransform(nextPos);
       this.displayElement.style.cssText += `display: flex; transform: ${translate}`;
       this.displayElement.innerHTML = `<div class=${DISPLAY_DRAG}>${this.props.dragPosFormat(guidePos)}</div>`;
+      return translate;
     }
+    return;
   }
 
   private hideDragPosition() {
@@ -509,6 +524,8 @@ export default class Guides extends React.PureComponent<GuidesProps, GuidesState
     this._pointerEventsTimer = setTimeout(() => {
       this.guidesElement.style.pointerEvents = 'auto';
     }, 300);
+
+    return this.guidesElement.style.pointerEvents;
   }
 
   private isLockType(lockGuides: LockGuides, type: string): boolean {
