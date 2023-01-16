@@ -43,3 +43,27 @@ export const LIGHT_THEME: ThemeInterface = {
   textColor: '#BBBBBB',
   borderColor: '#BBBBBB',
 }
+
+export const defaultProps: RulerProps = {
+  type: 'horizontal',
+  zoom: 1,
+  width: 0,
+  height: 0,
+  unit: 50,
+  negativeRuler: true,
+  mainLineSize: 4,
+  longLineSize: 10,
+  shortLineSize: 7,
+  segment: 1,
+  direction: 'end',
+  textAlign: 'center',
+  style: { zIndex: 10 },
+  backgroundColor: '#333333',
+  font: '10px Inter, sans-serif',
+  textColor: '#ffffff',
+  textBackgroundColor: 'transparent',
+  lineColor: '#777777',
+  range: [-Infinity, Infinity],
+  rangeBackgroundColor: 'transparent',
+  theme: 'dark',
+};
